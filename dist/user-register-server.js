@@ -1,0 +1,119 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = userRegisterRouter;
+const express_1 = require("express");
+const uuid_1 = require("uuid");
+function userRegisterRouter(pool) {
+    const router = (0, express_1.Router)();
+    // ✅ 사용자 목록 조회
+    router.get("/", async (_req, res) => {
+        try {
+            const result = await pool.query(`SELECT "No","ID","Name","email","company_part","created_at","updated_at","permissions"
+         FROM public.jeongho_users
+         ORDER BY created_at DESC NULLS LAST`);
+            res.json(result.rows);
+        }
+        catch (err) {
+            console.error("❌ 사용자 목록 조회 실패:", err);
+            res.status(500).json({ error: "사용자 목록 조회 실패" });
+        }
+    });
+    // ✅ 사용자 등록
+    router.post("/", async (req, res) => {
+        try {
+            const { Name, ID, password, email, company_part, permissions } = req.body;
+            if (!Name || !ID || !password) {
+                return res.status(400).json({ error: "Name, ID, password는 필수입니다." });
+            }
+            const No = (0, uuid_1.v4)(); // ✅ 서버에서 No 자동 생성
+            const now = new Date().toISOString();
+            const perms = JSON.stringify(permissions !== null && permissions !== void 0 ? permissions : {});
+            await pool.query(`INSERT INTO public.jeongho_users
+          ("No","ID","password_hash","Name","email","company_part","created_at","updated_at","permissions")
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`, [No, ID, password, Name, email !== null && email !== void 0 ? email : null, company_part !== null && company_part !== void 0 ? company_part : null, now, now, perms]);
+            res.json({ ok: true, No });
+        }
+        catch (err) {
+            if ((err === null || err === void 0 ? void 0 : err.code) === "23505") {
+                return res.status(409).json({ error: "중복된 ID입니다." });
+            }
+            console.error("❌ 사용자 등록 실패:", err);
+            res.status(500).json({ error: "사용자 등록 실패" });
+        }
+    });
+    // ✅ 사용자 수정
+    router.put("/:no", async (req, res) => {
+        try {
+            const { no } = req.params;
+            const { Name, ID, password, email, company_part, permissions } = req.body;
+            const sets = [];
+            const vals = [];
+            let idx = 1;
+            if (Name !== undefined) {
+                sets.push(`"Name"=$${idx++}`);
+                vals.push(Name);
+            }
+            if (ID !== undefined) {
+                sets.push(`"ID"=$${idx++}`);
+                vals.push(ID);
+            }
+            if (email !== undefined) {
+                sets.push(`"email"=$${idx++}`);
+                vals.push(email);
+            }
+            if (company_part !== undefined) {
+                sets.push(`"company_part"=$${idx++}`);
+                vals.push(company_part);
+            }
+            if (permissions !== undefined) {
+                sets.push(`"permissions"=$${idx++}`);
+                vals.push(JSON.stringify(permissions));
+            }
+            if (password) {
+                sets.push(`"password_hash"=$${idx++}`);
+                vals.push(password);
+            }
+            sets.push(`"updated_at"=$${idx++}`);
+            vals.push(new Date().toISOString());
+            if (sets.length === 0)
+                return res.json({ ok: true });
+            vals.push(no);
+            const query = `UPDATE public.jeongho_users SET ${sets.join(", ")} WHERE "No"=$${idx}`;
+            await pool.query(query, vals);
+            res.json({ ok: true });
+        }
+        catch (err) {
+            console.error("❌ 사용자 수정 실패:", err);
+            res.status(500).json({ error: "사용자 수정 실패" });
+        }
+    });
+    // ✅ 사용자 삭제
+    router.delete("/:no", async (req, res) => {
+        try {
+            const { no } = req.params;
+            await pool.query(`DELETE FROM public.jeongho_users WHERE "No"=$1`, [no]);
+            res.json({ ok: true });
+        }
+        catch (err) {
+            console.error("❌ 사용자 삭제 실패:", err);
+            res.status(500).json({ error: "사용자 삭제 실패" });
+        }
+    });
+    // ✅ 특정 사용자 조회 (수정 모달용)
+    router.get("/:no", async (req, res) => {
+        try {
+            const { no } = req.params;
+            const result = await pool.query(`SELECT "No","ID","Name","email","company_part","created_at","updated_at","permissions"
+ FROM public.jeongho_users WHERE "No"=$1`, [no]);
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: "사용자를 찾을 수 없습니다." });
+            }
+            res.json(result.rows[0]);
+        }
+        catch (err) {
+            console.error("❌ 사용자 단일 조회 실패:", err);
+            res.status(500).json({ error: "사용자 단일 조회 실패" });
+        }
+    });
+    return router;
+}

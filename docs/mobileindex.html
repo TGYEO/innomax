@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+
+<head>
+  <meta charset="UTF-8" />
+  <title>정호개발 장비 관리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- ✅ Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: "#2563eb",
+            accentLight: "#3b82f6",
+          },
+        },
+      },
+    };
+  </script>
+
+
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen overflow-x-hidden">
+
+  <!-- ✅ 슬라이드 메뉴 -->
+  <nav id="sideMenu"
+    class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 flex flex-col p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg font-semibold text-gray-800">메뉴</h2>
+      <button id="menuCloseBtn" class="text-gray-500 hover:text-gray-700 transition text-xl font-bold">
+        ×
+      </button>
+    </div>
+
+    <ul class="space-y-4">
+      <li>
+        <button data-tab="home"
+          class="menu-item w-full text-left text-gray-800 font-medium hover:text-accent transition">
+          홈 화면
+        </button>
+      </li>
+
+    </ul>
+  </nav>
+
+  <!-- ✅ 상단 헤더 -->
+  <header
+    class="fixed top-0 left-0 w-full bg-accent text-white flex items-center justify-between px-4 py-3 shadow-md z-40">
+    <button id="menuBtn" class="flex flex-col justify-center items-center space-y-1 w-7 h-6 focus:outline-none">
+      <span class="w-6 h-[3px] bg-white rounded"></span>
+      <span class="w-6 h-[3px] bg-white rounded"></span>
+      <span class="w-6 h-[3px] bg-white rounded"></span>
+    </button>
+
+    <div class="flex items-center space-x-3">
+      <div class="flex flex-col items-end text-right text-sm leading-tight">
+        <span id="userName" class="font-semibold">로그인 중...</span>
+        <span id="userRole" class="text-xs text-blue-100">정보 확인 중</span>
+      </div>
+
+      <!-- ✅ 로그아웃 버튼 -->
+      <button id="btnLogout"
+        class="bg-white/20 hover:bg-white/30 text-white text-xs font-semibold px-3 py-1 rounded transition">
+        로그아웃
+      </button>
+    </div>
+  </header>
+
+
+  <!-- ✅ 본문 영역 -->
+  <main class="pt-20 pb-20 px-4 space-y-8">
+
+    <!-- 🔹 홈 화면 -->
+    <section id="home" class="tab-section text-center">
+      <img src="static/logo.gif" alt="정호개발" class="h-10 mx-auto mb-6 object-contain" />
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">정호개발</h2>
+      <p id="currentTime" class="text-gray-500 text-sm">--:--:--</p>
+    </section>
+
+ 
+
+
+
+
+
+  </main>
+
+  <!-- ✅ 하단 상태바 -->
+  <footer class="fixed bottom-0 left-0 w-full bg-gray-900 text-gray-100 text-xs flex justify-between px-3 py-2 z-40">
+    <span id="serverStatus" class="before:content-['●'] before:text-red-500 before:mr-1">
+      서버 연결 중...
+    </span>
+    <span id="deviceStatus">모바일 접속</span>
+  </footer>
+
+
+  <!-- ✅ JS -->
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const menuCloseBtn = document.getElementById("menuCloseBtn");
+    const sideMenu = document.getElementById("sideMenu");
+    const tabSections = document.querySelectorAll(".tab-section");
+    const menuItems = document.querySelectorAll(".menu-item");
+    const timeEl = document.getElementById("currentTime");
+
+    // ✅ API 주소 정의
+    const API_BASE =
+      location.hostname === "tgyeo.github.io"
+        ? "https://port-0-jeongho-1-mghorm7bef413a34.sel3.cloudtype.app"
+        : "http://127.0.0.1:5050";
+
+    // ✅ 메뉴 열기/닫기
+    menuBtn.addEventListener("click", () => (sideMenu.style.transform = "translateX(0)"));
+    menuCloseBtn.addEventListener("click", () => (sideMenu.style.transform = "translateX(-100%)"));
+
+    // ✅ 탭 전환
+    menuItems.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+        tabSections.forEach((s) => s.classList.add("hidden"));
+        document.getElementById(target).classList.remove("hidden");
+        sideMenu.style.transform = "translateX(-100%)";
+      });
+    });
+
+    // ✅ 현재 시간 표시
+    function updateClock() {
+      const now = new Date();
+      const formatted = now.toLocaleTimeString("ko-KR", { hour12: false });
+      timeEl.textContent = formatted;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ==========================================================================
+    // 🌐 서버 연결 상태 체크 (Footer 표시)
+    // ==========================================================================
+    async function checkServerStatus() {
+      try {
+        const res = await fetch(`${API_BASE}/api/ping`, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function updateFooterStatus(connected) {
+      const el = document.getElementById("serverStatus");
+      if (!el) return;
+
+      if (connected) {
+        el.textContent = "서버 연결됨";
+        el.classList.remove("before:text-red-500", "text-gray-400");
+        el.classList.add("before:text-green-400", "text-green-300");
+      } else {
+        el.textContent = "서버 연결 끊김";
+        el.classList.remove("before:text-green-400", "text-green-300");
+        el.classList.add("before:text-red-500", "text-gray-400");
+      }
+    }
+
+    // ✅ 5초 간격으로 서버 연결 상태 확인
+    function startServerConnectionCheck() {
+      checkServerStatus().then(updateFooterStatus);
+      setInterval(async () => {
+        const ok = await checkServerStatus();
+        updateFooterStatus(ok);
+      }, 5000);
+    }
+
+    // ✅ 페이지 로드시 자동 실행
+    document.addEventListener("DOMContentLoaded", () => {
+      startServerConnectionCheck();
+    });
+  </script>
+
+
+
+  <script src="assets/js/mobile-workspace.bundle.js" defer></script>
+</body>
+
+
+
+</html>
