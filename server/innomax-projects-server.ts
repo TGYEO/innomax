@@ -42,9 +42,9 @@ export default function innomaxProjectsRouter(pool: Pool) {
       }
 
       const query = `
-        INSERT INTO public.innomax_works (id, detail_json)
+        INSERT INTO public.innomax_works (code_no, detail_json)
         VALUES ($1, $2)
-        ON CONFLICT (id)
+        ON CONFLICT (code_no)
         DO UPDATE SET detail_json = EXCLUDED.detail_json
       `;
 
@@ -64,9 +64,9 @@ export default function innomaxProjectsRouter(pool: Pool) {
     try {
       const { rows } = await pool.query(
         `
-        SELECT id, detail_json
+        SELECT code_no, detail_json
         FROM public.innomax_works
-        ORDER BY id DESC
+        ORDER BY code_no DESC
       `
       );
 
