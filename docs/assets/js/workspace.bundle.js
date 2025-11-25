@@ -17319,7 +17319,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // ✅ API 기본주소
 const API_BASE = location.hostname === "tgyeo.github.io"
-    ? "https://port-0-jeongho-1-mghorm7bef413a34.sel3.cloudtype.app"
+    ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
     : "http://127.0.0.1:5050";
 document.addEventListener("DOMContentLoaded", async () => {
     console.debug("[INIT] DOMContentLoaded 시작");

@@ -20,7 +20,7 @@ const isLocal =
 
 const API_BASE = isLocal
   ? "http://127.0.0.1:5050"
-  : "https://port-0-jeongho-1-mghorm7bef413a34.sel3.cloudtype.app";
+  : "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app";
 
 console.log("📱 [Mobile_Workspace] 초기화 시작");
 

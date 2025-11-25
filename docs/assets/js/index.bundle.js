@@ -22,7 +22,7 @@ const isLocal = location.hostname === "localhost" ||
     location.hostname.includes("app.github.dev");
 const API_BASE = isLocal
     ? "http://127.0.0.1:5050"
-    : "https://port-0-jeongho-1-mghorm7bef413a34.sel3.cloudtype.app";
+    : "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app";
 // ✅ 모달 닫기
 closeFailModalBtn.addEventListener("click", () => {
     failModal.classList.add("hidden");
