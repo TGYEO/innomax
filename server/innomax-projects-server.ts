@@ -42,7 +42,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
       }
 
       const query = `
-        INSERT INTO public.innomax_works (code_no, detail_json)
+        INSERT INTO public.innomax_projects (code_no, detail_json)
         VALUES ($1, $2)
         ON CONFLICT (code_no)
         DO UPDATE SET detail_json = EXCLUDED.detail_json
@@ -52,7 +52,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
 
       return res.json({ ok: true, message: "저장되었습니다." });
     } catch (err) {
-      console.error("❌ [innomax_works] save error:", err);
+      console.error("❌ [innomax_projects] save error:", err);
       return res
         .status(500)
         .json({ ok: false, message: "서버 오류가 발생했습니다." });
@@ -65,14 +65,14 @@ export default function innomaxProjectsRouter(pool: Pool) {
       const { rows } = await pool.query(
         `
         SELECT code_no, detail_json
-        FROM public.innomax_works
+        FROM public.innomax_projects
         ORDER BY code_no DESC
       `
       );
 
       return res.json({ ok: true, rows });
     } catch (err) {
-      console.error("❌ [innomax_works] list error:", err);
+      console.error("❌ [innomax_projects] list error:", err);
       return res
         .status(500)
         .json({ ok: false, message: "조회 중 서버 오류가 발생했습니다." });
