@@ -1,0 +1,15 @@
+{
+  "name": "이노맥스 업무 공유",
+  "short_name": "INNO-MAX",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2770b4",
+  "icons": [
+    {
+      "src": "static/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

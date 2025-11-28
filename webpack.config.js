@@ -22,7 +22,7 @@ module.exports = {
     workspace: "./TypeScript/workspace/workspace.ts",  // PC 워크스페이스 (workspace.html)
 
     // 📱 모바일 전용
-    "mobile-workspace": "./TypeScript/mobile/Mobile_Workspace.ts", // 모바일 ERP 메인 (mobileindex.html)
+    "mobile-workspace": "./TypeScript/mobile/00_Mobile_Workspace.ts", // 모바일 ERP 메인 (mobileindex.html)
   },
 
   // ─────────────────────────────────────────────

@@ -5,7 +5,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>정호개발 장비 관리</title>
+  <title>SW팀 업무 공유 프로그램</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- ✅ Tailwind -->
@@ -29,16 +29,26 @@
 <body class="bg-gray-50 text-gray-900 font-sans min-h-screen overflow-x-hidden">
 
   <!-- ✅ 슬라이드 메뉴 -->
-  <nav id="sideMenu"
-    class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 flex flex-col p-6">
+  <nav id="sideMenu" class="border border-[#848e75] fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl 
+         transform -translate-x-full transition-transform duration-500 z-50 flex flex-col p-6
+         origin-left">
+
+    <style>
+      .font-gost {
+        font-family: "Gost", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+    </style>
+
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-lg font-semibold text-gray-800">메뉴</h2>
-      <button id="menuCloseBtn" class="text-gray-500 hover:text-gray-700 transition text-xl font-bold">
+      <h2 class="text-lg font-bold text-gray-800 font-gost">메뉴</h2>
+      <button id="menuCloseBtn" class="text-red-500 hover:text-gray-700 transition text-2xl font-bold">
         ×
       </button>
     </div>
 
-    <ul class="space-y-4">
+    <ul class="space-y-3 font-gost">
+
+      <!-- 홈 화면 -->
       <li>
         <button data-tab="home"
           class="menu-item w-full text-left text-gray-800 font-medium hover:text-accent transition">
@@ -46,17 +56,76 @@
         </button>
       </li>
 
+      <!-- =========================== -->
+      <!-- 📌 내 업무 공유하기 (1단계) -->
+      <!-- =========================== -->
+
+      <li>
+        <button class="tree-toggle flex justify-between items-center w-full text-left 
+               text-gray-900 font-bold hover:text-accent transition" data-target="#tree_mywork">
+
+          내 업무 공유하기
+          <span class="arrow text-xl">▸</span>
+        </button>
+
+        <!-- 2단계 트리 -->
+        <ul id="tree_mywork" class="ml-4 mt-2 space-y-2 hidden">
+
+          <!-- 출장업무 -->
+          <li>
+            <button class="tree-toggle flex justify-between items-center w-full text-left 
+                   text-gray-800 font-semibold" data-target="#tree_outwork">
+              출장업무
+              <span class="arrow">▸</span>
+            </button>
+
+            <ul id="tree_outwork" class="ml-4 mt-1 space-y-1 hidden">
+              <li><button data-tab="mobile_set_up"
+                  class="menu-item w-full text-left text-gray-700 font-normal hover:text-accent transition">
+                  SET-UP
+                </button></li>
+              <li><button data-tab="mobile_as"
+                  class="menu-item w-full text-left text-gray-700 font-normal hover:text-accent transition">
+                  A/S
+                </button></li>
+            </ul>
+          </li>
+
+          <!-- 사내업무 -->
+          <li>
+            <button class="tree-toggle flex justify-between items-center w-full text-left 
+                   text-gray-800 font-semibold" data-target="#tree_inwork">
+              사내업무
+              <span class="arrow">▸</span>
+            </button>
+
+            <ul id="tree_inwork" class="ml-4 mt-1 space-y-1 hidden">
+              <li><button data-tab="mobile_test"
+                  class="menu-item w-full text-left text-gray-700 font-normal hover:text-accent transition">
+                  TEST
+                </button></li>
+              <li><button data-tab="mobile_doc"
+                  class="menu-item w-full text-left text-gray-700 font-normal hover:text-accent transition">
+                  문서작성
+                </button></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
   </nav>
 
+
+
   <!-- ✅ 상단 헤더 -->
   <header
-    class="fixed top-0 left-0 w-full bg-accent text-white flex items-center justify-between px-4 py-3 shadow-md z-40">
+    class="fixed top-0 left-0 w-full bg-accent text-white flex items-center justify-between px-4 py-2 shadow-md z-40">
     <button id="menuBtn" class="flex flex-col justify-center items-center space-y-1 w-7 h-6 focus:outline-none">
       <span class="w-6 h-[3px] bg-white rounded"></span>
       <span class="w-6 h-[3px] bg-white rounded"></span>
       <span class="w-6 h-[3px] bg-white rounded"></span>
     </button>
+
 
     <div class="flex items-center space-x-3">
       <div class="flex flex-col items-end text-right text-sm leading-tight">
@@ -74,16 +143,86 @@
 
 
   <!-- ✅ 본문 영역 -->
-  <main class="pt-20 pb-20 px-4 space-y-8">
+  <main class="pt-[60px] pb-16 px-4 space-y-6">
+
+
 
     <!-- 🔹 홈 화면 -->
-    <section id="home" class="tab-section text-center">
-      <img src="static/logo.gif" alt="정호개발" class="h-10 mx-auto mb-6 object-contain" />
-      <h2 class="text-2xl font-bold text-gray-800 mb-2">정호개발</h2>
+    <section id="home" class="tab-section text-center border border-[#2d6ebd]">
+      <img src="static/logo.gif" alt="inno" class="h-10 mx-auto mb-6 object-contain" />
       <p id="currentTime" class="text-gray-500 text-sm">--:--:--</p>
+
+      <div id="">
+
+      </div>
     </section>
 
- 
+
+    <section id="mobile_set_up_section"
+      class="hidden min-h-screen flex flex-col px-4 pb-20 bg-[#F4F5F7] text-gray-800 border border-[#2d6ebd]">
+
+
+      <!-- 1. 헤더 메시지 -->
+      <div class="mb-0">
+        <h2 class="text-lg font-bold text-[#2770b4]">
+          SET-UP 하시느라 고생하셨습니다!
+        </h2>
+      </div>
+
+      <!-- 2. 수주건 선택 드롭다운 -->
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-700 mb-1">
+          수주건 선택
+        </label>
+        <select id="setupOrderSelect" class="w-full p-3 rounded-lg border border-[#2d6ebd] bg-white text-sm">
+          <option value="">수주건을 선택하세요</option>
+          <!-- 동적으로 옵션 추가 예정 -->
+        </select>
+      </div>
+
+      <!-- 3. 전날 업무 불러오기 버튼 -->
+      <div class="mb-4">
+        <button id="btnLoadYesterdayWork"
+          class="w-full py-3 rounded-lg text-sm font-semibold text-white bg-[#2770b4] shadow active:scale-[0.98] transition">
+          전날 업무 불러오기
+        </button>
+      </div>
+
+      <!-- 4. 진행률 (%) Bar -->
+      <div class="mb-4">
+        <label class="block text-xs font-semibold text-gray-600 mb-1">
+          진행률
+          <span id="setupProgressPercentLabel" class="text-[11px] text-gray-500">(0%)</span>
+        </label>
+
+        <input id="setupProgressPercent" type="range" min="0" max="100" step="5" class="w-full accent-[#2770b4]">
+      </div>
+
+      <!-- 5. 불러온 업무 내용 (Read-only) -->
+      <div class="mb-4">
+        <label class="block text-xs font-semibold text-gray-600 mb-1">
+          불러온 업무 내용
+        </label>
+
+        <div id="setupLoadedWork"
+          class="w-full min-h-[80px] p-3 rounded-lg bg-white border border-[#2d6ebd] text-sm text-gray-700 overflow-y-auto">
+          불러온 내용이 없습니다.
+        </div>
+      </div>
+
+      <!-- 6. 업무 내용 작성 Textarea -->
+      <div class="mb-4 flex-1 flex flex-col">
+        <label class="block text-xs font-semibold text-gray-600 mb-1">
+          오늘 업무 내용
+        </label>
+
+        <textarea id="setupWorkInput"
+          class="w-full flex-1 p-3 rounded-lg border border-[#2d6ebd] bg-white text-sm resize-none"
+          placeholder="오늘 수행하신 SET-UP 업무를 입력해주세요."></textarea>
+      </div>
+    </section>
+
+
 
 
 
@@ -102,6 +241,39 @@
 
   <!-- ✅ JS -->
   <script>
+
+    function closeSideMenu() {
+      const sideMenu = document.getElementById("sideMenu");
+      if (!sideMenu) return;
+
+      sideMenu.style.transform = "translateX(-100%) rotateY(30deg)";
+      sideMenu.style.boxShadow = "none";
+    }
+
+
+    // =====================
+    // 📌 트리 토글
+    // =====================
+    document.querySelectorAll(".tree-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetSelector = btn.getAttribute("data-target");
+        const target = document.querySelector(targetSelector);
+
+        if (!target) return;
+
+        const arrow = btn.querySelector(".arrow");
+        const isOpen = !target.classList.contains("hidden");
+
+        if (isOpen) {
+          target.classList.add("hidden");
+          arrow.style.transform = "rotate(0deg)";
+        } else {
+          target.classList.remove("hidden");
+          arrow.style.transform = "rotate(90deg)";
+        }
+      });
+    });
+
     const menuBtn = document.getElementById("menuBtn");
     const menuCloseBtn = document.getElementById("menuCloseBtn");
     const sideMenu = document.getElementById("sideMenu");
@@ -174,6 +346,12 @@
         updateFooterStatus(ok);
       }, 5000);
     }
+
+    document.querySelectorAll("#sideMenu .menu-item").forEach(btn => {
+      btn.addEventListener("click", () => {
+        closeSideMenu();
+      });
+    });
 
     // ✅ 페이지 로드시 자동 실행
     document.addEventListener("DOMContentLoaded", () => {

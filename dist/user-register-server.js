@@ -9,7 +9,7 @@ function userRegisterRouter(pool) {
     router.get("/", async (_req, res) => {
         try {
             const result = await pool.query(`SELECT "No","ID","Name","email","company_part","created_at","updated_at","permissions"
-         FROM public.jeongho_users
+         FROM public.innomax_users
          ORDER BY created_at DESC NULLS LAST`);
             res.json(result.rows);
         }
@@ -28,7 +28,7 @@ function userRegisterRouter(pool) {
             const No = (0, uuid_1.v4)(); // ✅ 서버에서 No 자동 생성
             const now = new Date().toISOString();
             const perms = JSON.stringify(permissions !== null && permissions !== void 0 ? permissions : {});
-            await pool.query(`INSERT INTO public.jeongho_users
+            await pool.query(`INSERT INTO public.innomax_users
           ("No","ID","password_hash","Name","email","company_part","created_at","updated_at","permissions")
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`, [No, ID, password, Name, email !== null && email !== void 0 ? email : null, company_part !== null && company_part !== void 0 ? company_part : null, now, now, perms]);
             res.json({ ok: true, No });
@@ -78,7 +78,7 @@ function userRegisterRouter(pool) {
             if (sets.length === 0)
                 return res.json({ ok: true });
             vals.push(no);
-            const query = `UPDATE public.jeongho_users SET ${sets.join(", ")} WHERE "No"=$${idx}`;
+            const query = `UPDATE public.innomax_users SET ${sets.join(", ")} WHERE "No"=$${idx}`;
             await pool.query(query, vals);
             res.json({ ok: true });
         }
@@ -91,7 +91,7 @@ function userRegisterRouter(pool) {
     router.delete("/:no", async (req, res) => {
         try {
             const { no } = req.params;
-            await pool.query(`DELETE FROM public.jeongho_users WHERE "No"=$1`, [no]);
+            await pool.query(`DELETE FROM public.innomax_users WHERE "No"=$1`, [no]);
             res.json({ ok: true });
         }
         catch (err) {
@@ -104,7 +104,7 @@ function userRegisterRouter(pool) {
         try {
             const { no } = req.params;
             const result = await pool.query(`SELECT "No","ID","Name","email","company_part","created_at","updated_at","permissions"
- FROM public.jeongho_users WHERE "No"=$1`, [no]);
+ FROM public.innomax_users WHERE "No"=$1`, [no]);
             if (result.rows.length === 0) {
                 return res.status(404).json({ error: "사용자를 찾을 수 없습니다." });
             }

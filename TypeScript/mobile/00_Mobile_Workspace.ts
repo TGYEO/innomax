@@ -4,11 +4,17 @@
 // 설명: 로그인 인증 + 세션만료 + 대시보드/출고/입고/점검 초기화 + 서버상태 모니터링
 // ======================================================
 
-import { initMobile_DashBoard } from "./Mobile_DashBoard";
-import { initMobile_Lift_OutBound } from "./Mobile_Lift_OutBound";
-import { initMobile_Lift_InBound } from "./Mobile_Lift_InBound";
-import { initMobile_Lift_Check } from "./Mobile_Lift_Check";
+import { initMobile_DashBoard } from "./01_Mobile_DashBoard";
 import { Mobile_Loading } from "./mobileUtils/Mobile_Loading";
+
+// ======================================================
+// 📦 출장/사내 업무 모듈 Pool Import
+// ======================================================
+import { initMobile_SetUp } from "./02_mobile_set_up";
+import { initMobile_AS } from "./03_mobile_as";
+import { initMobile_Test } from "./04_mobile_test";
+import { initMobile_Doc } from "./05_mobile_doc";
+
 
 // ======================================================
 // 🌐 API BASE 설정
@@ -41,7 +47,7 @@ function initAuthAndUserInfo() {
   const userRole = document.getElementById("userRole");
 
   if (userName) userName.textContent = user.name;
-  if (userRole) userRole.textContent = "정호개발 관리자";
+  if (userRole) userRole.textContent = "SW팀";
 
   // ✅ 세션 만료 검사 (30분)
   const loginTime = user.loginTime;
@@ -96,13 +102,12 @@ export async function initMobile_Workspace() {
     // ✅ 각 탭 초기화
     console.log("🧭 [Mobile_Workspace] 모듈 초기화 시작");
     initMobile_DashBoard(API_BASE);
-    initMobile_Lift_OutBound(API_BASE);
-    initMobile_Lift_InBound(API_BASE);
-    initMobile_Lift_Check(API_BASE);
     console.log("✅ [Mobile_Workspace] 모든 모듈 초기화 완료");
 
     // ✅ 서버 상태 모니터링 시작
     startServerConnectionCheck();
+    // 🔹 출장/사내 업무 Pool 모듈 초기화
+    initBusinessModules();
   } catch (err) {
     console.error("❌ [Mobile_Workspace] 초기화 오류:", err);
     alert("모바일 워크스페이스 초기화 중 오류가 발생했습니다.");
@@ -117,6 +122,7 @@ export async function initMobile_Workspace() {
 document.addEventListener("DOMContentLoaded", () => {
   initMobile_Workspace();
 });
+
 
 // ======================================================
 // 🌐 서버 연결 상태 체크 (Footer 표시)
@@ -144,6 +150,18 @@ function updateFooterStatus(connected: boolean) {
     el.classList.remove("before:text-green-400", "text-green-300");
     el.classList.add("before:text-red-500", "text-gray-400");
   }
+}
+
+// ======================================================
+// 📦 출장업무 + 사내업무 Pool 초기화
+// ======================================================
+function initBusinessModules() {
+  console.log("📦 [Mobile_Workspace] 업무 Pool 초기화 시작");
+
+  initMobile_SetUp(API_BASE);
+  initMobile_AS(API_BASE);
+  initMobile_Test(API_BASE);
+  initMobile_Doc(API_BASE);
 }
 
 /**

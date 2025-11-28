@@ -16,7 +16,7 @@ function loginRouter(pool) {
             // ID + password_hash 평문 비교
             const query = `
       SELECT "ID" as id, "Name" as name
-      FROM jeongho_users
+      FROM innomax_users
       WHERE "ID" = $1 AND "password_hash" = $2
       LIMIT 1
     `;

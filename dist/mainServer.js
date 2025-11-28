@@ -15,6 +15,7 @@ const PORT = Number(process.env.PORT) || 5050;
 const allowedOrigins = [
     "http://127.0.0.1:5500",
     "http://127.0.0.1:5501", // ✅ 실제 Live Server 주소
+    "http://127.0.0.1:5502",
     "http://localhost:5500",
     "http://localhost:5501",
     "http://localhost:5050",
@@ -90,25 +91,21 @@ app.get("/api/health", async (req, res) => {
 });
 // ✅ 라우터 불러오기
 const login_server_1 = __importDefault(require("./login-server"));
-const Parts_server_1 = __importDefault(require("./Parts-server"));
-const Projects_server_1 = __importDefault(require("./Projects-server"));
-const InspectionLog_1 = __importDefault(require("./InspectionLog"));
-const PartsHistoryLog_1 = __importDefault(require("./PartsHistoryLog"));
 const user_register_server_1 = __importDefault(require("./user-register-server"));
-const Projects_server_2 = __importDefault(require("./Projects-server"));
-const ProjectsOverview_server_1 = __importDefault(require("./ProjectsOverview-server")); // ✅ 변경됨
-// ✅ 라우터 주입 (정상 동작 버전)
+const innomax_projects_server_1 = __importDefault(require("./innomax-projects-server"));
+const innomax_works_server_1 = __importDefault(require("./innomax-works-server"));
+const innomax_progress_server_1 = __importDefault(require("./innomax-progress-server"));
+// ✅ 라우터 주입
 app.use("/api/login", (0, login_server_1.default)(pool));
-app.use("/api/parts", (0, Parts_server_1.default)(pool));
-// ✅ overview 라우터 먼저 등록
-app.use("/api/projects-overview", (0, ProjectsOverview_server_1.default)(pool));
-// ✅ 나머지 프로젝트 관련 라우터들
-app.use("/api/projects", (0, Projects_server_1.default)(pool));
-app.use("/api/projects", (0, Projects_server_2.default)(pool));
-app.use("/api/inspection", (0, InspectionLog_1.default)(pool));
-app.use("/api/parts-history", (0, PartsHistoryLog_1.default)(pool));
 app.use("/api/users", (0, user_register_server_1.default)(pool));
+app.use("/api/innomax-projects", (0, innomax_projects_server_1.default)(pool));
+app.use("/api/innomax-works", (0, innomax_works_server_1.default)(pool));
+app.use("/api/innomax-progress", (0, innomax_progress_server_1.default)(pool));
 // ✅ 서버 실행
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+// ✅ 서버 연결 확인용 핑(Ping) 엔드포인트
+app.get("/api/ping", (req, res) => {
+    res.json({ status: "ok", message: "서버 연결 정상" });
 });
