@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./TypeScript/workspace/dashboard.ts":
-/*!*******************************************!*\
-  !*** ./TypeScript/workspace/dashboard.ts ***!
-  \*******************************************/
+/***/ "./TypeScript/workspace/01_dashboard.ts":
+/*!**********************************************!*\
+  !*** ./TypeScript/workspace/01_dashboard.ts ***!
+  \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -22,19 +22,323 @@ async function initDashboardPanel(API_BASE) {
 
 /***/ }),
 
-/***/ "./TypeScript/workspace/order-register.ts":
-/*!************************************************!*\
-  !*** ./TypeScript/workspace/order-register.ts ***!
-  \************************************************/
+/***/ "./TypeScript/workspace/02_view.ts":
+/*!*****************************************!*\
+  !*** ./TypeScript/workspace/02_view.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initView: () => (/* binding */ initView)
+/* harmony export */ });
+// src/view.ts
+function initView(API_BASE) {
+    const userData = localStorage.getItem("user");
+    if (!userData) {
+        alert("세션 만료 또는 비정상 접근입니다.");
+        window.location.href = "index.html";
+        return;
+    }
+    const user = JSON.parse(userData);
+    const userName = document.getElementById("userName");
+    const avatar = document.getElementById("avatar");
+    if (userName)
+        userName.textContent = user.name;
+    if (avatar)
+        avatar.textContent = user.name.charAt(0).toUpperCase();
+    // ✅ 세션 만료 체크 (30분 기준)
+    const loginTime = user.loginTime;
+    const now = Date.now();
+    if (now - loginTime > 1000 * 60 * 30) {
+        alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
+        localStorage.clear();
+        window.location.href = "index.html";
+    }
+    // ✅ 로그아웃 버튼 이벤트
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        localStorage.clear();
+        fetch(`${API_BASE}/api/login/logout`, {
+            method: "POST",
+            credentials: "include",
+        }).catch(() => { });
+        window.location.href = "index.html";
+    });
+    // ✅ 뒤로가기 방지
+    history.pushState(null, "", location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+}
+
+
+/***/ }),
+
+/***/ "./TypeScript/workspace/03_user-register.ts":
+/*!**************************************************!*\
+  !*** ./TypeScript/workspace/03_user-register.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initUserRegisterPanel: () => (/* binding */ initUserRegisterPanel)
+/* harmony export */ });
+function initUserRegisterPanel(API_BASE) {
+    const userTableBody = document.getElementById("userTableBody");
+    const userCount = document.getElementById("userCount");
+    const userForm = document.getElementById("userForm");
+    const modalMode = document.getElementById("modalMode");
+    const modalNo = document.getElementById("modalNo");
+    const userModal = document.getElementById("userModal");
+    const permPreview = document.getElementById("permPreview");
+    const permLabels = {
+        order_register: "수주건등록",
+        task_assign: "업무할당",
+        progress: "진행상황",
+        report: "진행상황보고",
+        request: "요청사항",
+    };
+    const permValues = {
+        ReadWrite: "읽고 쓰기 가능",
+        ReadOnly: "읽기 전용",
+        NoAccess: "접근 불가",
+    };
+    function parsePerm(json) {
+        try {
+            const obj = json ? JSON.parse(json) : {};
+            return {
+                order_register: obj.order_register ?? "NoAccess",
+                task_assign: obj.task_assign ?? "NoAccess",
+                progress: obj.progress ?? "NoAccess",
+                report: obj.report ?? "NoAccess",
+                request: obj.request ?? "NoAccess",
+            };
+        }
+        catch {
+            return {
+                order_register: "NoAccess",
+                task_assign: "NoAccess",
+                progress: "NoAccess",
+                report: "NoAccess",
+                request: "NoAccess",
+            };
+        }
+    }
+    function updatePermPreview(permissions) {
+        if (!permPreview)
+            return;
+        const html = Object.entries(permissions)
+            .map(([k, v]) => `${permLabels[k]} : ${permValues[v]}`)
+            .join("<br>");
+        permPreview.innerHTML = html;
+    }
+    // 🟦 사용자 목록 렌더링
+    async function renderUsers() {
+        try {
+            const res = await fetch(`${API_BASE}/api/users`);
+            const users = await res.json();
+            userTableBody.innerHTML = "";
+            users.forEach((u, idx) => {
+                const p = parsePerm(u.permissions);
+                const permText = Object.entries(p)
+                    .map(([k, v]) => `${permLabels[k]} : ${permValues[v]}`)
+                    .join("<br>");
+                userTableBody.innerHTML += `
+          <tr>
+            <td class="px-4 py-2">${idx + 1}</td>
+            <td class="px-4 py-2">${u.Name ?? "-"}</td>
+            <td class="px-4 py-2">${u.ID}</td>
+            <td class="px-4 py-2">****</td>
+            <td class="px-4 py-2">${u.email ?? "-"}</td>
+            <td class="px-4 py-2">${u.company_part ?? "-"}</td>
+            <td class="px-4 py-2 text-xs">${permText}</td>
+            <td class="px-4 py-2 text-center space-x-2">
+              <button data-action="edit" data-no="${u.No}" class="px-3 py-1 bg-yellow-400 text-white rounded text-xs">수정</button>
+              <button data-action="delete" data-no="${u.No}" class="px-3 py-1 bg-red-500 text-white rounded text-xs">삭제</button>
+            </td>
+          </tr>`;
+            });
+            userCount.innerText = `${users.length}명`;
+        }
+        catch (err) {
+            console.error("❌ 사용자 목록 불러오기 실패:", err);
+        }
+    }
+    // 🟦 모달 열기
+    async function openUserModal(mode, no) {
+        const title = document.getElementById("modalTitle");
+        const nameInput = document.getElementById("modalName");
+        const idInput = document.getElementById("modalID");
+        const passwordInput = document.getElementById("modalPassword");
+        const emailInput = document.getElementById("modalEmail");
+        const companyInput = document.getElementById("modalCompanyPart");
+        const Select = (id) => document.getElementById(id);
+        passwordInput.type = "password";
+        // ==============================
+        // 신규 사용자 추가
+        // ==============================
+        if (mode === "add") {
+            title.innerText = "신규 사용자 추가";
+            modalMode.value = "add";
+            modalNo.value = "";
+            userForm.reset();
+            const defaultPerm = {
+                order_register: "ReadWrite",
+                task_assign: "ReadWrite",
+                progress: "ReadWrite",
+                report: "ReadWrite",
+                request: "ReadWrite",
+            };
+            Select("수주건등록").value = defaultPerm.order_register;
+            Select("업무할당").value = defaultPerm.task_assign;
+            Select("진행상황").value = defaultPerm.progress;
+            Select("진행상황보고").value = defaultPerm.report;
+            Select("요청사항").value = defaultPerm.request;
+            updatePermPreview(defaultPerm);
+        }
+        // ==============================
+        // 사용자 수정
+        // ==============================
+        else if (mode === "edit" && no) {
+            try {
+                const res = await fetch(`${API_BASE}/api/users/${no}`);
+                const u = await res.json();
+                title.innerText = "사용자 수정";
+                modalMode.value = "edit";
+                modalNo.value = u.No;
+                nameInput.value = u.Name ?? "";
+                idInput.value = u.ID;
+                passwordInput.value = "";
+                passwordInput.placeholder = "변경 시에만 입력";
+                emailInput.value = u.email ?? "";
+                companyInput.value = u.company_part ?? "";
+                const p = parsePerm(u.permissions);
+                Select("수주건등록").value = p.order_register;
+                Select("업무할당").value = p.task_assign;
+                Select("진행상황").value = p.progress;
+                Select("진행상황보고").value = p.report;
+                Select("요청사항").value = p.request;
+                updatePermPreview(p);
+            }
+            catch (err) {
+                console.error("❌ 사용자 정보 불러오기 실패:", err);
+            }
+        }
+        userModal.classList.remove("hidden");
+    }
+    // 🟦 모달 닫기
+    function closeUserModal() {
+        userModal.classList.add("hidden");
+    }
+    window.togglePassword = function () {
+        const input = document.getElementById("modalPassword");
+        input.type = input.type === "password" ? "text" : "password";
+    };
+    // 새 권한 ID
+    const permIds = ["수주건등록", "업무할당", "진행상황", "진행상황보고", "요청사항"];
+    // 🟦 권한 select 변경 → 미리보기 갱신
+    permIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("change", () => {
+                const p = {
+                    order_register: document.getElementById("수주건등록").value,
+                    task_assign: document.getElementById("업무할당").value,
+                    progress: document.getElementById("진행상황").value,
+                    report: document.getElementById("진행상황보고").value,
+                    request: document.getElementById("요청사항").value,
+                };
+                updatePermPreview(p);
+            });
+        }
+    });
+    // 🟦 저장
+    if (userForm) {
+        userForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const mode = modalMode.value;
+            const no = modalNo.value || undefined;
+            const Name = document.getElementById("modalName").value.trim();
+            const ID = document.getElementById("modalID").value.trim();
+            const password = document.getElementById("modalPassword").value.trim();
+            const email = document.getElementById("modalEmail").value.trim() || null;
+            const company_part = document.getElementById("modalCompanyPart").value.trim() || null;
+            const permissions = {
+                order_register: document.getElementById("수주건등록").value,
+                task_assign: document.getElementById("업무할당").value,
+                progress: document.getElementById("진행상황").value,
+                report: document.getElementById("진행상황보고").value,
+                request: document.getElementById("요청사항").value,
+            };
+            try {
+                if (mode === "add") {
+                    await fetch(`${API_BASE}/api/users`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ Name, ID, password, email, company_part, permissions }),
+                    });
+                }
+                else {
+                    const payload = { Name, ID, email, company_part, permissions };
+                    if (password)
+                        payload.password = password;
+                    await fetch(`${API_BASE}/api/users/${no}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                }
+                await renderUsers();
+                closeUserModal();
+            }
+            catch (err) {
+                console.error("❌ 사용자 저장 실패:", err);
+            }
+        });
+    }
+    // 🟦 삭제
+    async function deleteUser(no) {
+        await fetch(`${API_BASE}/api/users/${no}`, { method: "DELETE" });
+        await renderUsers();
+    }
+    userTableBody.addEventListener("click", (e) => {
+        const target = e.target;
+        if (target.dataset.action === "edit")
+            openUserModal("edit", target.dataset.no);
+        if (target.dataset.action === "delete")
+            deleteUser(target.dataset.no);
+    });
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape")
+            closeUserModal();
+    });
+    window.openAddUserModal = () => openUserModal("add");
+    window.closeUserModal = closeUserModal;
+    renderUsers();
+}
+
+
+/***/ }),
+
+/***/ "./TypeScript/workspace/04_order-register.ts":
+/*!***************************************************!*\
+  !*** ./TypeScript/workspace/04_order-register.ts ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   initOrderRegisterPanel: () => (/* binding */ initOrderRegisterPanel)
 /* harmony export */ });
+/* harmony import */ var _04_order_register_detail__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./04_order-register_detail */ "./TypeScript/workspace/04_order-register_detail.ts");
 // TypeScript/workspace/order-register.ts
+
 let orderRegisterInitialized = false;
 function initOrderRegisterPanel(API_BASE) {
+    const API_BASE_inner = location.hostname === "tgyeo.github.io"
+        ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
+        : "http://127.0.0.1:5050";
     function clearForm() {
         orderNoEl.value = "";
         equipNameEl.value = "";
@@ -82,6 +386,9 @@ function initOrderRegisterPanel(API_BASE) {
         console.error("❌ [OrderRegister] 버튼 또는 테이블 body를 찾지 못했습니다.");
         return;
     }
+    // 내부 탭 버튼
+    const tabButtons = document.querySelectorAll(`#panel-수주건등록 .tab-btn`);
+    const tabs = document.querySelectorAll(`#panel-수주건등록 .tab-panel`);
     // ============================================
     // ✅ 리스트 로드 함수
     // ============================================
@@ -132,6 +439,15 @@ function initOrderRegisterPanel(API_BASE) {
     // ============================================
     if (!orderRegisterInitialized) {
         orderRegisterInitialized = true;
+        // 내부 탭 버튼 클릭 이벤트
+        tabButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const tabId = btn.dataset.tab;
+                if (tabId === "_panel-수주건등록-2") {
+                    (0,_04_order_register_detail__WEBPACK_IMPORTED_MODULE_0__.initOrderRegister_detail_Panel)(API_BASE_inner);
+                }
+            });
+        });
         // 🔹 저장 버튼 클릭
         btnSaveOrder.addEventListener("click", async () => {
             const orderNo = orderNoEl.value.trim();
@@ -242,10 +558,566 @@ function initOrderRegisterPanel(API_BASE) {
 
 /***/ }),
 
-/***/ "./TypeScript/workspace/progress-panel.ts":
-/*!************************************************!*\
-  !*** ./TypeScript/workspace/progress-panel.ts ***!
-  \************************************************/
+/***/ "./TypeScript/workspace/04_order-register_detail.ts":
+/*!**********************************************************!*\
+  !*** ./TypeScript/workspace/04_order-register_detail.ts ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initOrderRegister_detail_Panel: () => (/* binding */ initOrderRegister_detail_Panel)
+/* harmony export */ });
+let initOrderRegister_detail_Panel_Initialized = false;
+function initOrderRegister_detail_Panel(API_BASE) {
+    if (initOrderRegister_detail_Panel_Initialized)
+        return;
+    initOrderRegister_detail_Panel_Initialized = true;
+    console.log("🟦 [메인장비 사양등록] 패널 초기화 시작");
+    // 🔧 실제 1~8 생성
+    const container = document.getElementById("chamber-container");
+    for (let i = 1; i <= 8; i++) {
+        container.insertAdjacentHTML("beforeend", createChamberLayout(i));
+        const domChamber = collectChamberDOM(i);
+        bindChamberEvents(domChamber);
+        // domChamber.btnApply.addEventListener("click", () => {
+        //     const values = collectChamberValues(domChamber);
+        //     appendChamberBox(i, values);
+        // });
+    }
+    // -------------------------------------------------------------------
+    // 📌 1) DOM 요소 수집
+    // -------------------------------------------------------------------
+    const suffix = "_panel-수주건등록-2";
+    const dom = {
+        type: document.getElementById("equipment_type" + suffix),
+        inch: document.getElementById("equipment_inch" + suffix),
+        traumWrap: document.getElementById("traum_only_wrap" + suffix),
+        traumSub: document.getElementById("traum_sub" + suffix),
+        driveType: document.getElementById("drive_type" + suffix),
+        layout: document.getElementById("layout-view" + suffix),
+        btnApply: document.getElementById("장비기본구조-btnApplyLayout" + suffix),
+        sizeInputs: {
+            main_1: {
+                width: document.getElementById("main_1_width" + suffix),
+                height: document.getElementById("main_1_height" + suffix),
+            },
+            main_2: {
+                width: document.getElementById("main_2_width" + suffix),
+                height: document.getElementById("main_2_height" + suffix),
+            },
+            local1: {
+                width: document.getElementById("local1_width" + suffix),
+                height: document.getElementById("local1_height" + suffix),
+            },
+            local2: {
+                width: document.getElementById("local2_width" + suffix),
+                height: document.getElementById("local2_height" + suffix),
+            },
+            local3: {
+                width: document.getElementById("local3_width" + suffix),
+                height: document.getElementById("local3_height" + suffix),
+            },
+            local4: {
+                width: document.getElementById("local4_width" + suffix),
+                height: document.getElementById("local4_height" + suffix),
+            },
+            local5: {
+                width: document.getElementById("local5_width" + suffix),
+                height: document.getElementById("local5_height" + suffix),
+            },
+        }
+    };
+    function collectChamberDOM(chNo) {
+        const suffix = "_panel-수주건등록-2";
+        const dom = {
+            chuckType: document.getElementById(`챔버-${chNo}-구조-chuck_type${suffix}`),
+            cups: {},
+            innerCup: document.getElementById(`챔버-${chNo}-구조-inner-cup_type${suffix}`),
+            backChemical: {
+                type1: document.getElementById(`챔버-${chNo}-구조-Back-Chemical-type-1${suffix}`),
+                type2: document.getElementById(`챔버-${chNo}-구조-Back-Chemical-type-2${suffix}`)
+            },
+            dispensers: {},
+            btnApply: document.getElementById(`챔버-${chNo}-구조-btnApplyLayout${suffix}`)
+        };
+        // -------------------------------------------------
+        // Cup 1~4 DOM 수집
+        // -------------------------------------------------
+        for (let i = 1; i <= 4; i++) {
+            dom.cups[`cup${i}`] = document.getElementById(`챔버-${chNo}-구조-cup-${i}_type${suffix}`);
+        }
+        // -------------------------------------------------
+        // Dispenser 1~4 DOM 수집
+        // -------------------------------------------------
+        for (let d = 1; d <= 4; d++) {
+            const dispKey = `dispenser${d}`;
+            dom.dispensers[dispKey] = {
+                type: document.getElementById(`챔버-${chNo}-구조-dispenser-${d}_type${suffix}`),
+                chemicals: {}
+            };
+            // Chemical 1~4
+            for (let c = 1; c <= 4; c++) {
+                dom.dispensers[dispKey].chemicals[`chem${c}`] =
+                    document.getElementById(`챔버-${chNo}-구조-dispenser-${d}-chemical-${c}_type${suffix}`);
+            }
+        }
+        //이벤트 등록 함수
+        return dom;
+    }
+    dom.layout.style.position = "relative";
+    dom.layout.style.minHeight = "400px";
+    // -------------------------------------------------------------------
+    // 📌 2) TRAUM ONLY 표시
+    // -------------------------------------------------------------------
+    function applyTraumCondition() {
+        console.log(`🔎 [TRAUM 체크] type=${dom.type.value}`);
+        dom.traumWrap.style.display = dom.type.value === "TRAUM" ? "" : "none";
+    }
+    applyTraumCondition();
+    dom.type.addEventListener("change", applyTraumCondition);
+    // -------------------------------------------------------------------
+    // 📌 3) 확인 버튼 클릭 → 박스 생성
+    // -------------------------------------------------------------------
+    dom.btnApply.addEventListener("click", () => {
+        console.log("📐 [레이아웃 생성 START] ---------------------------");
+        // 초기화
+        dom.layout.innerHTML = "";
+        console.log("🧹 기존 layout 박스 삭제 완료");
+        const items = [
+            { key: "main_1", label: "메인장비-1" },
+            { key: "main_2", label: "메인장비-2" },
+            { key: "local1", label: "로컬유닛-1" },
+            { key: "local2", label: "로컬유닛-2" },
+            { key: "local3", label: "로컬유닛-3" },
+            { key: "local4", label: "로컬유닛-4" },
+            { key: "local5", label: "로컬유닛-5" },
+        ];
+        // ● 입력된 값 확인 로그
+        console.log("📥 입력값 확인");
+        items.forEach(i => {
+            console.log(`   - ${i.label}: ${dom.sizeInputs[i.key].width.value} × ${dom.sizeInputs[i.key].height.value}`);
+        });
+        // 유효값 필터링
+        const valid = items.map(item => {
+            const w = Number(dom.sizeInputs[item.key].width.value);
+            const h = Number(dom.sizeInputs[item.key].height.value);
+            return { ...item, width: w, height: h };
+        }).filter(v => v.width > 0 && v.height > 0);
+        console.log("📋 유효 데이터:", valid);
+        if (!valid.length) {
+            console.warn("⚠️ [STOP] width/height 모두 0 또는 비어 있음 → 박스 생성 중단");
+            return;
+        }
+        const maxWidth = Math.max(...valid.map(x => x.width));
+        const maxHeight = Math.max(...valid.map(x => x.height));
+        console.log("📏 최대 width =", maxWidth, " / 최대 height =", maxHeight);
+        const baseMinW = 80; // 최소 가로 px
+        const baseMinH = 40; // 최소 세로 px
+        const baseAddW = 220; // 비례 가로 px
+        const baseAddH = 140; // 비례 세로 px
+        valid.forEach((item, idx) => {
+            // 📌 가로 비례(px)
+            const ratioW = item.width / maxWidth;
+            const pxWidth = baseMinW + baseAddW * ratioW;
+            // 📌 세로 비례(px)
+            const ratioH = item.height / maxHeight;
+            const pxHeight = baseMinH + baseAddH * ratioH;
+            console.log(`➡ 박스 생성: ${item.label}, size = ${pxWidth} × ${pxHeight}`);
+            const box = document.createElement("div");
+            box.className = "drag-box";
+            // 가로/세로 반영
+            box.style.width = `${pxWidth}px`;
+            box.style.height = `${pxHeight}px`; // 실제로 height 가 아니라고 봐야한다
+            // 초기 위치
+            box.style.left = "10px";
+            box.style.top = `${10 + idx * (pxHeight + 20)}px`;
+            // Text
+            box.textContent = `${item.label} (${item.width} × ${item.height})`;
+            dom.layout.appendChild(box);
+        });
+        console.log("🎉 박스 생성 완료. 드래그 기능 활성화");
+        enableDrag(dom.layout);
+    });
+    // -------------------------------------------------------------------
+    // 📌 4) 드래그 기능
+    // -------------------------------------------------------------------
+    function enableDrag(container) {
+        console.log("🟦 드래그 기능 활성화");
+        let target = null;
+        let offsetX = 0, offsetY = 0;
+        container.onmousedown = (e) => {
+            const el = e.target.closest(".drag-box");
+            if (!el)
+                return;
+            target = el;
+            const rect = el.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            console.log(`🟡 드래그 시작: ${el.textContent}`);
+            document.onmousemove = onMove;
+            document.onmouseup = onUp;
+        };
+        function onMove(e) {
+            if (!target)
+                return;
+            const rect = container.getBoundingClientRect();
+            let x = e.clientX - rect.left - offsetX;
+            let y = e.clientY - rect.top - offsetY;
+            if (x < 0)
+                x = 0;
+            if (y < 0)
+                y = 0;
+            if (x > rect.width - target.offsetWidth)
+                x = rect.width - target.offsetWidth;
+            if (y > rect.height - target.offsetHeight)
+                y = rect.height - target.offsetHeight;
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+        }
+        function onUp() {
+            if (target) {
+                console.log(`🟢 드래그 종료: 최종 위치 = ${target.style.left}, ${target.style.top}`);
+            }
+            target = null;
+            document.onmousemove = null;
+            document.onmouseup = null;
+        }
+    }
+    function createChamberLayout(chNo) {
+        return `
+            <div id="챔버-${chNo}-구조" class="p-2 border border-[#000000] mt-3">
+        챔버-${chNo}
+
+        <!-- CHUCK -->
+        <div class="opt-row">
+            <label class="opt-label">CHUCK Type</label>
+            <select id="챔버-${chNo}-구조-chuck_type_panel-수주건등록-2" class="opt-input">
+                <option>GRIP</option>
+                <option>VACCUM</option>
+                <option>Bernoulli</option>
+                <option>Venturi</option>
+            </select>
+        </div>
+
+        <!-- Cup 1~4 -->
+        ${[1, 2, 3, 4].map(i => `
+        <div class="opt-row">
+            <label class="opt-label">Cup-${i} Type</label>
+            <select id="챔버-${chNo}-구조-cup-${i}_type_panel-수주건등록-2" class="opt-input">
+                <option>None</option>
+                <option>Cyclinder</option>
+                <option>Motor</option>
+            </select>
+        </div>
+        `).join("")}
+
+        <!-- Inner Cup -->
+        <div class="opt-row">
+            <label class="opt-label">Inner Cup Type</label>
+            <select id="챔버-${chNo}-구조-inner-cup_type_panel-수주건등록-2" class="opt-input">
+                <option>None</option>
+                <option>Motor</option>
+            </select>
+        </div>
+
+        <!-- Back Chemical -->
+        <div class="opt-row">
+            <label class="opt-label">Back Chemical</label>
+            <div>
+                <select id="챔버-${chNo}-구조-Back-Chemical-type-1_panel-수주건등록-2" class="opt-input">
+                    <option>None</option>
+                    <option>DIW</option>
+                    <option>N2</option>
+                </select>
+                <select id="챔버-${chNo}-구조-Back-Chemical-type-2_panel-수주건등록-2" class="opt-input">
+                    <option>None</option>
+                    <option>DIW</option>
+                    <option>N2</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Dispenser 1 -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#d0f655]">Dispenser-1 Type</label>
+            <select id="챔버-${chNo}-구조-dispenser-1_type_panel-수주건등록-2" class="opt-input">
+                <option>None</option>
+                <option>U/D Cyclinder</option>
+                <option>U/D Motor</option>
+            </select>
+        </div>
+
+        <!-- Dispenser Chemicals -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#d0f655]">Dispenser-1 Chemical</label>
+            <div>
+                ${[1, 2, 3, 4].map(i => `
+                <select id="챔버-${chNo}-구조-dispenser-1-chemical-${i}_type_panel-수주건등록-2"
+                    class="opt-input">
+                    <option>None</option>
+                    <option>DIW</option>
+                    <option>N2</option>
+                    <option>NANO-DIW</option>
+                    <option>DICO2</option>
+                    <option>TIW</option>
+                    <option>TI</option>
+                    <option>CU</option>
+                    <option>ACID</option>
+                    <option>NPS-5300</option>
+                </select>
+                `).join("")}
+            </div>
+        </div>
+
+        <!-- Dispenser 2 -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#d7644b]">Dispenser-2 Type</label>
+            <select id="챔버-${chNo}-구조-dispenser-2_type_panel-수주건등록-2" class="opt-input">
+                <option>None</option>
+                <option>U/D Cyclinder</option>
+                <option>U/D Motor</option>
+            </select>
+        </div>
+
+        <!-- Dispenser Chemicals -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#d7644b]">Dispenser-2 Chemical</label>
+            <div>
+                ${[1, 2, 3, 4].map(i => `
+                <select id="챔버-${chNo}-구조-dispenser-2-chemical-${i}_type_panel-수주건등록-2"
+                    class="opt-input">
+                    <option>None</option>
+                    <option>DIW</option>
+                    <option>N2</option>
+                    <option>NANO-DIW</option>
+                    <option>DICO2</option>
+                    <option>TIW</option>
+                    <option>TI</option>
+                    <option>CU</option>
+                    <option>ACID</option>
+                    <option>NPS-5300</option>
+                </select>
+                `).join("")}
+            </div>
+        </div>
+
+        <!-- Dispenser 3 -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#4bd7d2]">Dispenser-3 Type</label>
+            <select id="챔버-${chNo}-구조-dispenser-3_type_panel-수주건등록-2" class="opt-input">
+                <option>None</option>
+                <option>U/D Cyclinder</option>
+                <option>U/D Motor</option>
+            </select>
+        </div>
+
+        <!-- Dispenser Chemicals -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#4bd7d2]">Dispenser-3 Chemical</label>
+            <div>
+                ${[1, 2, 3, 4].map(i => `
+                <select id="챔버-${chNo}-구조-dispenser-3-chemical-${i}_type_panel-수주건등록-2"
+                    class="opt-input">
+                    <option>None</option>
+                    <option>DIW</option>
+                    <option>N2</option>
+                    <option>NANO-DIW</option>
+                    <option>DICO2</option>
+                    <option>TIW</option>
+                    <option>TI</option>
+                    <option>CU</option>
+                    <option>ACID</option>
+                    <option>NPS-5300</option>
+                </select>
+                `).join("")}
+            </div>
+        </div>
+
+        <!-- Dispenser 4 -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#624bd7]">Dispenser-4 Type</label>
+            <select id="챔버-${chNo}-구조-dispenser-4_type_panel-수주건등록-2" class="opt-input">
+                <option>None</option>
+                <option>U/D Cyclinder</option>
+                <option>U/D Motor</option>
+            </select>
+        </div>
+
+        <!-- Dispenser Chemicals -->
+        <div class="opt-row">
+            <label class="opt-label bg-[#624bd7]">Dispenser-4 Chemical</label>
+            <div>
+                ${[1, 2, 3, 4].map(i => `
+                <select id="챔버-${chNo}-구조-dispenser-4-chemical-${i}_type_panel-수주건등록-2"
+                    class="opt-input">
+                    <option>None</option>
+                    <option>DIW</option>
+                    <option>N2</option>
+                    <option>NANO-DIW</option>
+                    <option>DICO2</option>
+                    <option>TIW</option>
+                    <option>TI</option>
+                    <option>CU</option>
+                    <option>ACID</option>
+                    <option>NPS-5300</option>
+                </select>
+                `).join("")}
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-4">
+            <button id="챔버-${chNo}-구조-btnApplyLayout_panel-수주건등록-2"
+                class="px-4 py-1 rounded bg-blue-600 text-white text-sm hover:bg-blue-700">
+                확인
+            </button>
+        </div>
+    </div>`;
+    }
+    //#region 챔버 형상화 관련
+    function collectChamberValues(dom) {
+        const result = {};
+        result.chuckType = dom.chuckType.value;
+        result.innerCup = dom.innerCup.value;
+        result.cups = {};
+        for (let i = 1; i <= 4; i++) {
+            result.cups[`cup${i}`] = dom.cups[`cup${i}`].value;
+        }
+        result.backChemical = {
+            type1: dom.backChemical.type1.value,
+            type2: dom.backChemical.type2.value,
+        };
+        result.dispensers = {};
+        for (let d = 1; d <= 4; d++) {
+            result.dispensers[`disp${d}`] = {
+                type: dom.dispensers[`dispenser${d}`].type.value,
+                chemicals: {}
+            };
+            for (let c = 1; c <= 4; c++) {
+                result.dispensers[`disp${d}`].chemicals[`chem${c}`] =
+                    dom.dispensers[`dispenser${d}`].chemicals[`chem${c}`].value;
+            }
+        }
+        return result;
+    }
+    function appendChamberBox(chNo, values) {
+        //const canvas = document.getElementById("layout-view")!;
+        // UUID 같은 랜덤 ID
+        const boxId = `box_${chNo}_${Date.now()}`;
+        const box = document.createElement("div");
+        box.id = boxId;
+        box.className = `
+        absolute bg-white border border-black rounded shadow-md p-2
+        w-[160px] h-[160px] cursor-move select-none
+    `;
+        // 박스 내부 내용
+        box.innerHTML = `
+        <div class="font-bold text-sm mb-1">Chamber ${chNo}</div>
+        <div class="text-xs leading-4">
+            <div>CHUCK : ${values.chuckType}</div>
+            <div>INNER : ${values.innerCup}</div>
+            <div>CUP : ${values.cups.cup1}, ${values.cups.cup2}, ${values.cups.cup3}, ${values.cups.cup4}</div>
+            <div>BACK : ${values.backChemical.type1}, ${values.backChemical.type2}</div>
+        </div>
+
+        <button class="absolute top-1 right-1 text-[10px] px-1 bg-red-600 text-white rounded"
+            data-remove="${boxId}">
+            X
+        </button>
+    `;
+        // 초기 위치 (대충 랜덤)
+        box.style.left = `${30 + Math.random() * 100}px`;
+        box.style.top = `${30 + Math.random() * 100}px`;
+        dom.layout.appendChild(box);
+        makeDraggable(box);
+        bindRemoveEvent(box);
+    }
+    function makeDraggable(box) {
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDown = false;
+        box.addEventListener("mousedown", (e) => {
+            if (e.target.dataset.remove)
+                return; // X 버튼 제외
+            isDown = true;
+            offsetX = e.clientX - box.offsetLeft;
+            offsetY = e.clientY - box.offsetTop;
+            box.style.zIndex = "999";
+        });
+        document.addEventListener("mousemove", (e) => {
+            if (!isDown)
+                return;
+            box.style.left = e.clientX - offsetX + "px";
+            box.style.top = e.clientY - offsetY + "px";
+        });
+        document.addEventListener("mouseup", () => {
+            isDown = false;
+            box.style.zIndex = "1";
+        });
+    }
+    function bindRemoveEvent(box) {
+        const btn = box.querySelector("[data-remove]");
+        if (!btn)
+            return;
+        btn.addEventListener("click", () => {
+            box.remove();
+        });
+    }
+    const container_1 = document.getElementById("chamber-container");
+    for (let i = 1; i <= 8; i++) {
+        container_1.insertAdjacentHTML("beforeend", createChamberLayout(i));
+        const dom = collectChamberDOM(i);
+        bindChamberEvents(dom); // 변경 색 하이라이트
+        // 🔵 확인 버튼 이벤트 연결
+        dom.btnApply.addEventListener("click", () => {
+            const values = collectChamberValues(dom);
+            appendChamberBox(i, values);
+        });
+    }
+    //#endregion
+    //#region 공통 함수
+    function applySelectHighlight(selectEl) {
+        if (!selectEl)
+            return;
+        selectEl.addEventListener("change", () => {
+            selectEl.style.backgroundColor = "#d0f0ff"; // 변경 시 하늘색
+        });
+    }
+    async function bindChamberEvents(dom) {
+        // 1) Chuck   
+        applySelectHighlight(dom.chuckType);
+        // 2) Inner Cup
+        applySelectHighlight(dom.innerCup);
+        // 3) Back Chemical 1, 2
+        applySelectHighlight(dom.backChemical.type1);
+        applySelectHighlight(dom.backChemical.type2);
+        // 4) Cup 1~4
+        for (let i = 1; i <= 4; i++) {
+            applySelectHighlight(dom.cups[`cup${i}`]);
+        }
+        // 5) Dispenser 1~4 + Chemical 1~4
+        for (let d = 1; d <= 4; d++) {
+            const disp = dom.dispensers[`dispenser${d}`];
+            if (!disp)
+                continue;
+            applySelectHighlight(disp.type);
+            for (let c = 1; c <= 4; c++) {
+                applySelectHighlight(disp.chemicals[`chem${c}`]);
+            }
+        }
+        return 1;
+    }
+    //#endregion
+    console.log("✅ [메인장비 사양등록] 패널 초기화 완료");
+}
+
+
+/***/ }),
+
+/***/ "./TypeScript/workspace/05_progress-panel.ts":
+/*!***************************************************!*\
+  !*** ./TypeScript/workspace/05_progress-panel.ts ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -572,442 +1444,10 @@ function initProgressPanel(API_BASE) {
 
 /***/ }),
 
-/***/ "./TypeScript/workspace/user-register.ts":
-/*!***********************************************!*\
-  !*** ./TypeScript/workspace/user-register.ts ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   initUserRegisterPanel: () => (/* binding */ initUserRegisterPanel)
-/* harmony export */ });
-function initUserRegisterPanel(API_BASE) {
-    const userTableBody = document.getElementById("userTableBody");
-    const userCount = document.getElementById("userCount");
-    const userForm = document.getElementById("userForm");
-    const modalMode = document.getElementById("modalMode");
-    const modalNo = document.getElementById("modalNo");
-    const userModal = document.getElementById("userModal");
-    const permPreview = document.getElementById("permPreview");
-    const permLabels = {
-        order_register: "수주건등록",
-        task_assign: "업무할당",
-        progress: "진행상황",
-        report: "진행상황보고",
-        request: "요청사항",
-    };
-    const permValues = {
-        ReadWrite: "읽고 쓰기 가능",
-        ReadOnly: "읽기 전용",
-        NoAccess: "접근 불가",
-    };
-    function parsePerm(json) {
-        try {
-            const obj = json ? JSON.parse(json) : {};
-            return {
-                order_register: obj.order_register ?? "NoAccess",
-                task_assign: obj.task_assign ?? "NoAccess",
-                progress: obj.progress ?? "NoAccess",
-                report: obj.report ?? "NoAccess",
-                request: obj.request ?? "NoAccess",
-            };
-        }
-        catch {
-            return {
-                order_register: "NoAccess",
-                task_assign: "NoAccess",
-                progress: "NoAccess",
-                report: "NoAccess",
-                request: "NoAccess",
-            };
-        }
-    }
-    function updatePermPreview(permissions) {
-        if (!permPreview)
-            return;
-        const html = Object.entries(permissions)
-            .map(([k, v]) => `${permLabels[k]} : ${permValues[v]}`)
-            .join("<br>");
-        permPreview.innerHTML = html;
-    }
-    // 🟦 사용자 목록 렌더링
-    async function renderUsers() {
-        try {
-            const res = await fetch(`${API_BASE}/api/users`);
-            const users = await res.json();
-            userTableBody.innerHTML = "";
-            users.forEach((u, idx) => {
-                const p = parsePerm(u.permissions);
-                const permText = Object.entries(p)
-                    .map(([k, v]) => `${permLabels[k]} : ${permValues[v]}`)
-                    .join("<br>");
-                userTableBody.innerHTML += `
-          <tr>
-            <td class="px-4 py-2">${idx + 1}</td>
-            <td class="px-4 py-2">${u.Name ?? "-"}</td>
-            <td class="px-4 py-2">${u.ID}</td>
-            <td class="px-4 py-2">****</td>
-            <td class="px-4 py-2">${u.email ?? "-"}</td>
-            <td class="px-4 py-2">${u.company_part ?? "-"}</td>
-            <td class="px-4 py-2 text-xs">${permText}</td>
-            <td class="px-4 py-2 text-center space-x-2">
-              <button data-action="edit" data-no="${u.No}" class="px-3 py-1 bg-yellow-400 text-white rounded text-xs">수정</button>
-              <button data-action="delete" data-no="${u.No}" class="px-3 py-1 bg-red-500 text-white rounded text-xs">삭제</button>
-            </td>
-          </tr>`;
-            });
-            userCount.innerText = `${users.length}명`;
-        }
-        catch (err) {
-            console.error("❌ 사용자 목록 불러오기 실패:", err);
-        }
-    }
-    // 🟦 모달 열기
-    async function openUserModal(mode, no) {
-        const title = document.getElementById("modalTitle");
-        const nameInput = document.getElementById("modalName");
-        const idInput = document.getElementById("modalID");
-        const passwordInput = document.getElementById("modalPassword");
-        const emailInput = document.getElementById("modalEmail");
-        const companyInput = document.getElementById("modalCompanyPart");
-        const Select = (id) => document.getElementById(id);
-        passwordInput.type = "password";
-        // ==============================
-        // 신규 사용자 추가
-        // ==============================
-        if (mode === "add") {
-            title.innerText = "신규 사용자 추가";
-            modalMode.value = "add";
-            modalNo.value = "";
-            userForm.reset();
-            const defaultPerm = {
-                order_register: "ReadWrite",
-                task_assign: "ReadWrite",
-                progress: "ReadWrite",
-                report: "ReadWrite",
-                request: "ReadWrite",
-            };
-            Select("수주건등록").value = defaultPerm.order_register;
-            Select("업무할당").value = defaultPerm.task_assign;
-            Select("진행상황").value = defaultPerm.progress;
-            Select("진행상황보고").value = defaultPerm.report;
-            Select("요청사항").value = defaultPerm.request;
-            updatePermPreview(defaultPerm);
-        }
-        // ==============================
-        // 사용자 수정
-        // ==============================
-        else if (mode === "edit" && no) {
-            try {
-                const res = await fetch(`${API_BASE}/api/users/${no}`);
-                const u = await res.json();
-                title.innerText = "사용자 수정";
-                modalMode.value = "edit";
-                modalNo.value = u.No;
-                nameInput.value = u.Name ?? "";
-                idInput.value = u.ID;
-                passwordInput.value = "";
-                passwordInput.placeholder = "변경 시에만 입력";
-                emailInput.value = u.email ?? "";
-                companyInput.value = u.company_part ?? "";
-                const p = parsePerm(u.permissions);
-                Select("수주건등록").value = p.order_register;
-                Select("업무할당").value = p.task_assign;
-                Select("진행상황").value = p.progress;
-                Select("진행상황보고").value = p.report;
-                Select("요청사항").value = p.request;
-                updatePermPreview(p);
-            }
-            catch (err) {
-                console.error("❌ 사용자 정보 불러오기 실패:", err);
-            }
-        }
-        userModal.classList.remove("hidden");
-    }
-    // 🟦 모달 닫기
-    function closeUserModal() {
-        userModal.classList.add("hidden");
-    }
-    window.togglePassword = function () {
-        const input = document.getElementById("modalPassword");
-        input.type = input.type === "password" ? "text" : "password";
-    };
-    // 새 권한 ID
-    const permIds = ["수주건등록", "업무할당", "진행상황", "진행상황보고", "요청사항"];
-    // 🟦 권한 select 변경 → 미리보기 갱신
-    permIds.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener("change", () => {
-                const p = {
-                    order_register: document.getElementById("수주건등록").value,
-                    task_assign: document.getElementById("업무할당").value,
-                    progress: document.getElementById("진행상황").value,
-                    report: document.getElementById("진행상황보고").value,
-                    request: document.getElementById("요청사항").value,
-                };
-                updatePermPreview(p);
-            });
-        }
-    });
-    // 🟦 저장
-    if (userForm) {
-        userForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const mode = modalMode.value;
-            const no = modalNo.value || undefined;
-            const Name = document.getElementById("modalName").value.trim();
-            const ID = document.getElementById("modalID").value.trim();
-            const password = document.getElementById("modalPassword").value.trim();
-            const email = document.getElementById("modalEmail").value.trim() || null;
-            const company_part = document.getElementById("modalCompanyPart").value.trim() || null;
-            const permissions = {
-                order_register: document.getElementById("수주건등록").value,
-                task_assign: document.getElementById("업무할당").value,
-                progress: document.getElementById("진행상황").value,
-                report: document.getElementById("진행상황보고").value,
-                request: document.getElementById("요청사항").value,
-            };
-            try {
-                if (mode === "add") {
-                    await fetch(`${API_BASE}/api/users`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ Name, ID, password, email, company_part, permissions }),
-                    });
-                }
-                else {
-                    const payload = { Name, ID, email, company_part, permissions };
-                    if (password)
-                        payload.password = password;
-                    await fetch(`${API_BASE}/api/users/${no}`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload),
-                    });
-                }
-                await renderUsers();
-                closeUserModal();
-            }
-            catch (err) {
-                console.error("❌ 사용자 저장 실패:", err);
-            }
-        });
-    }
-    // 🟦 삭제
-    async function deleteUser(no) {
-        await fetch(`${API_BASE}/api/users/${no}`, { method: "DELETE" });
-        await renderUsers();
-    }
-    userTableBody.addEventListener("click", (e) => {
-        const target = e.target;
-        if (target.dataset.action === "edit")
-            openUserModal("edit", target.dataset.no);
-        if (target.dataset.action === "delete")
-            deleteUser(target.dataset.no);
-    });
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape")
-            closeUserModal();
-    });
-    window.openAddUserModal = () => openUserModal("add");
-    window.closeUserModal = closeUserModal;
-    renderUsers();
-}
-
-
-/***/ }),
-
-/***/ "./TypeScript/workspace/utils/loading.ts":
-/*!***********************************************!*\
-  !*** ./TypeScript/workspace/utils/loading.ts ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   LoadingUtil: () => (/* binding */ LoadingUtil)
-/* harmony export */ });
-/**
- * ✅ 전역 로딩 / 진행률 팝업 유틸리티
- * 자동 생성 + 진행률 표시 + 최소 표시시간 포함
- */
-const LoadingUtil = {
-    el: null,
-    ensureElement() {
-        if (this.el)
-            return this.el;
-        const div = document.createElement("div");
-        div.id = "globalLoadingPopup";
-        div.className =
-            "hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/40";
-        div.innerHTML = `
-      <div class="bg-white rounded-lg shadow-lg px-8 py-6 text-center max-w-sm w-[90%] transition-all">
-        <div id="spinnerWrap" class="flex justify-center mb-4">
-          <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-        <div id="progressWrap" class="hidden flex flex-col items-center mb-2">
-          <div class="w-32 bg-gray-200 rounded-full h-2 mb-2 overflow-hidden">
-            <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-200" style="width:0%"></div>
-          </div>
-          <span id="progressText" class="text-xs text-gray-600">0%</span>
-        </div>
-        <p id="loadingMessage" class="text-gray-700 font-medium text-sm leading-relaxed">
-          ⚙️ 서버에서 데이터를 불러오는 중입니다.<br />잠시만 기다려주세요.
-        </p>
-      </div>
-    `;
-        document.body.appendChild(div);
-        this.el = div;
-        return div;
-    },
-    /** 🔹 일반 로딩 */
-    show(message) {
-        const el = this.ensureElement();
-        const msg = el.querySelector("#loadingMessage");
-        const spinner = el.querySelector("#spinnerWrap");
-        const progressWrap = el.querySelector("#progressWrap");
-        if (msg) {
-            msg.innerHTML =
-                message ||
-                    `⚙️ 서버에서 데이터를 불러오는 중입니다.<br />잠시만 기다려주세요.`;
-        }
-        spinner.classList.remove("hidden");
-        progressWrap.classList.add("hidden");
-        el.classList.remove("hidden");
-    },
-    /** 🔹 진행률 기반 로딩 */
-    showProgress(message = "💾 서버에 데이터를 저장 중입니다...") {
-        const el = this.ensureElement();
-        const msg = el.querySelector("#loadingMessage");
-        const spinner = el.querySelector("#spinnerWrap");
-        const progressWrap = el.querySelector("#progressWrap");
-        const progressBar = el.querySelector("#progressBar");
-        const progressText = el.querySelector("#progressText");
-        msg.innerHTML = message;
-        spinner.classList.add("hidden");
-        progressWrap.classList.remove("hidden");
-        el.classList.remove("hidden");
-        // 초기화
-        progressBar.style.width = "0%";
-        progressText.textContent = "0%";
-    },
-    /** 🔹 진행률 갱신 */
-    updateProgress(value) {
-        const el = this.ensureElement();
-        const bar = el.querySelector("#progressBar");
-        const text = el.querySelector("#progressText");
-        const percent = Math.min(100, Math.max(0, value));
-        if (bar)
-            bar.style.width = `${percent}%`;
-        if (text)
-            text.textContent = `${percent.toFixed(0)}%`;
-    },
-    /** 🔹 로딩 종료 */
-    hide() {
-        const el = this.ensureElement();
-        el.classList.add("hidden");
-    },
-    /** 🔹 일반 wrap (0.8초 최소 유지) */
-    async wrap(promise, message) {
-        const MIN_DELAY = 800;
-        this.show(message);
-        try {
-            const [result] = await Promise.all([
-                promise,
-                new Promise(resolve => setTimeout(resolve, MIN_DELAY))
-            ]);
-            return result;
-        }
-        finally {
-            this.hide();
-        }
-    },
-    /** 🔹 진행률 기반 Promise 래핑 */
-    async trackProgress(promise, message, duration = 1500) {
-        this.showProgress(message);
-        const el = this.ensureElement();
-        // 가짜 진행률 시뮬레이션 (UX용)
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 10 + 5;
-            this.updateProgress(progress);
-            if (progress >= 90)
-                clearInterval(interval);
-        }, 150);
-        try {
-            const result = await promise;
-            this.updateProgress(100);
-            await new Promise(resolve => setTimeout(resolve, duration)); // 약간의 여유시간
-            return result;
-        }
-        finally {
-            clearInterval(interval);
-            this.hide();
-        }
-    }
-};
-
-
-/***/ }),
-
-/***/ "./TypeScript/workspace/view.ts":
-/*!**************************************!*\
-  !*** ./TypeScript/workspace/view.ts ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   initView: () => (/* binding */ initView)
-/* harmony export */ });
-// src/view.ts
-function initView(API_BASE) {
-    const userData = localStorage.getItem("user");
-    if (!userData) {
-        alert("세션 만료 또는 비정상 접근입니다.");
-        window.location.href = "index.html";
-        return;
-    }
-    const user = JSON.parse(userData);
-    const userName = document.getElementById("userName");
-    const avatar = document.getElementById("avatar");
-    if (userName)
-        userName.textContent = user.name;
-    if (avatar)
-        avatar.textContent = user.name.charAt(0).toUpperCase();
-    // ✅ 세션 만료 체크 (30분 기준)
-    const loginTime = user.loginTime;
-    const now = Date.now();
-    if (now - loginTime > 1000 * 60 * 30) {
-        alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
-        localStorage.clear();
-        window.location.href = "index.html";
-    }
-    // ✅ 로그아웃 버튼 이벤트
-    document.getElementById("logoutBtn")?.addEventListener("click", () => {
-        localStorage.clear();
-        fetch(`${API_BASE}/api/login/logout`, {
-            method: "POST",
-            credentials: "include",
-        }).catch(() => { });
-        window.location.href = "index.html";
-    });
-    // ✅ 뒤로가기 방지
-    history.pushState(null, "", location.href);
-    window.onpopstate = function () {
-        history.go(1);
-    };
-}
-
-
-/***/ }),
-
-/***/ "./TypeScript/workspace/work-assign.ts":
-/*!*********************************************!*\
-  !*** ./TypeScript/workspace/work-assign.ts ***!
-  \*********************************************/
+/***/ "./TypeScript/workspace/06_work-assign.ts":
+/*!************************************************!*\
+  !*** ./TypeScript/workspace/06_work-assign.ts ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1520,10 +1960,10 @@ function initWorkAssignPanel(API_BASE) {
 
 /***/ }),
 
-/***/ "./TypeScript/workspace/work-progress.ts":
-/*!***********************************************!*\
-  !*** ./TypeScript/workspace/work-progress.ts ***!
-  \***********************************************/
+/***/ "./TypeScript/workspace/07_work-progress.ts":
+/*!**************************************************!*\
+  !*** ./TypeScript/workspace/07_work-progress.ts ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1963,6 +2403,255 @@ function initWorkProgressPanel(API_BASE) {
     // 최초 로드
     loadMyWorks();
 }
+
+
+/***/ }),
+
+/***/ "./TypeScript/workspace/utils/ModalUtil.ts":
+/*!*************************************************!*\
+  !*** ./TypeScript/workspace/utils/ModalUtil.ts ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ModalUtil: () => (/* binding */ ModalUtil)
+/* harmony export */ });
+const ModalUtil = {
+    el: null,
+    ensureElement() {
+        if (this.el)
+            return this.el;
+        const div = document.createElement("div");
+        div.id = "globalSimpleModal";
+        div.className =
+            "hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/50";
+        div.innerHTML = `
+      <div id="modalBox" class="bg-white w-[360px] rounded-2xl p-6 shadow-xl text-center">
+        <div id="modalIcon" class="text-5xl mb-4 select-none"></div>
+        <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
+        <p id="modalMessage" class="text-sm text-gray-700 mb-6"></p>
+        <div id="modalBtns" class="flex justify-center gap-2">
+          <button id="modalCancelBtn"
+            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 hidden">취소</button>
+          <button id="modalOkBtn"
+            class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 hidden">확인</button>
+        </div>
+      </div>
+    `;
+        document.body.appendChild(div);
+        this.el = div;
+        return div;
+    },
+    setStyle(type) {
+        const el = this.ensureElement();
+        const iconEl = el.querySelector("#modalIcon");
+        const titleEl = el.querySelector("#modalTitle");
+        if (type === "alert") {
+            iconEl.textContent = "ℹ️";
+            iconEl.className = "text-5xl text-blue-600 mb-4";
+            titleEl.className = "text-xl font-bold mb-2 text-blue-700";
+        }
+        else {
+            iconEl.textContent = "⚠️";
+            iconEl.className = "text-5xl text-yellow-500 mb-4";
+            titleEl.className = "text-xl font-bold mb-2 text-yellow-700";
+        }
+    },
+    /**
+     * ✨ 단일 모달 호출
+     * - alert → 아무 값 없음
+     * - warn → boolean 반환
+     */
+    async show({ type = "alert", title = "알림", message = "", showOk = true, showCancel = false, }) {
+        const el = this.ensureElement();
+        const titleEl = el.querySelector("#modalTitle");
+        const msgEl = el.querySelector("#modalMessage");
+        const okBtn = el.querySelector("#modalOkBtn");
+        const cancelBtn = el.querySelector("#modalCancelBtn");
+        // 스타일
+        this.setStyle(type);
+        // 내용
+        titleEl.textContent = title;
+        msgEl.textContent = message;
+        // 버튼 표시 여부
+        okBtn.classList.toggle("hidden", !showOk);
+        cancelBtn.classList.toggle("hidden", !showCancel);
+        // 표시
+        el.classList.remove("hidden");
+        // -----------------------
+        // alert 모달은 확인만 필요
+        // -----------------------
+        if (type === "alert") {
+            return new Promise((resolve) => {
+                const close = () => {
+                    this.hide();
+                    okBtn.removeEventListener("click", close);
+                    resolve();
+                };
+                okBtn.addEventListener("click", close);
+            });
+        }
+        // -----------------------
+        // warn 모달은 확인/취소 필요
+        // -----------------------
+        return new Promise((resolve) => {
+            const onOk = () => {
+                cleanup();
+                this.hide();
+                resolve(true);
+            };
+            const onCancel = () => {
+                cleanup();
+                this.hide();
+                resolve(false);
+            };
+            const cleanup = () => {
+                okBtn.removeEventListener("click", onOk);
+                cancelBtn.removeEventListener("click", onCancel);
+            };
+            okBtn.addEventListener("click", onOk);
+            cancelBtn.addEventListener("click", onCancel);
+        });
+    },
+    hide() {
+        const el = this.ensureElement();
+        el.classList.add("hidden");
+    },
+};
+
+
+/***/ }),
+
+/***/ "./TypeScript/workspace/utils/loading.ts":
+/*!***********************************************!*\
+  !*** ./TypeScript/workspace/utils/loading.ts ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LoadingUtil: () => (/* binding */ LoadingUtil)
+/* harmony export */ });
+/**
+ * ✅ 전역 로딩 / 진행률 팝업 유틸리티
+ * 자동 생성 + 진행률 표시 + 최소 표시시간 포함
+ */
+const LoadingUtil = {
+    el: null,
+    ensureElement() {
+        if (this.el)
+            return this.el;
+        const div = document.createElement("div");
+        div.id = "globalLoadingPopup";
+        div.className =
+            "hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/40";
+        div.innerHTML = `
+      <div class="bg-white rounded-lg shadow-lg px-8 py-6 text-center max-w-sm w-[90%] transition-all">
+        <div id="spinnerWrap" class="flex justify-center mb-4">
+          <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <div id="progressWrap" class="hidden flex flex-col items-center mb-2">
+          <div class="w-32 bg-gray-200 rounded-full h-2 mb-2 overflow-hidden">
+            <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-200" style="width:0%"></div>
+          </div>
+          <span id="progressText" class="text-xs text-gray-600">0%</span>
+        </div>
+        <p id="loadingMessage" class="text-gray-700 font-medium text-sm leading-relaxed">
+          ⚙️ 서버에서 데이터를 불러오는 중입니다.<br />잠시만 기다려주세요.
+        </p>
+      </div>
+    `;
+        document.body.appendChild(div);
+        this.el = div;
+        return div;
+    },
+    /** 🔹 일반 로딩 */
+    show(message) {
+        const el = this.ensureElement();
+        const msg = el.querySelector("#loadingMessage");
+        const spinner = el.querySelector("#spinnerWrap");
+        const progressWrap = el.querySelector("#progressWrap");
+        if (msg) {
+            msg.innerHTML =
+                message ||
+                    `⚙️ 서버에서 데이터를 불러오는 중입니다.<br />잠시만 기다려주세요.`;
+        }
+        spinner.classList.remove("hidden");
+        progressWrap.classList.add("hidden");
+        el.classList.remove("hidden");
+    },
+    /** 🔹 진행률 기반 로딩 */
+    showProgress(message = "💾 서버에 데이터를 저장 중입니다...") {
+        const el = this.ensureElement();
+        const msg = el.querySelector("#loadingMessage");
+        const spinner = el.querySelector("#spinnerWrap");
+        const progressWrap = el.querySelector("#progressWrap");
+        const progressBar = el.querySelector("#progressBar");
+        const progressText = el.querySelector("#progressText");
+        msg.innerHTML = message;
+        spinner.classList.add("hidden");
+        progressWrap.classList.remove("hidden");
+        el.classList.remove("hidden");
+        // 초기화
+        progressBar.style.width = "0%";
+        progressText.textContent = "0%";
+    },
+    /** 🔹 진행률 갱신 */
+    updateProgress(value) {
+        const el = this.ensureElement();
+        const bar = el.querySelector("#progressBar");
+        const text = el.querySelector("#progressText");
+        const percent = Math.min(100, Math.max(0, value));
+        if (bar)
+            bar.style.width = `${percent}%`;
+        if (text)
+            text.textContent = `${percent.toFixed(0)}%`;
+    },
+    /** 🔹 로딩 종료 */
+    hide() {
+        const el = this.ensureElement();
+        el.classList.add("hidden");
+    },
+    /** 🔹 일반 wrap (0.8초 최소 유지) */
+    async wrap(promise, message) {
+        const MIN_DELAY = 800;
+        this.show(message);
+        try {
+            const [result] = await Promise.all([
+                promise,
+                new Promise(resolve => setTimeout(resolve, MIN_DELAY))
+            ]);
+            return result;
+        }
+        finally {
+            this.hide();
+        }
+    },
+    /** 🔹 진행률 기반 Promise 래핑 */
+    async trackProgress(promise, message, duration = 1500) {
+        this.showProgress(message);
+        const el = this.ensureElement();
+        // 가짜 진행률 시뮬레이션 (UX용)
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 10 + 5;
+            this.updateProgress(progress);
+            if (progress >= 90)
+                clearInterval(interval);
+        }, 150);
+        try {
+            const result = await promise;
+            this.updateProgress(100);
+            await new Promise(resolve => setTimeout(resolve, duration)); // 약간의 여유시간
+            return result;
+        }
+        finally {
+            clearInterval(interval);
+            this.hide();
+        }
+    }
+};
 
 
 /***/ }),
@@ -17296,18 +17985,19 @@ function getDatasetClipArea(chart, meta) {
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!*******************************************!*\
-  !*** ./TypeScript/workspace/workspace.ts ***!
-  \*******************************************/
+/*!**********************************************!*\
+  !*** ./TypeScript/workspace/00_workspace.ts ***!
+  \**********************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _user_register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user-register */ "./TypeScript/workspace/user-register.ts");
-/* harmony import */ var _view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view */ "./TypeScript/workspace/view.ts");
-/* harmony import */ var _dashboard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dashboard */ "./TypeScript/workspace/dashboard.ts");
+/* harmony import */ var _03_user_register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./03_user-register */ "./TypeScript/workspace/03_user-register.ts");
+/* harmony import */ var _02_view__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./02_view */ "./TypeScript/workspace/02_view.ts");
+/* harmony import */ var _01_dashboard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./01_dashboard */ "./TypeScript/workspace/01_dashboard.ts");
 /* harmony import */ var _utils_loading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/loading */ "./TypeScript/workspace/utils/loading.ts");
-/* harmony import */ var _order_register__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./order-register */ "./TypeScript/workspace/order-register.ts");
-/* harmony import */ var _work_assign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./work-assign */ "./TypeScript/workspace/work-assign.ts");
-/* harmony import */ var _work_progress__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./work-progress */ "./TypeScript/workspace/work-progress.ts");
-/* harmony import */ var _progress_panel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./progress-panel */ "./TypeScript/workspace/progress-panel.ts");
+/* harmony import */ var _04_order_register__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./04_order-register */ "./TypeScript/workspace/04_order-register.ts");
+/* harmony import */ var _06_work_assign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./06_work-assign */ "./TypeScript/workspace/06_work-assign.ts");
+/* harmony import */ var _07_work_progress__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./07_work-progress */ "./TypeScript/workspace/07_work-progress.ts");
+/* harmony import */ var _05_progress_panel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./05_progress-panel */ "./TypeScript/workspace/05_progress-panel.ts");
+/* harmony import */ var _utils_ModalUtil__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./utils/ModalUtil */ "./TypeScript/workspace/utils/ModalUtil.ts");
 // TypeScript/workspace/workspace.ts
 
 
@@ -17317,89 +18007,169 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// ✅ API 기본주소
+
+// ==============================================================
+// 🔵 API 기본주소
+// ==============================================================
 const API_BASE = location.hostname === "tgyeo.github.io"
     ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
     : "http://127.0.0.1:5050";
+function initLocalTabNavigation() {
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const panels = document.querySelectorAll('[id^="panel-"]');
+    const titleEl = document.getElementById("wsTitle");
+    function showPanel(id) {
+        // 1) 모든 패널 숨기기
+        panels.forEach((p) => p.classList.add("hidden"));
+        // 2) 해당 패널 표시
+        const target = document.getElementById(id);
+        if (target)
+            target.classList.remove("hidden");
+        // 3) 버튼 스타일 적용
+        navButtons.forEach((btn) => {
+            const active = btn.dataset.panel === id;
+            btn.classList.toggle("bg-[#7ce92f]", active);
+            btn.classList.toggle("text-[#000000]", active);
+            btn.classList.toggle("font-bold", active);
+        });
+        // 4) 제목 변경
+        const curBtn = document.querySelector(`.nav-btn[data-panel="${id}"]`);
+        if (curBtn && titleEl) {
+            titleEl.textContent = curBtn.textContent?.trim() ?? "";
+        }
+    }
+    // 초기 Dashboard
+    showPanel("panel-dashboard");
+    return showPanel;
+}
+// ==============================================================
+// 🔵 메인 초기화
+// ==============================================================
 document.addEventListener("DOMContentLoaded", async () => {
     console.debug("[INIT] DOMContentLoaded 시작");
-    await (0,_view__WEBPACK_IMPORTED_MODULE_1__.initView)(API_BASE);
+    // nav-btn 전환 로직 활성화
+    const showPanel = initLocalTabNavigation();
+    // 공통 View 초기화
+    await (0,_02_view__WEBPACK_IMPORTED_MODULE_1__.initView)(API_BASE);
     const sidebarButtons = document.querySelectorAll("#sidebar [data-panel]");
-    console.debug(`[INIT] sidebar 버튼 개수: ${sidebarButtons.length}`);
-    if (sidebarButtons.length === 0) {
-        console.warn("⚠️ 사이드바 버튼이 없습니다. HTML의 data-panel 속성 확인 필요");
-        return;
-    }
+    const userName = document.getElementById("userName");
     sidebarButtons.forEach((btn) => {
         btn.addEventListener("click", async () => {
-            const targetPanelId = btn.dataset.panel;
-            if (!targetPanelId)
+            const id = btn.dataset.panel;
+            if (!id)
                 return;
-            console.debug(`[TAB] 클릭됨 → ${targetPanelId}`);
-            document.querySelectorAll("[id^='panel-']").forEach((el) => el.classList.add("hidden"));
-            const panel = document.getElementById(targetPanelId);
-            if (!panel) {
-                console.error(`[TAB] 패널을 찾을 수 없음: #${targetPanelId}`);
-                return;
+            // ----------------------------------------------
+            // 🔐 1) 권한 체크 
+            // ----------------------------------------------
+            //최상단 사용자 관리탭
+            if (id.includes("사용자-관리")) {
+                const allowed = ["장혜용", "여태검"];
+                const current = (userName?.textContent ?? "").trim();
+                if (!allowed.includes(current)) {
+                    const ok = await _utils_ModalUtil__WEBPACK_IMPORTED_MODULE_8__.ModalUtil.show({
+                        type: "alert",
+                        title: "접근 권한",
+                        message: "접근 권한이 없습니다.",
+                        showOk: true,
+                        showCancel: false
+                    });
+                    if (ok) {
+                        return; // ❗ showPanel 실행 전 return → 패널이 안 보임
+                    }
+                    else {
+                        return; // ❗ showPanel 실행 전 return → 패널이 안 보임
+                    }
+                }
             }
-            panel.classList.remove("hidden");
-            // ✅ 로딩 표시
+            if (id.includes("수주건등록")) {
+                try {
+                    const url = `${API_BASE}/api/users`;
+                    const res = await fetch(url);
+                    if (!res.ok) {
+                        console.error("❌ 사용자 목록 불러오기 실패");
+                        return;
+                    }
+                    const userList = await res.json(); // 배열 전체를 받아온다고 가정
+                    console.log("📌 사용자 전체 목록:", userList);
+                    const allowed = [];
+                    for (const user of userList) {
+                        try {
+                            // permissions 필드는 문자열 → JSON 파싱
+                            const perms = JSON.parse(user.permissions);
+                            // 수주건등록 권한 체크
+                            if (perms.order_register === "ReadWrite") {
+                                allowed.push(user.Name); // 또는 user.ID
+                            }
+                        }
+                        catch (err) {
+                            console.error("❌ permission 파싱 실패:", user.permissions, err);
+                        }
+                    }
+                    console.log("✅ 수주건 등록 권한자 목록:", allowed);
+                    // 여기서 allowed 배열을 실제 권한 체크에 사용
+                    const currentUser = (userName?.textContent ?? "").trim();
+                    if (!allowed.includes(currentUser)) {
+                        const ok = await _utils_ModalUtil__WEBPACK_IMPORTED_MODULE_8__.ModalUtil.show({
+                            type: "alert",
+                            title: "접근 권한",
+                            message: "접근 권한이 없습니다.",
+                            showOk: true,
+                            showCancel: false
+                        });
+                        if (ok) {
+                            return; // ❗ showPanel 실행 전 return → 패널이 안 보임
+                        }
+                        else {
+                            return; // ❗ showPanel 실행 전 return → 패널이 안 보임
+                        }
+                    }
+                }
+                catch (err) {
+                    console.error("❌ 사용자 권한 로딩 오류:", err);
+                }
+            }
+            // ----------------------------------------------
+            // 🔵 2) 패널 전환(showPanel) 실행
+            //     → 패널이 시각적으로 보이는 단계
+            // ----------------------------------------------
+            showPanel(id);
+            // ----------------------------------------------
+            // ⏳ 3) 패널 초기화
+            // ----------------------------------------------
             _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.show();
             try {
-                // ✅ 한 프레임 지연 — DOM 렌더링 완료 보장
                 await new Promise((r) => requestAnimationFrame(r));
-                //#region ▶ 대시보드
-                if (targetPanelId.includes("대시보드")) {
-                    console.debug("📊 [Dashboard] 탭 선택됨 — 장비 기준 대시보드 초기화");
-                    await _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.wrap(Promise.resolve((0,_dashboard__WEBPACK_IMPORTED_MODULE_2__.initDashboardPanel)(API_BASE)));
+                if (id.includes("대시보드")) {
+                    await (0,_01_dashboard__WEBPACK_IMPORTED_MODULE_2__.initDashboardPanel)(API_BASE);
                 }
-                //#endregion
-                //#region ▶ 사용자 관리
-                else if (targetPanelId.includes("사용자-관리")) {
-                    await _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.wrap(Promise.resolve((0,_user_register__WEBPACK_IMPORTED_MODULE_0__.initUserRegisterPanel)(API_BASE)));
+                else if (id.includes("사용자-관리")) {
+                    await (0,_03_user_register__WEBPACK_IMPORTED_MODULE_0__.initUserRegisterPanel)(API_BASE);
                 }
-                //#endregion
-                //#region ▶ 수주건 등록
-                else if (targetPanelId.includes("수주건등록")) {
-                    console.debug("📦 [OrderRegister] 탭 선택됨 — 수주건 등록 패널 초기화");
-                    await _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.wrap(Promise.resolve((0,_order_register__WEBPACK_IMPORTED_MODULE_4__.initOrderRegisterPanel)(API_BASE)));
+                else if (id.includes("수주건등록")) {
+                    await (0,_04_order_register__WEBPACK_IMPORTED_MODULE_4__.initOrderRegisterPanel)(API_BASE);
                 }
-                //#endregion
-                //#region ▶ 업무할당
-                else if (targetPanelId.includes("업무할당")) {
-                    await _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.wrap(Promise.resolve((0,_work_assign__WEBPACK_IMPORTED_MODULE_5__.initWorkAssignPanel)(API_BASE)));
+                else if (id.includes("업무할당")) {
+                    await (0,_06_work_assign__WEBPACK_IMPORTED_MODULE_5__.initWorkAssignPanel)(API_BASE);
                 }
-                //#endregion
-                //#region ▶ 진행상황보고
-                else if (targetPanelId.includes("진행상황보고")) {
-                    await _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.wrap(Promise.resolve((0,_work_progress__WEBPACK_IMPORTED_MODULE_6__.initWorkProgressPanel)(API_BASE)));
+                else if (id.includes("진행상황보고")) {
+                    await (0,_07_work_progress__WEBPACK_IMPORTED_MODULE_6__.initWorkProgressPanel)(API_BASE);
                 }
-                //#endregion
-                //#region ▶ 진행상황 한눈에 보기
-                else if (targetPanelId.includes("진행상황-한눈에보기")) {
-                    await _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.wrap(Promise.resolve((0,_progress_panel__WEBPACK_IMPORTED_MODULE_7__.initProgressPanel)(API_BASE)));
+                else if (id.includes("진행상황-한눈에보기")) {
+                    await (0,_05_progress_panel__WEBPACK_IMPORTED_MODULE_7__.initProgressPanel)(API_BASE);
                 }
-                //#endregion
-                else {
-                    console.log("⚙️ 특별한 초기화 함수 없음:", targetPanelId);
-                }
-                console.debug(`[TAB] ${targetPanelId} 초기화 완료`);
+                console.debug(`[TAB] ${id} 초기화 완료`);
             }
             catch (err) {
-                console.error(`[TAB] ${targetPanelId} 로드 실패:`, err);
-                alert(`${targetPanelId} 탭 로드 중 오류 발생`);
+                console.error(`[TAB ERROR] ${id}:`, err);
+                alert(`${id} 초기화 중 오류 발생`);
             }
             finally {
                 _utils_loading__WEBPACK_IMPORTED_MODULE_3__.LoadingUtil.hide();
             }
         });
     });
-    // ✅ 초기 탭 자동 표시
-    const defaultPanel = document.getElementById("panel-dashboard");
-    if (defaultPanel) {
-        defaultPanel.classList.remove("hidden");
-        await (0,_dashboard__WEBPACK_IMPORTED_MODULE_2__.initDashboardPanel)(API_BASE);
-    }
+    // 초기 Dashboard 데이터 로드
+    await (0,_01_dashboard__WEBPACK_IMPORTED_MODULE_2__.initDashboardPanel)(API_BASE);
     console.debug("[INIT] workspace 초기화 완료");
 });
 

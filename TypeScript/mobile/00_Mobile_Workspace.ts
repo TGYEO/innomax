@@ -174,3 +174,44 @@ function startServerConnectionCheck() {
     updateFooterStatus(ok);
   }, 5000);
 }
+
+// ======================================================
+// 📱 탭 전환 처리 (PC workspace.ts 참고하여 동일 구조로 추가)
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  initMobile_Workspace();
+
+  // 🔹 탭 버튼들: data-tab 속성 필수
+  const tabButtons = document.querySelectorAll<HTMLElement>("[data-tab]");
+
+  console.log("📱 [Mobile_Workspace] 데이터-탭 버튼 수:", tabButtons.length);
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.dataset.tab;
+      if (!targetId) return;
+
+      console.log(`[MOBILE TAB] 클릭됨 → ${targetId}`);
+
+      // 🔹 모든 모바일 패널 숨기기
+      document
+        .querySelectorAll<HTMLElement>("[id^='mobile_panel-']")
+        .forEach((el) => el.classList.add("hidden"));
+
+      // 🔹 해당 패널 표시
+      const panel = document.getElementById(`mobile_panel-${targetId}`);
+      if (!panel) {
+        console.error(`[MOBILE TAB] 패널 없음: mobile_panel-${targetId}`);
+        return;
+      }
+      panel.classList.remove("hidden");
+
+      // 🔹 모바일에서는 sidebar 자동 닫기 (UI 경험 개선)
+      const sidebar = document.getElementById("mobileSidebar");
+      if (sidebar) sidebar.classList.add("hidden");
+    });
+  });
+});
+
+

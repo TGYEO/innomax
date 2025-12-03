@@ -96,11 +96,11 @@ app.get("/api/health", async (req: Request, res: Response) => {
 });
 
 // ✅ 라우터 불러오기
-import loginRouter from "./login-server";
-import userRegisterRouter from "./user-register-server";
-import innomaxProjectsRouter from "./innomax-projects-server";
-import innomaxWorksRouter from "./innomax-works-server";
-import innomaxProgressRouter from "./innomax-progress-server";
+import loginRouter from "./01_login-server";
+import userRegisterRouter from "./02_user-register-server";
+import innomaxProjectsRouter from "./03_innomax-projects-server";
+import innomaxWorksRouter from "./04_innomax-works-server";
+import innomaxProgressRouter from "./05_innomax-progress-server";
 
 
 

@@ -19,7 +19,7 @@ module.exports = {
   entry: {
     // 🖥️ PC 전용
     index: "./TypeScript/login/index.ts",              // 로그인 페이지 (index.html)
-    workspace: "./TypeScript/workspace/workspace.ts",  // PC 워크스페이스 (workspace.html)
+    workspace: "./TypeScript/workspace/00_workspace.ts",  // PC 워크스페이스 (workspace.html)
 
     // 📱 모바일 전용
     "mobile-workspace": "./TypeScript/mobile/00_Mobile_Workspace.ts", // 모바일 ERP 메인 (mobileindex.html)

@@ -20,6 +20,8 @@ export default function userRegisterRouter(pool: Pool) {
     }
   });
 
+  
+
   // ✅ 사용자 등록
   router.post("/", async (req: Request, res: Response) => {
     try {

@@ -8,42 +8,60 @@
     <link href="assets/css/styles.css" rel="stylesheet">
 </head>
 
-<body class="h-dvh overflow-hidden bg-gray-200 text-gray-800 flex flex-col gap-6 text-base font-medium">
+<body class="h-dvh overflow-hidden bg-[#d7e5f3] flex flex-col gap-6 text-base font-medium">
 
 
     <!-- ===== 상단 바 ===== -->
-    <header
-        class="grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-xl border border-sky-200 bg-[#E3FDFD] shadow px-6 py-4">
+    <header class="grid grid-cols-[auto_1fr_auto] items-center gap-4 
+           bg-[#d7e5f3] text-white shadow-lg px-6 py-4">
+
+        <!-- 좌측 로고 -->
         <div class="flex items-center gap-4">
-            <div class="relative w-[200px] h-[40px] flex items-center">
-                <img src="static/logo.gif" alt="업무관리 시스템" class="h-10 object-contain" />
+            <div class="relative h-[40px] flex items-center">
+                <img src="static/logo.png" alt="업무관리 시스템" class="h-10 object-contain drop-shadow-lg" />
             </div>
-            <div class="tracking-tight text-xl font-bold text-sky-800">이노맥스</div>
         </div>
 
+        <!-- 우측 사용자 영역 -->
         <div class="flex items-center gap-4 justify-self-end">
-            <div class="flex items-center gap-3 px-3 py-2 rounded-full border border-sky-200 bg-white/70">
-                <div id="avatar"
-                    class="w-9 h-9 rounded-full grid place-items-center text-sm font-bold text-sky-700 border border-sky-300 bg-white/80">
-                    U
+
+            <!-- 🔷 Avatar + Name 그룹 (Glass / Soft border) -->
+            <div class="flex items-center gap-3 px-4 py-2 rounded-full
+                    bg-white/20 backdrop-blur-md
+                    border border-white/30 shadow-md">
+
+                <!-- avatar -->
+                <div id="avatar" class="w-10 h-10 rounded-full grid place-items-center text-sm font-bold
+                       bg-white/30 text-[#000000] border border-white/40 shadow-inner">
                 </div>
-                <div id="userName" class="text-sky-900 font-semibold">사용자</div>
+
+                <!-- userName -->
+                <div id="userName" class="text-[#000000] font-semibold tracking-tight drop-shadow-sm">
+                    사용자
+                </div>
             </div>
-            <button id="logoutBtn"
-                class="px-4 py-2 text-sm font-bold rounded-lg bg-sky-500 text-white shadow hover:bg-sky-400 transition">
+
+            <!-- 🔷 Logout 버튼 (두드러지는 시인성 있는 버튼) -->
+            <button id="logoutBtn" class="px-5 py-2 text-sm font-bold rounded-lg
+                   bg-white/20 backdrop-blur-md
+                   border border-white/40 text-[#000000] shadow-md
+                   hover:bg-white/30 active:bg-white/40 transition">
                 로그아웃
             </button>
+
         </div>
     </header>
 
 
+
     <!-- ===== 레이아웃 ===== -->
-    <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 min-h-0 flex-1 px-6 pb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 min-h-0 flex-1 px-6 pb-6 ">
 
         <!-- ===== 사이드 네비 ===== -->
-        <aside class="rounded-xl border border-gray-200 bg-white shadow flex flex-col overflow-hidden" id="sidebar">
+        <aside class="rounded-xl border border-[#c7d8ee] bg-[#d7e5f3] shadow-2xl flex flex-col overflow-hidden"
+            id="sidebar">
 
-            <nav class="p-4 space-y-4">
+            <nav class="p-2 space-y-4">
 
                 <button
                     class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
@@ -54,28 +72,35 @@
                 <!-- 📌 관리자 전용 -->
                 <div>
                     <button id="btnAdminGroup"
-                        class="flex items-center justify-between w-full px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100">
+                        class="flex items-center justify-between w-full px-5 py-3 rounded-lg text-[14px] font-bold text-gray-700 hover:bg-gray-100">
                         <span>관리자 전용</span>
                         <span id="iconAdminArrow" class="transition-transform">▼</span>
                     </button>
 
                     <div id="adminGroupContent" class="mt-2 space-y-2 pl-3 hidden">
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[12px] font-bold text-gray-700 hover:bg-gray-100"
                             data-panel="panel-수주건등록">
                             수주건등록
                         </button>
 
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[12px] font-bold text-gray-700 hover:bg-gray-100"
                             data-panel="panel-업무할당">
                             업무할당
                         </button>
 
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[12px] font-bold text-gray-700 hover:bg-gray-100"
                             data-panel="panel-진행상황-한눈에보기">
                             진행상황-한눈에보기
+                        </button>
+
+                        <!-- 사용자관리 (공통메뉴) -->
+                        <button
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[14px] font-bold text-gray-700 hover:bg-gray-100"
+                            data-panel="panel-사용자-관리">
+                            사용자 관리
                         </button>
                     </div>
                 </div>
@@ -83,32 +108,27 @@
                 <!-- 📌 직원 전용 -->
                 <div>
                     <button id="btnStaffGroup"
-                        class="flex items-center justify-between w-full px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100">
+                        class="flex items-center justify-between w-full px-5 py-3 rounded-lg text-[14px] font-bold text-gray-700 hover:bg-gray-100">
                         <span>직원 전용</span>
                         <span id="iconStaffArrow" class="transition-transform">▼</span>
                     </button>
 
                     <div id="staffGroupContent" class="mt-2 space-y-2 pl-3 hidden">
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[14px] font-bold text-gray-700 hover:bg-gray-100"
                             data-panel="panel-진행상황보고">
                             진행상황보고
                         </button>
 
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[14px] font-bold text-gray-700 hover:bg-gray-100"
                             data-panel="panel-요청사항">
                             요청사항
                         </button>
                     </div>
                 </div>
 
-                <!-- 사용자관리 (공통메뉴) -->
-                <button
-                    class="nav-btn w-full text-left px-5 py-3 rounded-lg text-lg font-bold text-gray-700 hover:bg-gray-100"
-                    data-panel="panel-사용자-관리">
-                    사용자 관리
-                </button>
+
 
             </nav>
 
@@ -146,336 +166,471 @@
 
         <!-- ===== 메인 작업영역 ===== -->
         <main id="workspace"
-            class="flex-1 min-h-0 rounded-xl border border-gray-300 bg-gray-100 shadow-sm flex flex-col overflow-hidden min-w-0 text-gray-900"
+            class="flex-1 min-h-0 rounded-xl border border-[#f6f7f7] bg-[#f6f7f7] shadow-2xl flex flex-col overflow-hidden min-w-0"
             aria-live="polite">
 
 
             <!-- 패널 제목 -->
-            <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div
+                class="flex items-center justify-between gap-4 px-6 py-4 border border-[#f6f7f7] bg-[#f6f7f7] shadow-lg">
                 <div id="wsTitle" class="text-lg font-bold text-gray-900">대시보드</div>
             </div>
 
             <!-- 실제 컨텐츠 패널 -->
-            <section class="p-2 overflow-hidden flex-1 space-y-6">
+            <section class="overflow-hidden flex-1 space-y-6">
 
                 <!-- 📊 장비 현황 대시보드 -->
-                <div id="panel-dashboard" class="space-y-4 p-4 bg-gray-50 rounded-lg shadow-inner text-[13px]">
+                <div id="panel-dashboard" class="hidden p-1">
 
 
                 </div>
 
                 <!-- 📌 수주건등록 패널 -->
                 <section id="panel-수주건등록" class="hidden p-1">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[600px]">
+                    <div class="w-full">
+                        <!-- ▲ 탭 영역 -->
+                        <div class="flex border-b border-gray-300 bg-gray-100">
 
-                        <!--🔹 좌측 입력 Form-->
-                        <div class="bg-white rounded-xl shadow p-2 space-y-3 text-sm">
 
-                            <!-- 1) 수주건번호 / 장비명 / 고객사 -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">수주건번호</label>
-                                    <input type="text" id="orderNo"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5"
-                                        placeholder="ISS25-001S">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">장비명</label>
-                                    <input type="text" id="equipName"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5" placeholder="PR STRIP">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">고객사</label>
-                                    <select id="clientName"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
-                                        <option value="">선택하세요</option>
-                                        <option value="AMKOR-5 송도">AMKOR-5 송도</option>
-                                        <option value="AMKOR-4 광주">AMKOR-4 광주</option>
-                                        <option value="NEPES 1공장 오창">NEPES 1공장 오창</option>
-                                        <option value="NEPES 2공장 오창">NEPES 2공장 오창</option>
-                                        <option value="ON-SEMI 부천">ON-SEMI 부천</option>
-                                        <option value="SK-실트론 구미">SK-실트론 구미</option>
-                                        <option value="매그너칩 구미">매그너칩 구미</option>
-                                        <option value="KEC 구미">KEC 구미</option>
-                                        <option value="와이솔 오산">와이솔 오산</option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-                            <!-- 2) 포장예정일 / 납품예정일 -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">포장예정일</label>
-                                    <input type="date" id="packDate"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">납품예정일</label>
-                                    <input type="date" id="deliveryDate"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-                            </div>
-
-                            <!-- 3) 제작 담당 3개 -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">제작담당 (정)</label>
-                                    <input type="text" id="mfgMain"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">제작담당 (부)</label>
-                                    <input type="text" id="mfgSub"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">제작업체</label>
-                                    <input type="text" id="mfgCompany"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-                            </div>
-
-                            <!-- 4) PLC 담당 3개 -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">PLC담당 (정)</label>
-                                    <input type="text" id="plcMain"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">PLC담당 (부)</label>
-                                    <input type="text" id="plcSub"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">PLC업체</label>
-                                    <input type="text" id="plcCompany"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-                            </div>
-
-                            <!-- 5) 배선 담당 3개 -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">배선담당 (정)</label>
-                                    <input type="text" id="wireMain"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">배선담당 (부)</label>
-                                    <input type="text" id="wireSub"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">배선업체</label>
-                                    <input type="text" id="wireCompany"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-                            </div>
-
-                            <!-- 6) 셋업 담당 2개 -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">셋업담당 (정)</label>
-                                    <input type="text" id="setupMain"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-
-                                <div>
-                                    <label class="block text-gray-700 font-semibold mb-1">셋업담당 (부)</label>
-                                    <input type="text" id="setupSub"
-                                        class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                </div>
-                            </div>
-
-                            <!-- 저장 버튼 -->
-                            <button id="btnSaveOrder"
-                                class="w-full mt-2 bg-indigo-600 text-white py-2 rounded-lg text-sm hover:bg-indigo-700">
-                                수주건 저장
+                            <button data-tab="_panel-수주건등록-2"
+                                class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
+                                메인장비 사양등록
                             </button>
 
+                            <button data-tab="_panel-수주건등록-3"
+                                class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
+                                개조장비 사양등록
+                            </button>
+
+                            <button data-tab="_panel-수주건등록-1"
+                                class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300 bg-white">
+                                수주건등록
+                            </button>
                         </div>
 
-                        <!--🔹 우측 수주건 리스트 (독립형 긴 패널)-->
-                        <div class="bg-white rounded-xl shadow p-6 h-[600px] flex flex-col">
+                        <!-- ▼ 탭 콘텐츠 영역 -->
+                        <div
+                            class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[600px] border border-[#000000] relative overflow-hidden">
 
-                            <!-- 내부 스크롤 영역 -->
-                            <div class="overflow-x-auto overflow-y-auto flex-1 border rounded-lg">
-                                <table class="min-w-full text-sm text-gray-700">
-                                    <thead class="bg-gray-100">
-                                        <tr>
-                                            <th class="border px-3 py-2">No</th>
-                                            <th class="border px-3 py-2">수주건번호</th>
-                                            <th class="border px-3 py-2">장비명</th>
-                                            <th class="border px-3 py-2">고객사</th>
-                                            <th class="border px-3 py-2">포장예정일</th>
-                                            <th class="border px-3 py-2">납품예정일</th>
-                                            <th class="border px-3 py-2 w-20">관리</th>
-                                        </tr>
-                                    </thead>
+                            <!-- Panel 1 -->
+                            <div id="_panel-수주건등록-1"
+                                class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-100 translate-x-0 transition-all duration-300 overflow-x-auto overflow-y-auto">
+                                <!--🔹 좌측 입력 Form-->
+                                <div class="bg-white rounded-xl shadow p-2 space-y-3 text-sm">
 
-                                    <tbody id="orderListBody" class="divide-y">
-                                        <!-- JS로 데이터가 채워짐 -->
-                                    </tbody>
-                                </table>
+                                    <!-- 1) 수주건번호 / 장비명 / 고객사 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">수주건번호</label>
+                                            <input type="text" id="orderNo"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5"
+                                                placeholder="ISS25-001S">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">장비명</label>
+                                            <input type="text" id="equipName"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5"
+                                                placeholder="PR STRIP">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">고객사</label>
+                                            <select id="clientName"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
+                                                <option value="">선택하세요</option>
+                                                <option value="AMKOR-5 송도">AMKOR-5 송도</option>
+                                                <option value="AMKOR-4 광주">AMKOR-4 광주</option>
+                                                <option value="NEPES 1공장 오창">NEPES 1공장 오창</option>
+                                                <option value="NEPES 2공장 오창">NEPES 2공장 오창</option>
+                                                <option value="ON-SEMI 부천">ON-SEMI 부천</option>
+                                                <option value="SK-실트론 구미">SK-실트론 구미</option>
+                                                <option value="매그너칩 구미">매그너칩 구미</option>
+                                                <option value="KEC 구미">KEC 구미</option>
+                                                <option value="와이솔 오산">와이솔 오산</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- 2) 포장예정일 / 납품예정일 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">포장예정일</label>
+                                            <input type="date" id="packDate"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">납품예정일</label>
+                                            <input type="date" id="deliveryDate"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 3) 제작 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">제작담당 (정)</label>
+                                            <input type="text" id="mfgMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">제작담당 (부)</label>
+                                            <input type="text" id="mfgSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">제작업체</label>
+                                            <input type="text" id="mfgCompany"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 4) PLC 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PLC담당 (정)</label>
+                                            <input type="text" id="plcMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PLC담당 (부)</label>
+                                            <input type="text" id="plcSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PLC업체</label>
+                                            <input type="text" id="plcCompany"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 5) 배선 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">배선담당 (정)</label>
+                                            <input type="text" id="wireMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">배선담당 (부)</label>
+                                            <input type="text" id="wireSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">배선업체</label>
+                                            <input type="text" id="wireCompany"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 6) 셋업 담당 2개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">셋업담당 (정)</label>
+                                            <input type="text" id="setupMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">셋업담당 (부)</label>
+                                            <input type="text" id="setupSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 저장 버튼 -->
+                                    <button id="btnSaveOrder"
+                                        class="w-full mt-2 bg-indigo-600 text-white py-2 rounded-lg text-sm hover:bg-indigo-700">
+                                        수주건 저장
+                                    </button>
+
+                                </div>
+
+                                <!--🔹 우측 수주건 리스트 (독립형 긴 패널)-->
+                                <div class="bg-white rounded-xl shadow p-6 h-[600px] flex flex-col">
+
+                                    <!-- 내부 스크롤 영역 -->
+                                    <div class="overflow-x-auto overflow-y-auto flex-1 border rounded-lg">
+                                        <table class="min-w-full text-sm text-gray-700">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="border px-3 py-2">No</th>
+                                                    <th class="border px-3 py-2">수주건번호</th>
+                                                    <th class="border px-3 py-2">장비명</th>
+                                                    <th class="border px-3 py-2">고객사</th>
+                                                    <th class="border px-3 py-2">포장예정일</th>
+                                                    <th class="border px-3 py-2">납품예정일</th>
+                                                    <th class="border px-3 py-2 w-20">관리</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="orderListBody" class="divide-y">
+                                                <!-- JS로 데이터가 채워짐 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Panel 2 -->
+                            <div id="_panel-수주건등록-2"
+                                class="tab-panel absolute inset-0 opacity-0 translate-x-10 pointer-events-none transition-all duration-300">
+
+                                <div class="flex w-full h-full gap-2">
+
+                                    <!-- ▼ 옵션 선택 패널 (왼쪽) -->
+                                    <div id="option-select_panel-수주건등록-2"
+                                        class="basis-1/3 p-2 border border-[#b40d0d] overflow-y-auto space-y-2">
+
+                                        <div id="장비기본구조" class="p-2 border border-[#000000]">
+                                            <!-- 장비 타입 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">장비 타입</label>
+                                                <select id="equipment_type_panel-수주건등록-2" class="opt-input">
+                                                    <option>TRAUM</option>
+                                                    <option>ASTRO</option>
+                                                    <option>TETTIS</option>
+                                                    <option>DRYER</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 장비 인치 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">장비 인치</label>
+                                                <select id="equipment_inch_panel-수주건등록-2" class="opt-input">
+                                                    <option>4</option>
+                                                    <option>6</option>
+                                                    <option>8</option>
+                                                    <option>12</option>
+                                                    <option>마스크</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- TRAUM ONLY -->
+                                            <div class="opt-row" id="traum_only_wrap_panel-수주건등록-2"
+                                                style="display:none">
+                                                <label class="opt-label">Cassette / LESS</label>
+                                                <select id="traum_sub_panel-수주건등록-2" class="opt-input">
+                                                    <option>LESS</option>
+                                                    <option>Cassette</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 설비 구동 방식 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">설비 구동 방식</label>
+                                                <select id="drive_type_panel-수주건등록-2" class="opt-input">
+                                                    <option>오토 설비</option>
+                                                    <option>메뉴얼 설비</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 메인장비 - 1 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">메인장비-1 사이즈</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="main_1_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="main_1_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+                                            <!-- 메인장비 - 2 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">메인장비-2 사이즈</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="main_2_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="main_2_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+
+                                            <!-- 로컬유닛 1 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">로컬유닛-1</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="local1_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="local1_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+
+                                            <!-- 로컬유닛 2 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">로컬유닛-2</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="local2_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="local2_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+
+                                            <!-- 로컬유닛 3 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">로컬유닛-3</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="local3_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="local3_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+
+                                            <!-- 로컬유닛 4 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">로컬유닛-4</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="local4_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="local4_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+
+                                            <!-- 로컬유닛 5 -->
+                                            <div class="opt-row">
+                                                <label class="opt-label">로컬유닛-5</label>
+                                                <div class="flex items-center gap-1">
+                                                    <input id="local5_width_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="가로">
+                                                    <span>×</span>
+                                                    <input id="local5_height_panel-수주건등록-2" type="number"
+                                                        class="opt-input w-20" placeholder="세로">
+                                                </div>
+                                            </div>
+
+
+
+                                            <!-- 확인 버튼 -->
+                                            <div class="flex justify-end mt-4">
+                                                <button id="장비기본구조-btnApplyLayout_panel-수주건등록-2"
+                                                    class="px-4 py-1 rounded bg-blue-600 text-white text-sm hover:bg-blue-700">
+                                                    확인
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div id="chamber-container"></div>
+
+
+
+
+
+
+                                    </div>
+
+
+                                    <div id="layout-view_panel-수주건등록-2" class="basis-2/3 p-1 border border-[#b40d0d]">
+                                    </div>
+
+
+                                    <!-- ▼ 공통 스타일 -->
+                                    <style>
+                                        .opt-row {
+                                            display: grid;
+                                            grid-template-columns: 120px 1fr;
+                                            gap: 6px;
+                                            align-items: center;
+                                        }
+
+                                        .opt-label {
+                                            font-size: 13px;
+                                            font-weight: 600;
+                                            color: #333;
+                                        }
+
+                                        .opt-input {
+                                            border: 1px solid #999;
+                                            border-radius: 4px;
+                                            padding: 4px 6px;
+                                            font-size: 13px;
+                                        }
+
+                                        .drag-box {
+                                            position: absolute;
+                                            height: 60px;
+                                            border: 1px solid #3488ee;
+                                            background: #e7f1ff;
+                                            font-size: 11px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            cursor: move;
+                                            user-select: none;
+                                        }
+                                    </style>
+
+
+
+
+                                </div>
+                            </div>
+
+                            <!-- Panel 3 -->
+                            <div id="_panel-수주건등록-3"
+                                class="tab-panel absolute inset-0 opacity-0 translate-x-10 pointer-events-none transition-all duration-300">
+                                <div class="p-4">패널 3 콘텐츠</div>
                             </div>
 
                         </div>
-
-
-
-
                     </div>
+
+
+                    <script>
+                        // ---------------------------
+                        // 📌 TAB 기능
+                        // ---------------------------
+                        const tabBtns = document.querySelectorAll(".tab-btn");
+                        const tabPanels = document.querySelectorAll(".tab-panel");
+
+                        tabBtns.forEach(btn => {
+                            btn.addEventListener("click", () => {
+                                const target = btn.getAttribute("data-tab");
+
+                                // 버튼 스타일 처리
+                                tabBtns.forEach(b => b.classList.remove("bg-white"));
+                                btn.classList.add("bg-white");
+
+                                // 패널 스위칭 (스무스 모션)
+                                tabPanels.forEach(panel => {
+                                    if (panel.id === target) {
+                                        panel.classList.remove("opacity-0", "translate-x-10", "pointer-events-none");
+                                        panel.classList.add("opacity-100", "translate-x-0");
+                                    } else {
+                                        panel.classList.remove("opacity-100", "translate-x-0");
+                                        panel.classList.add("opacity-0", "translate-x-10", "pointer-events-none");
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+
 
 
 
 
                 </section>
 
-                <!-- ✅ 사용자 관리 -->
-                <div id="panel-사용자-관리" class="space-y-4 hidden">
-                    <!-- 상단 영역 -->
-                    <div class="flex justify-between items-center">
-                        <div class="text-sm text-gray-600">총 사용자: <span id="userCount">0명</span></div>
-                        <button onclick="openAddUserModal()"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            ➕ 신규 사용자 추가
-                        </button>
-                    </div>
-
-                    <!-- 사용자 테이블 -->
-                    <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
-                        <table class="min-w-full divide-y divide-gray-200 text-sm">
-                            <thead class="bg-gray-100 text-gray-700 text-left">
-                                <tr>
-                                    <th class="px-4 py-2">No</th>
-                                    <th class="px-4 py-2">Name</th>
-                                    <th class="px-4 py-2">ID</th>
-                                    <th class="px-4 py-2">비밀번호</th>
-                                    <th class="px-4 py-2">이메일</th>
-                                    <th class="px-4 py-2">회사파트</th>
-                                    <th class="px-4 py-2">권한</th>
-                                    <th class="px-4 py-2 text-center">관리</th>
-                                </tr>
-                            </thead>
-                            <tbody id="userTableBody" class="divide-y divide-gray-200"></tbody>
-                        </table>
-                    </div>
-
-                    <!-- ✅ 사용자 추가/수정 모달 -->
-                    <div id="userModal"
-                        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 space-y-4">
-                            <h3 id="modalTitle" class="text-lg font-bold text-gray-900">사용자 추가</h3>
-                            <form id="userForm" class="space-y-4">
-                                <input type="hidden" id="modalMode" value="add" />
-                                <input type="hidden" id="modalNo" value="" />
-
-                                <div class="pb-3 border-b">
-                                    <label class="block text-sm font-medium text-gray-700">Name</label>
-                                    <input id="modalName" type="text" class="w-full border rounded px-3 py-2 mt-1"
-                                        required />
-                                </div>
-
-                                <div class="pb-3 border-b">
-                                    <label class="block text-sm font-medium text-gray-700">ID</label>
-                                    <input id="modalID" type="text" class="w-full border rounded px-3 py-2 mt-1"
-                                        required />
-                                </div>
-
-                                <div class="pb-3 border-b">
-                                    <label class="block text-sm font-medium text-gray-700">비밀번호</label>
-                                    <div class="flex items-center space-x-2">
-                                        <input id="modalPassword" type="password"
-                                            class="w-full border rounded px-3 py-2 mt-1" placeholder="수정 시에만 입력" />
-                                        <button type="button" onclick="togglePassword()"
-                                            class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">👁</button>
-                                    </div>
-                                </div>
-
-
-                                <div class="pb-3 border-b">
-                                    <label class="block text-sm font-medium text-gray-700">이메일</label>
-                                    <input id="modalEmail" type="email" class="w-full border rounded px-3 py-2 mt-1" />
-                                </div>
-
-                                <div class="pb-3 border-b">
-                                    <label class="block text-sm font-medium text-gray-700">회사파트 (company_part)</label>
-                                    <input id="modalCompanyPart" type="text"
-                                        class="w-full border rounded px-3 py-2 mt-1" value="이노맥스" />
-                                </div>
-
-                                <div class="pb-3 border-b">
-                                    <label class="block text-sm font-medium text-gray-700">권한 (각 탭별)</label>
-
-
-                                    <div id="permissionContainer" class="grid grid-cols-2 gap-2 mt-2">
-                                        <div>
-                                            <label>수주건등록</label>
-                                            <select id="수주건등록" class="w-full border rounded px-2 py-1">
-                                                <option value="ReadWrite">읽고 쓰기 가능</option>
-                                                <option value="ReadOnly">읽기 전용</option>
-                                                <option value="NoAccess">접근 불가</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label>업무할당</label>
-                                            <select id="업무할당" class="w-full border rounded px-2 py-1">
-                                                <option value="ReadWrite">읽고 쓰기 가능</option>
-                                                <option value="ReadOnly">읽기 전용</option>
-                                                <option value="NoAccess">접근 불가</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label>진행상황</label>
-                                            <select id="진행상황" class="w-full border rounded px-2 py-1">
-                                                <option value="ReadWrite">읽고 쓰기 가능</option>
-                                                <option value="ReadOnly">읽기 전용</option>
-                                                <option value="NoAccess">접근 불가</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label>진행상황보고</label>
-                                            <select id="진행상황보고" class="w-full border rounded px-2 py-1">
-                                                <option value="ReadWrite">읽고 쓰기 가능</option>
-                                                <option value="ReadOnly">읽기 전용</option>
-                                                <option value="NoAccess">접근 불가</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label>요청사항</label>
-                                            <select id="요청사항" class="w-full border rounded px-2 py-1">
-                                                <option value="ReadWrite">읽고 쓰기 가능</option>
-                                                <option value="ReadOnly">읽기 전용</option>
-                                                <option value="NoAccess">접근 불가</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="flex justify-end space-x-2 pt-3">
-                                    <button type="button" onclick="closeUserModal()"
-                                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">취소</button>
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">저장</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
 
 
                 <!-- 📌 업무할당 패널 -->
@@ -941,7 +1096,7 @@
                 <!-- ============================================================= -->
                 <!-- 📌 진행상황 패널 전체 (대시보드 + 캘린더)                     -->
                 <!-- ============================================================= -->
-                <div id="panel-진행상황-한눈에보기" class="hidden overflow-hidden bg-gray-50" style="height: 750px;">
+                <div id="panel-진행상황-한눈에보기" class="hidden overflow-hidden bg-gray border border-[#250d0d]">
 
                     <!-- ---------------------------- -->
                     <!-- 상단 헤더 -->
@@ -1242,6 +1397,135 @@
 
 
 
+                <!-- ✅ 사용자 관리 -->
+                <div id="panel-사용자-관리" class="hidden bg-gray">
+                    <!-- 사용자 테이블 -->
+                    <div class="p-3 rounded-lg shadow overflow-x-auto overflow-y-auto h-[600px]">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-100 text-gray-700 text-left">
+                                <tr>
+                                    <th class="px-4 py-2">No</th>
+                                    <th class="px-4 py-2">Name</th>
+                                    <th class="px-4 py-2">ID</th>
+                                    <th class="px-4 py-2">비밀번호</th>
+                                    <th class="px-4 py-2">이메일</th>
+                                    <th class="px-4 py-2">회사파트</th>
+                                    <th class="px-4 py-2">권한</th>
+                                    <th class="px-4 py-2 text-center">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody" class="divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- ✅ 사용자 추가/수정 모달 -->
+                    <div id="userModal"
+                        class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+                        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 space-y-4">
+                            <h3 id="modalTitle" class="text-lg font-bold text-gray-900">사용자 추가</h3>
+                            <form id="userForm" class="space-y-4">
+                                <input type="hidden" id="modalMode" value="add" />
+                                <input type="hidden" id="modalNo" value="" />
+
+                                <div class="pb-3 border-b">
+                                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                                    <input id="modalName" type="text" class="w-full border rounded px-3 py-2 mt-1"
+                                        required />
+                                </div>
+
+                                <div class="pb-3 border-b">
+                                    <label class="block text-sm font-medium text-gray-700">ID</label>
+                                    <input id="modalID" type="text" class="w-full border rounded px-3 py-2 mt-1"
+                                        required />
+                                </div>
+
+                                <div class="pb-3 border-b">
+                                    <label class="block text-sm font-medium text-gray-700">비밀번호</label>
+                                    <div class="flex items-center space-x-2">
+                                        <input id="modalPassword" type="password"
+                                            class="w-full border rounded px-3 py-2 mt-1" placeholder="수정 시에만 입력" />
+                                        <button type="button" onclick="togglePassword()"
+                                            class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">👁</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="pb-3 border-b">
+                                    <label class="block text-sm font-medium text-gray-700">이메일</label>
+                                    <input id="modalEmail" type="email" class="w-full border rounded px-3 py-2 mt-1" />
+                                </div>
+
+                                <div class="pb-3 border-b">
+                                    <label class="block text-sm font-medium text-gray-700">회사파트 (company_part)</label>
+                                    <input id="modalCompanyPart" type="text"
+                                        class="w-full border rounded px-3 py-2 mt-1" value="이노맥스" />
+                                </div>
+
+                                <div class="pb-3 border-b">
+                                    <label class="block text-sm font-medium text-gray-700">권한 (각 탭별)</label>
+
+
+                                    <div id="permissionContainer" class="grid grid-cols-2 gap-2 mt-2">
+                                        <div>
+                                            <label>수주건등록</label>
+                                            <select id="수주건등록" class="w-full border rounded px-2 py-1">
+                                                <option value="ReadWrite">읽고 쓰기 가능</option>
+                                                <option value="ReadOnly">읽기 전용</option>
+                                                <option value="NoAccess">접근 불가</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>업무할당</label>
+                                            <select id="업무할당" class="w-full border rounded px-2 py-1">
+                                                <option value="ReadWrite">읽고 쓰기 가능</option>
+                                                <option value="ReadOnly">읽기 전용</option>
+                                                <option value="NoAccess">접근 불가</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>진행상황</label>
+                                            <select id="진행상황" class="w-full border rounded px-2 py-1">
+                                                <option value="ReadWrite">읽고 쓰기 가능</option>
+                                                <option value="ReadOnly">읽기 전용</option>
+                                                <option value="NoAccess">접근 불가</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>진행상황보고</label>
+                                            <select id="진행상황보고" class="w-full border rounded px-2 py-1">
+                                                <option value="ReadWrite">읽고 쓰기 가능</option>
+                                                <option value="ReadOnly">읽기 전용</option>
+                                                <option value="NoAccess">접근 불가</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label>요청사항</label>
+                                            <select id="요청사항" class="w-full border rounded px-2 py-1">
+                                                <option value="ReadWrite">읽고 쓰기 가능</option>
+                                                <option value="ReadOnly">읽기 전용</option>
+                                                <option value="NoAccess">접근 불가</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="flex justify-end space-x-2 pt-3">
+                                    <button type="button" onclick="closeUserModal()"
+                                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">취소</button>
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">저장</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </section>
 
 
@@ -1249,43 +1533,6 @@
 
 
     </div>
-
-    <!-- ===== JS: 탭 전환 ===== -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const navButtons = document.querySelectorAll(".nav-btn");
-            const panels = document.querySelectorAll('[id^="panel-"]');
-
-            function showPanel(id) {
-                panels.forEach(p => p.classList.add("hidden"));
-                document.getElementById(id).classList.remove("hidden");
-
-                navButtons.forEach(b => {
-                    if (b.dataset.panel === id) {
-                        b.classList.add("bg-blue-100", "text-blue-700", "font-bold");
-                    } else {
-                        b.classList.remove("bg-blue-100", "text-blue-700", "font-bold");
-                    }
-                });
-
-                const cur = document.querySelector(`.nav-btn[data-panel="${id}"]`);
-                if (cur) document.getElementById("wsTitle").textContent = cur.textContent;
-            }
-
-            // 버튼 이벤트
-            navButtons.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    const id = btn.dataset.panel;
-                    if (id) showPanel(id);
-                });
-            });
-
-            // 초기화: Dashboard
-            showPanel("panel-dashboard");
-        });
-    </script>
-
-
 
     <script src="assets/js/workspace.bundle.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>

@@ -4,7 +4,7 @@
   "description": "이노맥스 업무관리 프로그램",
   "main": "server/mainServer.ts",
   "scripts": {
-    "dev:server": "ts-node-dev --respawn --transpile-only --project tsconfig.server.json server/mainServer.ts",
+    "dev:server": "ts-node-dev --respawn --transpile-only --project tsconfig.server.json server/00_mainServer.ts",
     "dev:frontend": "webpack --watch --mode development",
     "dev:css": "postcss src/styles.css -o docs/assets/css/styles.css --watch",
     "dev:assets": "concurrently \"npm run dev:frontend\" \"npm run dev:css\"",
