@@ -16,11 +16,9 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
         const domChamber = collectChamberDOM(i);
         bindChamberEvents(domChamber);
+        bindChamberEvents_1(domChamber, i);
 
-        // domChamber.btnApply.addEventListener("click", () => {
-        //     const values = collectChamberValues(domChamber);
-        //     appendChamberBox(i, values);
-        // });
+
     }
 
 
@@ -82,6 +80,11 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         const suffix = "_panel-수주건등록-2";
 
         const dom: any = {
+
+            // 🔹 챔버 전체 DIV (루트 DOM 추가)
+            root: document.getElementById(`챔버-${chNo}-구조`),
+
+
             chuckType: document.getElementById(`챔버-${chNo}-구조-chuck_type${suffix}`),
 
             cups: {},
@@ -291,194 +294,183 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
     function createChamberLayout(chNo: any) {
         return `
-            <div id="챔버-${chNo}-구조" class="p-2 border border-[#000000] mt-3">
-        챔버-${chNo}
+        <div class="border border-[#000000] mt-3 rounded">
 
-        <!-- CHUCK -->
-        <div class="opt-row">
-            <label class="opt-label">CHUCK Type</label>
-            <select id="챔버-${chNo}-구조-chuck_type_panel-수주건등록-2" class="opt-input">
-                <option>GRIP</option>
-                <option>VACCUM</option>
-                <option>Bernoulli</option>
-                <option>Venturi</option>
-            </select>
-        </div>
+            <!-- 🔹 챔버 헤더 (이벤트 없음) -->
+            <div id="챔버-${chNo}-구조-header"
+                class="flex justify-between items-center bg-gray-200 px-2 py-1.5 cursor-pointer">
 
-        <!-- Cup 1~4 -->
-        ${[1, 2, 3, 4].map(i => `
-        <div class="opt-row">
-            <label class="opt-label">Cup-${i} Type</label>
-            <select id="챔버-${chNo}-구조-cup-${i}_type_panel-수주건등록-2" class="opt-input">
-                <option>None</option>
-                <option>Cyclinder</option>
-                <option>Motor</option>
-            </select>
-        </div>
-        `).join("")}
+                <div class="font-semibold">챔버-${chNo}</div>
 
-        <!-- Inner Cup -->
-        <div class="opt-row">
-            <label class="opt-label">Inner Cup Type</label>
-            <select id="챔버-${chNo}-구조-inner-cup_type_panel-수주건등록-2" class="opt-input">
-                <option>None</option>
-                <option>Motor</option>
-            </select>
-        </div>
-
-        <!-- Back Chemical -->
-        <div class="opt-row">
-            <label class="opt-label">Back Chemical</label>
-            <div>
-                <select id="챔버-${chNo}-구조-Back-Chemical-type-1_panel-수주건등록-2" class="opt-input">
-                    <option>None</option>
-                    <option>DIW</option>
-                    <option>N2</option>
-                </select>
-                <select id="챔버-${chNo}-구조-Back-Chemical-type-2_panel-수주건등록-2" class="opt-input">
-                    <option>None</option>
-                    <option>DIW</option>
-                    <option>N2</option>
-                </select>
+                <button id="챔버-${chNo}-구조-toggleBtn"
+                    class="text-sm text-blue-600 hover:underline">
+                    접기
+                </button>
             </div>
-        </div>
 
-        <!-- Dispenser 1 -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#d0f655]">Dispenser-1 Type</label>
-            <select id="챔버-${chNo}-구조-dispenser-1_type_panel-수주건등록-2" class="opt-input">
-                <option>None</option>
-                <option>U/D Cyclinder</option>
-                <option>U/D Motor</option>
-            </select>
-        </div>
+            <!-- 🔹 챔버 전체 내부 (접기/펼침 대상) -->
+            <div id="챔버-${chNo}-구조-body" class="p-1.5 space-y-2">
 
-        <!-- Dispenser Chemicals -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#d0f655]">Dispenser-1 Chemical</label>
-            <div>
+                <!-- CHUCK -->
+                <div class="opt-row p-1.5">
+                    <label class="opt-label">CHUCK Type</label>
+                    <select id="챔버-${chNo}-구조-chuck_type_panel-수주건등록-2" class="opt-input p-1.5">
+                        <option>NONE</option>
+                        <option>GRIP</option>
+                        <option>VACCUM</option>
+                        <option>Bernoulli</option>
+                        <option>Venturi</option>
+                    </select>
+                </div>
+
+                <!-- Cup 1~4 -->
                 ${[1, 2, 3, 4].map(i => `
-                <select id="챔버-${chNo}-구조-dispenser-1-chemical-${i}_type_panel-수주건등록-2"
-                    class="opt-input">
-                    <option>None</option>
-                    <option>DIW</option>
-                    <option>N2</option>
-                    <option>NANO-DIW</option>
-                    <option>DICO2</option>
-                    <option>TIW</option>
-                    <option>TI</option>
-                    <option>CU</option>
-                    <option>ACID</option>
-                    <option>NPS-5300</option>
-                </select>
+                <div class="opt-row p-1.5">
+                    <label class="opt-label">Cup-${i} Type</label>
+                    <select id="챔버-${chNo}-구조-cup-${i}_type_panel-수주건등록-2" class="opt-input p-1.5">
+                        <option>None</option>
+                        <option>Cyclinder</option>
+                        <option>Motor</option>
+                    </select>
+                </div>
                 `).join("")}
+
+                <!-- Inner Cup -->
+                <div class="opt-row p-1.5">
+                    <label class="opt-label">Inner Cup Type</label>
+                    <select id="챔버-${chNo}-구조-inner-cup_type_panel-수주건등록-2" class="opt-input p-1.5">
+                        <option>None</option>
+                        <option>Motor</option>
+                    </select>
+                </div>
+
+                <!-- Back Chemical -->
+                <div class="opt-row p-1.5">
+                    <label class="opt-label">Back Chemical</label>
+                    <div class="flex flex-col gap-1">
+                        <select id="챔버-${chNo}-구조-Back-Chemical-type-1_panel-수주건등록-2" class="opt-input p-1.5">
+                            <option>None</option>
+                            <option>DIW</option>
+                            <option>N2</option>
+                        </select>
+                        <select id="챔버-${chNo}-구조-Back-Chemical-type-2_panel-수주건등록-2" class="opt-input p-1.5">
+                            <option>None</option>
+                            <option>DIW</option>
+                            <option>N2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- DIS1 --------------------------------------------------------------- -->
+                <div class="border border-[#53f51d] p-1.5 space-y-1.5">
+
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-1 Type</label>
+                        <select id="챔버-${chNo}-구조-dispenser-1_type_panel-수주건등록-2" class="opt-input p-1.5">
+                            <option>None</option>
+                            <option>U/D Cyclinder</option>
+                            <option>U/D Motor</option>
+                        </select>
+                    </div>
+
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-1 Chemical</label>
+                        <div class="flex flex-col gap-1">
+                            ${[1, 2, 3, 4].map(i => `
+                                <input type="text"
+                                    id="챔버-${chNo}-구조-dispenser-1-chemical-${i}_type_panel-수주건등록-2"
+                                    class="opt-input p-1.5"
+                                    placeholder="Chemical ${i}">
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIS2 --------------------------------------------------------------- -->
+                <div class="border border-[#f5361d] p-1.5 space-y-1.5">
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-2 Type</label>
+                        <select id="챔버-${chNo}-구조-dispenser-2_type_panel-수주건등록-2" class="opt-input p-1.5">
+                            <option>None</option>
+                            <option>U/D Cyclinder</option>
+                            <option>U/D Motor</option>
+                        </select>
+                    </div>
+
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-2 Chemical</label>
+                        <div class="flex flex-col gap-1">
+                            ${[1, 2, 3, 4].map(i => `
+                                <input type="text"
+                                    id="챔버-${chNo}-구조-dispenser-2-chemical-${i}_type_panel-수주건등록-2"
+                                    class="opt-input p-1.5"
+                                    placeholder="Chemical ${i}">
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIS3 --------------------------------------------------------------- -->
+                <div class="border border-[#0988cc] p-1.5 space-y-1.5">
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-3 Type</label>
+                        <select id="챔버-${chNo}-구조-dispenser-3_type_panel-수주건등록-2" class="opt-input p-1.5">
+                            <option>None</option>
+                            <option>U/D Cyclinder</option>
+                            <option>U/D Motor</option>
+                        </select>
+                    </div>
+
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-3 Chemical</label>
+                        <div class="flex flex-col gap-1">
+                            ${[1, 2, 3, 4].map(i => `
+                                <input type="text"
+                                    id="챔버-${chNo}-구조-dispenser-3-chemical-${i}_type_panel-수주건등록-2"
+                                    class="opt-input p-1.5"
+                                    placeholder="Chemical ${i}">
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIS4 --------------------------------------------------------------- -->
+                <div class="border border-[#ba7cf8] p-1.5 space-y-1.5">
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-4 Type</label>
+                        <select id="챔버-${chNo}-구조-dispenser-4_type_panel-수주건등록-2" class="opt-input p-1.5">
+                            <option>None</option>
+                            <option>U/D Cyclinder</option>
+                            <option>U/D Motor</option>
+                        </select>
+                    </div>
+
+                    <div class="opt-row p-1.5">
+                        <label class="opt-label">Dispenser-4 Chemical</label>
+                        <div class="flex flex-col gap-1">
+                            ${[1, 2, 3, 4].map(i => `
+                                <input type="text"
+                                    id="챔버-${chNo}-구조-dispenser-4-chemical-${i}_type_panel-수주건등록-2"
+                                    class="opt-input p-1.5"
+                                    placeholder="Chemical ${i}">
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end mt-4">
+                    <button id="챔버-${chNo}-구조-btnApplyLayout_panel-수주건등록-2"
+                        class="px-4 py-1.5 rounded bg-blue-600 text-white text-sm hover:bg-blue-700">
+                        확인
+                    </button>
+                </div>
+
             </div>
         </div>
-
-        <!-- Dispenser 2 -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#d7644b]">Dispenser-2 Type</label>
-            <select id="챔버-${chNo}-구조-dispenser-2_type_panel-수주건등록-2" class="opt-input">
-                <option>None</option>
-                <option>U/D Cyclinder</option>
-                <option>U/D Motor</option>
-            </select>
-        </div>
-
-        <!-- Dispenser Chemicals -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#d7644b]">Dispenser-2 Chemical</label>
-            <div>
-                ${[1, 2, 3, 4].map(i => `
-                <select id="챔버-${chNo}-구조-dispenser-2-chemical-${i}_type_panel-수주건등록-2"
-                    class="opt-input">
-                    <option>None</option>
-                    <option>DIW</option>
-                    <option>N2</option>
-                    <option>NANO-DIW</option>
-                    <option>DICO2</option>
-                    <option>TIW</option>
-                    <option>TI</option>
-                    <option>CU</option>
-                    <option>ACID</option>
-                    <option>NPS-5300</option>
-                </select>
-                `).join("")}
-            </div>
-        </div>
-
-        <!-- Dispenser 3 -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#4bd7d2]">Dispenser-3 Type</label>
-            <select id="챔버-${chNo}-구조-dispenser-3_type_panel-수주건등록-2" class="opt-input">
-                <option>None</option>
-                <option>U/D Cyclinder</option>
-                <option>U/D Motor</option>
-            </select>
-        </div>
-
-        <!-- Dispenser Chemicals -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#4bd7d2]">Dispenser-3 Chemical</label>
-            <div>
-                ${[1, 2, 3, 4].map(i => `
-                <select id="챔버-${chNo}-구조-dispenser-3-chemical-${i}_type_panel-수주건등록-2"
-                    class="opt-input">
-                    <option>None</option>
-                    <option>DIW</option>
-                    <option>N2</option>
-                    <option>NANO-DIW</option>
-                    <option>DICO2</option>
-                    <option>TIW</option>
-                    <option>TI</option>
-                    <option>CU</option>
-                    <option>ACID</option>
-                    <option>NPS-5300</option>
-                </select>
-                `).join("")}
-            </div>
-        </div>
-
-        <!-- Dispenser 4 -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#624bd7]">Dispenser-4 Type</label>
-            <select id="챔버-${chNo}-구조-dispenser-4_type_panel-수주건등록-2" class="opt-input">
-                <option>None</option>
-                <option>U/D Cyclinder</option>
-                <option>U/D Motor</option>
-            </select>
-        </div>
-
-        <!-- Dispenser Chemicals -->
-        <div class="opt-row">
-            <label class="opt-label bg-[#624bd7]">Dispenser-4 Chemical</label>
-            <div>
-                ${[1, 2, 3, 4].map(i => `
-                <select id="챔버-${chNo}-구조-dispenser-4-chemical-${i}_type_panel-수주건등록-2"
-                    class="opt-input">
-                    <option>None</option>
-                    <option>DIW</option>
-                    <option>N2</option>
-                    <option>NANO-DIW</option>
-                    <option>DICO2</option>
-                    <option>TIW</option>
-                    <option>TI</option>
-                    <option>CU</option>
-                    <option>ACID</option>
-                    <option>NPS-5300</option>
-                </select>
-                `).join("")}
-            </div>
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <button id="챔버-${chNo}-구조-btnApplyLayout_panel-수주건등록-2"
-                class="px-4 py-1 rounded bg-blue-600 text-white text-sm hover:bg-blue-700">
-                확인
-            </button>
-        </div>
-    </div>`;
+        `;
     }
+
+
 
 
     //#region 챔버 형상화 관련
@@ -516,26 +508,58 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
 
     function appendChamberBox(chNo: number, values: any) {
-        //const canvas = document.getElementById("layout-view")!;
 
-        // UUID 같은 랜덤 ID
         const boxId = `box_${chNo}_${Date.now()}`;
 
         const box = document.createElement("div");
         box.id = boxId;
+
         box.className = `
         absolute bg-white border border-black rounded shadow-md p-2
-        w-[160px] h-[160px] cursor-move select-none
+        w-[220px] h-auto cursor-move select-none
     `;
 
-        // 박스 내부 내용
         box.innerHTML = `
-        <div class="font-bold text-sm mb-1">Chamber ${chNo}</div>
-        <div class="text-xs leading-4">
-            <div>CHUCK : ${values.chuckType}</div>
-            <div>INNER : ${values.innerCup}</div>
-            <div>CUP : ${values.cups.cup1}, ${values.cups.cup2}, ${values.cups.cup3}, ${values.cups.cup4}</div>
-            <div>BACK : ${values.backChemical.type1}, ${values.backChemical.type2}</div>
+        <div class="font-bold text-sm mb-2">Chamber ${chNo}</div>
+
+        <div class="text-xs leading-4 space-y-1">
+
+            <div><b>CHUCK :</b> ${values.chuckType}</div>
+            <div><b>INNER :</b> ${values.innerCup}</div>
+
+            <div><b>CUP-1 :</b> 
+                ${values.cups.cup1}
+            </div>
+
+            <div><b>CUP-2 :</b> 
+                ${values.cups.cup2}
+            </div>
+
+            <div><b>CUP-3 :</b> 
+                ${values.cups.cup3}
+            </div>
+            
+            <div><b>CUP-4 :</b> 
+                ${values.cups.cup4}
+            </div>
+
+            <div><b>BACK :</b> 
+                ${values.backChemical.type1},
+                ${values.backChemical.type2}
+            </div>
+
+            ${[1, 2, 3, 4].map(d => `
+                <div class="mt-1">
+                    <b>DIS-${d} :</b> ${values.dispensers[`disp${d}`].type}
+                </div>
+                <div class="ml-2">
+                    ${values.dispensers[`disp${d}`].chemicals.chem1},
+                    ${values.dispensers[`disp${d}`].chemicals.chem2},
+                    ${values.dispensers[`disp${d}`].chemicals.chem3},
+                    ${values.dispensers[`disp${d}`].chemicals.chem4}
+                </div>
+            `).join("")}
+
         </div>
 
         <button class="absolute top-1 right-1 text-[10px] px-1 bg-red-600 text-white rounded"
@@ -544,7 +568,7 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         </button>
     `;
 
-        // 초기 위치 (대충 랜덤)
+        // 랜덤 초기 위치
         box.style.left = `${30 + Math.random() * 100}px`;
         box.style.top = `${30 + Math.random() * 100}px`;
 
@@ -553,6 +577,7 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         makeDraggable(box);
         bindRemoveEvent(box);
     }
+
 
 
     function makeDraggable(box: HTMLElement) {
@@ -594,15 +619,16 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
     const container_1 = document.getElementById("chamber-container")!;
     for (let i = 1; i <= 8; i++) {
-        container_1.insertAdjacentHTML("beforeend", createChamberLayout(i));
 
         const dom = collectChamberDOM(i);
         bindChamberEvents(dom); // 변경 색 하이라이트
+
 
         // 🔵 확인 버튼 이벤트 연결
         dom.btnApply.addEventListener("click", () => {
             const values = collectChamberValues(dom);
             appendChamberBox(i, values);
+
         });
     }
 
@@ -618,6 +644,10 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         selectEl.addEventListener("change", () => {
             selectEl.style.backgroundColor = "#d0f0ff";   // 변경 시 하늘색
         });
+
+
+
+
     }
 
 
@@ -627,6 +657,8 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
         // 1) Chuck   
         applySelectHighlight(dom.chuckType);
+
+        applySelectHighlight(dom.root);
 
         // 2) Inner Cup
         applySelectHighlight(dom.innerCup);
@@ -653,6 +685,24 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         }
         return 1;
     }
+
+
+    function bindChamberEvents_1(dom: any, chNo: number) {
+        const header = document.getElementById(`챔버-${chNo}-구조-header`);
+        const body = document.getElementById(`챔버-${chNo}-구조-body`);
+        const btn = document.getElementById(`챔버-${chNo}-구조-toggleBtn`);
+
+        if (!header || !body || !btn) return;
+
+        header.addEventListener("click", () => {
+            const hidden = body.style.display === "none";
+
+            body.style.display = hidden ? "block" : "none";
+            btn.innerText = hidden ? "접기" : "펼치기";
+        });
+    }
+
+
 
 
     //#endregion

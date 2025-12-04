@@ -172,23 +172,35 @@ export function initOrderRegisterPanel(API_BASE: string) {
         }
     }
 
+    // 내부 탭 버튼 클릭 이벤트
+    tabButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const tabId = btn.dataset.tab;
+            if (tabId === "_panel-수주건등록-2") {
+                initOrderRegister_detail_Panel(API_BASE_inner);
+            }
+
+
+            //아직 작업 시작 안함
+            // if (tabId === "_panel-수주건등록-1") {
+            //     initOrderRegister_detail_Panel(API_BASE_inner);
+            // }
+
+            // if (tabId === "_panel-수주건등록-3") {
+            //     initOrderRegister_detail_Panel(API_BASE_inner);
+            // }
+
+
+        });
+    });
+
     // ============================================
     // ✅ 이벤트 바인딩 (중복 방지)
     // ============================================
     if (!orderRegisterInitialized) {
         orderRegisterInitialized = true;
 
-        // 내부 탭 버튼 클릭 이벤트
-        tabButtons.forEach((btn) => {
-            btn.addEventListener("click", () => {
-                const tabId = btn.dataset.tab;
-                if (tabId === "_panel-수주건등록-2") {
-                    initOrderRegister_detail_Panel(API_BASE_inner);
-                }
 
-
-            });
-        });
 
 
         // 🔹 저장 버튼 클릭

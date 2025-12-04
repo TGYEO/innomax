@@ -14,6 +14,7 @@ import { ModalUtil } from "./utils/ModalUtil";
 // ==============================================================
 // 🔵 API 기본주소
 // ==============================================================
+const dummy = "1";
 const API_BASE =
   location.hostname === "tgyeo.github.io"
     ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
