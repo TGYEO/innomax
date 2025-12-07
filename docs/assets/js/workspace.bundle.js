@@ -334,106 +334,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _04_order_register_detail__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./04_order-register_detail */ "./TypeScript/workspace/04_order-register_detail.ts");
 // TypeScript/workspace/order-register.ts
 
-let orderRegisterInitialized = false;
 function initOrderRegisterPanel(API_BASE) {
     const API_BASE_inner = location.hostname === "tgyeo.github.io"
         ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
         : "http://127.0.0.1:5050";
-    function clearForm() {
-        orderNoEl.value = "";
-        equipNameEl.value = "";
-        clientNameEl.value = "";
-        packDateEl.value = "";
-        deliveryDateEl.value = "";
-        mfgMainEl.value = "";
-        mfgSubEl.value = "";
-        mfgCompanyEl.value = "";
-        plcMainEl.value = "";
-        plcSubEl.value = "";
-        plcCompanyEl.value = "";
-        wireMainEl.value = "";
-        wireSubEl.value = "";
-        wireCompanyEl.value = "";
-        setupMainEl.value = "";
-        setupSubEl.value = "";
-        // 포커스 기본 위치
-        orderNoEl.focus();
-    }
-    const panel = document.getElementById("panel-수주건등록");
-    if (!panel) {
-        console.warn("⚠️ [OrderRegister] #panel-수주건등록 를 찾지 못했습니다.");
-        return;
-    }
-    const orderNoEl = panel.querySelector("#orderNo");
-    const equipNameEl = panel.querySelector("#equipName");
-    const clientNameEl = panel.querySelector("#clientName");
-    const packDateEl = panel.querySelector("#packDate");
-    const deliveryDateEl = panel.querySelector("#deliveryDate");
-    const mfgMainEl = panel.querySelector("#mfgMain");
-    const mfgSubEl = panel.querySelector("#mfgSub");
-    const mfgCompanyEl = panel.querySelector("#mfgCompany");
-    const plcMainEl = panel.querySelector("#plcMain");
-    const plcSubEl = panel.querySelector("#plcSub");
-    const plcCompanyEl = panel.querySelector("#plcCompany");
-    const wireMainEl = panel.querySelector("#wireMain");
-    const wireSubEl = panel.querySelector("#wireSub");
-    const wireCompanyEl = panel.querySelector("#wireCompany");
-    const setupMainEl = panel.querySelector("#setupMain");
-    const setupSubEl = panel.querySelector("#setupSub");
-    const btnSaveOrder = panel.querySelector("#btnSaveOrder");
-    const orderListBody = panel.querySelector("#orderListBody");
-    if (!btnSaveOrder || !orderListBody) {
-        console.error("❌ [OrderRegister] 버튼 또는 테이블 body를 찾지 못했습니다.");
-        return;
-    }
     // 내부 탭 버튼
     const tabButtons = document.querySelectorAll(`#panel-수주건등록 .tab-btn`);
     const tabs = document.querySelectorAll(`#panel-수주건등록 .tab-panel`);
-    // ============================================
-    // ✅ 리스트 로드 함수
-    // ============================================
-    async function loadOrderList() {
-        orderListBody.innerHTML =
-            '<tr><td colspan="7" class="text-center text-gray-400 py-4">로딩 중...</td></tr>';
-        try {
-            const res = await fetch(`${API_BASE}/api/innomax-projects`);
-            const json = await res.json();
-            if (!res.ok || !json.ok) {
-                throw new Error(json.message || "조회 실패");
-            }
-            const rows = json.rows || [];
-            if (rows.length === 0) {
-                orderListBody.innerHTML =
-                    '<tr><td colspan="7" class="text-center text-gray-400 py-4">등록된 수주건이 없습니다.</td></tr>';
-                return;
-            }
-            orderListBody.innerHTML = "";
-            rows.forEach((row, idx) => {
-                const d = row.detail_json || {};
-                const tr = document.createElement("tr");
-                tr.classList.add("hover:bg-sky-50", "cursor-pointer", "transition-colors");
-                tr.innerHTML = `
-          <td class="border px-3 py-1 text-center">${idx + 1}</td>
-          <td class="border px-3 py-1">${row.code_no}</td>
-          <td class="border px-3 py-1">${d.equipName ?? ""}</td>
-          <td class="border px-3 py-1">${d.clientName ?? ""}</td>
-          <td class="border px-3 py-1">${d.packDate ?? ""}</td>
-          <td class="border px-3 py-1">${d.deliveryDate ?? ""}</td>
-          <td class="border px-3 py-1 text-center text-xs">
-            <button class="px-2 py-1 rounded bg-indigo-500 text-white btn-order-select" data-code="${row.code_no}">
-              선택
-            </button>
-          </td>
-        `;
-                orderListBody.appendChild(tr);
-            });
-        }
-        catch (err) {
-            console.error("❌ [OrderRegister] 리스트 로드 오류:", err);
-            orderListBody.innerHTML =
-                '<tr><td colspan="7" class="text-center text-red-500 py-4">조회 중 오류가 발생했습니다.</td></tr>';
-        }
-    }
     // 내부 탭 버튼 클릭 이벤트
     tabButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -450,116 +357,6 @@ function initOrderRegisterPanel(API_BASE) {
             // }
         });
     });
-    // ============================================
-    // ✅ 이벤트 바인딩 (중복 방지)
-    // ============================================
-    if (!orderRegisterInitialized) {
-        orderRegisterInitialized = true;
-        // 🔹 저장 버튼 클릭
-        btnSaveOrder.addEventListener("click", async () => {
-            const orderNo = orderNoEl.value.trim();
-            const equipName = equipNameEl.value.trim();
-            const clientName = clientNameEl.value.trim();
-            if (!orderNo) {
-                alert("수주건번호를 입력하세요.");
-                orderNoEl.focus();
-                return;
-            }
-            if (!equipName) {
-                alert("장비명을 입력하세요.");
-                equipNameEl.focus();
-                return;
-            }
-            if (!clientName) {
-                alert("고객사를 선택하세요.");
-                clientNameEl.focus();
-                return;
-            }
-            const payload = {
-                orderNo,
-                equipName,
-                clientName,
-                packDate: packDateEl.value || null,
-                deliveryDate: deliveryDateEl.value || null,
-                mfgMain: mfgMainEl.value || "",
-                mfgSub: mfgSubEl.value || "",
-                mfgCompany: mfgCompanyEl.value || "",
-                plcMain: plcMainEl.value || "",
-                plcSub: plcSubEl.value || "",
-                plcCompany: plcCompanyEl.value || "",
-                wireMain: wireMainEl.value || "",
-                wireSub: wireSubEl.value || "",
-                wireCompany: wireCompanyEl.value || "",
-                setupMain: setupMainEl.value || "",
-                setupSub: setupSubEl.value || "",
-            };
-            try {
-                const res = await fetch(`${API_BASE}/api/innomax-projects`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                });
-                const json = await res.json();
-                if (!res.ok || !json.ok) {
-                    throw new Error(json.message || "저장 실패");
-                }
-                alert("수주건이 저장되었습니다.");
-                clearForm(); // ← 폼 전체 초기화
-                // 🔹 리스트 새로고침
-                await loadOrderList();
-            }
-            catch (err) {
-                console.error("❌ [OrderRegister] 저장 오류:", err);
-                alert("수주건 저장 중 오류가 발생했습니다.");
-            }
-        });
-        // 🔹 리스트에서 "선택" 버튼 클릭 시, 폼에 다시 채워넣기
-        orderListBody.addEventListener("click", (e) => {
-            const target = e.target;
-            if (!target.classList.contains("btn-order-select"))
-                return;
-            const code = target.dataset.code;
-            if (!code)
-                return;
-            // 현재 rows를 다시 가져오는 것보다는,
-            // 화면에서 detail_json까지 숨겨두지 않았으니
-            // 간단하게 다시 GET 후 해당 code_no를 찾아 채워넣는 방식 사용
-            (async () => {
-                try {
-                    const res = await fetch(`${API_BASE}/api/innomax-projects`);
-                    const json = await res.json();
-                    if (!res.ok || !json.ok)
-                        return;
-                    const rows = json.rows || [];
-                    const found = rows.find((r) => r.code_no === code);
-                    if (!found)
-                        return;
-                    const d = found.detail_json;
-                    orderNoEl.value = d.orderNo ?? found.code_no;
-                    equipNameEl.value = d.equipName ?? "";
-                    clientNameEl.value = d.clientName ?? "";
-                    packDateEl.value = d.packDate ?? "";
-                    deliveryDateEl.value = d.deliveryDate ?? "";
-                    mfgMainEl.value = d.mfgMain ?? "";
-                    mfgSubEl.value = d.mfgSub ?? "";
-                    mfgCompanyEl.value = d.mfgCompany ?? "";
-                    plcMainEl.value = d.plcMain ?? "";
-                    plcSubEl.value = d.plcSub ?? "";
-                    plcCompanyEl.value = d.plcCompany ?? "";
-                    wireMainEl.value = d.wireMain ?? "";
-                    wireSubEl.value = d.wireSub ?? "";
-                    wireCompanyEl.value = d.wireCompany ?? "";
-                    setupMainEl.value = d.setupMain ?? "";
-                    setupSubEl.value = d.setupSub ?? "";
-                }
-                catch (err) {
-                    console.error("❌ [OrderRegister] 선택 후 로드 오류:", err);
-                }
-            })();
-        });
-    }
-    // ✅ 탭 들어올 때마다 리스트는 매번 새로 조회
-    loadOrderList().catch((err) => console.error("❌ [OrderRegister] 초기 로드 오류:", err));
 }
 
 
@@ -575,63 +372,95 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   initOrderRegister_detail_Panel: () => (/* binding */ initOrderRegister_detail_Panel)
 /* harmony export */ });
+/* harmony import */ var _utils_ModalUtil__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/ModalUtil */ "./TypeScript/workspace/utils/ModalUtil.ts");
+
 let initOrderRegister_detail_Panel_Initialized = false;
 function initOrderRegister_detail_Panel(API_BASE) {
     if (initOrderRegister_detail_Panel_Initialized)
         return;
     initOrderRegister_detail_Panel_Initialized = true;
     console.log("🟦 [메인장비 사양등록] 패널 초기화 시작");
-    // 🔧 실제 1~8 생성
-    const container = document.getElementById("chamber-container");
-    for (let i = 1; i <= 8; i++) {
-        container.insertAdjacentHTML("beforeend", createChamberLayout(i));
-        const domChamber = collectChamberDOM(i);
-        bindChamberEvents(domChamber);
-        bindChamberEvents_1(domChamber, i);
-    }
-    // -------------------------------------------------------------------
-    // 📌 1) DOM 요소 수집
-    // -------------------------------------------------------------------
-    const suffix = "_panel-수주건등록-2";
-    const dom = {
-        type: document.getElementById("equipment_type" + suffix),
-        inch: document.getElementById("equipment_inch" + suffix),
-        traumWrap: document.getElementById("traum_only_wrap" + suffix),
-        traumSub: document.getElementById("traum_sub" + suffix),
-        driveType: document.getElementById("drive_type" + suffix),
-        layout: document.getElementById("layout-view" + suffix),
-        btnApply: document.getElementById("장비기본구조-btnApplyLayout" + suffix),
-        sizeInputs: {
-            main_1: {
-                width: document.getElementById("main_1_width" + suffix),
-                height: document.getElementById("main_1_height" + suffix),
-            },
-            main_2: {
-                width: document.getElementById("main_2_width" + suffix),
-                height: document.getElementById("main_2_height" + suffix),
-            },
-            local1: {
-                width: document.getElementById("local1_width" + suffix),
-                height: document.getElementById("local1_height" + suffix),
-            },
-            local2: {
-                width: document.getElementById("local2_width" + suffix),
-                height: document.getElementById("local2_height" + suffix),
-            },
-            local3: {
-                width: document.getElementById("local3_width" + suffix),
-                height: document.getElementById("local3_height" + suffix),
-            },
-            local4: {
-                width: document.getElementById("local4_width" + suffix),
-                height: document.getElementById("local4_height" + suffix),
-            },
-            local5: {
-                width: document.getElementById("local5_width" + suffix),
-                height: document.getElementById("local5_height" + suffix),
-            },
+    //#region  초기 Dom 수집 및 이벤트 바인딩
+    async function bindChamberEvents(dom) {
+        // 1) Chuck   
+        applySelectHighlight(dom.chuckType);
+        applySelectHighlight(dom.root);
+        // 2) Inner Cup
+        applySelectHighlight(dom.innerCup);
+        // 3) Back Chemical 1, 2
+        applySelectHighlight(dom.backChemical.type1);
+        applySelectHighlight(dom.backChemical.type2);
+        // 4) Cup 1~4
+        for (let i = 1; i <= 4; i++) {
+            applySelectHighlight(dom.cups[`cup${i}`]);
         }
-    };
+        // 5) Dispenser 1~4 + Chemical 1~4
+        for (let d = 1; d <= 4; d++) {
+            const disp = dom.dispensers[`dispenser${d}`];
+            if (!disp)
+                continue;
+            applySelectHighlight(disp.type);
+            for (let c = 1; c <= 4; c++) {
+                applySelectHighlight(disp.chemicals[`chem${c}`]);
+            }
+        }
+        return 1;
+    }
+    function bindChamberEvents_1(dom, chNo) {
+        const header = document.getElementById(`챔버-${chNo}-구조-header`);
+        const body = document.getElementById(`챔버-${chNo}-구조-body`);
+        const btn = document.getElementById(`챔버-${chNo}-구조-toggleBtn`);
+        if (!header || !body || !btn)
+            return;
+        header.addEventListener("click", () => {
+            const hidden = body.style.display === "none";
+            body.style.display = hidden ? "block" : "none";
+            btn.innerText = hidden ? "접기" : "펼치기";
+        });
+    }
+    function collectMainEquipmentDOM() {
+        const suffix = "_panel-수주건등록-2";
+        const dom = {
+            type: document.getElementById("equipment_type" + suffix),
+            inch: document.getElementById("equipment_inch" + suffix),
+            traumWrap: document.getElementById("traum_only_wrap" + suffix),
+            traumSub: document.getElementById("traum_sub" + suffix),
+            driveType: document.getElementById("drive_type" + suffix),
+            layout: document.getElementById("layout-view" + suffix),
+            btnApply: document.getElementById("장비기본구조-btnApplyLayout" + suffix),
+            sizeInputs: {
+                main_1: {
+                    width: document.getElementById("main_1_width" + suffix),
+                    height: document.getElementById("main_1_height" + suffix),
+                },
+                main_2: {
+                    width: document.getElementById("main_2_width" + suffix),
+                    height: document.getElementById("main_2_height" + suffix),
+                },
+                local1: {
+                    width: document.getElementById("local1_width" + suffix),
+                    height: document.getElementById("local1_height" + suffix),
+                },
+                local2: {
+                    width: document.getElementById("local2_width" + suffix),
+                    height: document.getElementById("local2_height" + suffix),
+                },
+                local3: {
+                    width: document.getElementById("local3_width" + suffix),
+                    height: document.getElementById("local3_height" + suffix),
+                },
+                local4: {
+                    width: document.getElementById("local4_width" + suffix),
+                    height: document.getElementById("local4_height" + suffix),
+                },
+                local5: {
+                    width: document.getElementById("local5_width" + suffix),
+                    height: document.getElementById("local5_height" + suffix),
+                },
+            }
+        };
+        return dom; // ✅ 반환 필수
+    }
     function collectChamberDOM(chNo) {
         const suffix = "_panel-수주건등록-2";
         const dom = {
@@ -671,24 +500,269 @@ function initOrderRegister_detail_Panel(API_BASE) {
         //이벤트 등록 함수
         return dom;
     }
-    dom.layout.style.position = "relative";
-    dom.layout.style.minHeight = "400px";
+    function collectOrderButtons(suffix) {
+        return {
+            save: document.getElementById("btn-order-save" + suffix),
+            read: document.getElementById("btn-order-read" + suffix),
+            edit: document.getElementById("btn-order-edit" + suffix),
+            reset: document.getElementById("btn-reset" + suffix),
+        };
+    }
+    function collectOrderLoadModalDOM(suffix) {
+        return {
+            modal: document.getElementById("modal-order-" + suffix),
+            table: document.getElementById("order-list-table" + suffix),
+            tbody: document.getElementById("order-list-body" + suffix),
+            btnClose: document.getElementById("btn-close" + suffix),
+        };
+    }
+    const MainbtnDom = collectOrderButtons("_panel-수주건등록-2");
+    const OrderModalDom = collectOrderLoadModalDOM("_panel-수주건등록-2");
+    const Maindom = collectMainEquipmentDOM();
+    const container = document.getElementById("chamber-container"); // 🔧 실제 1~8 생성
+    for (let i = 1; i <= 8; i++) {
+        container.insertAdjacentHTML("beforeend", createChamberLayout(i));
+        const domChamber = collectChamberDOM(i);
+        bindChamberEvents(domChamber);
+        bindChamberEvents_1(domChamber, i);
+    }
+    //#endregion
+    //#region 수주건 저장
+    function collectValuesFromDiv(divId) {
+        const container = document.getElementById(divId);
+        if (!container)
+            return {};
+        const result = {};
+        // input, select, textarea 모두 수집
+        const elements = container.querySelectorAll("input, select, textarea");
+        elements.forEach((el) => {
+            const id = el.id;
+            if (!id)
+                return;
+            if (el instanceof HTMLInputElement)
+                result[id] = el.value;
+            else if (el instanceof HTMLSelectElement)
+                result[id] = el.value;
+            else if (el instanceof HTMLTextAreaElement)
+                result[id] = el.value;
+        });
+        return result;
+    }
+    function collectBoxes(container) {
+        const result = [];
+        const boxes = container.querySelectorAll(".drag-box");
+        boxes.forEach((el, idx) => {
+            const box = el;
+            const style = window.getComputedStyle(box);
+            result.push({
+                id: box.id,
+                width: parseFloat(style.width),
+                height: parseFloat(style.height),
+                left: parseFloat(style.left),
+                top: parseFloat(style.top),
+                text: box.textContent ?? ""
+            });
+        });
+        return result;
+    }
+    MainbtnDom.save.addEventListener("click", async () => {
+        // 📌 1) 패널 내부 모든 input/select 값 수집
+        const detail_json = collectValuesFromDiv("_panel-수주건등록-2");
+        console.log("detail_json:", detail_json);
+        // 📌 2) 레이아웃 박스 정보 수집
+        const detail_box_json = collectBoxes(Maindom.layout);
+        console.log("detail_box_json:", detail_box_json);
+        const code_no = document.getElementById("order_number_panel-수주건등록-2").value.trim();
+        if (!code_no) {
+            await _utils_ModalUtil__WEBPACK_IMPORTED_MODULE_0__.ModalUtil.show({ type: "alert", title: "알림", showOk: true, showCancel: false, message: "수주코드가 비어 있습니다." });
+            return;
+        }
+        // 📌 3) 최종 Payload 구성
+        const payload = {
+            code_no,
+            detail_json,
+            detail_box_json,
+        };
+        console.log("최종 payload:", payload);
+        try {
+            // 📌 4) 서버로 전송
+            const res = await fetch(`${API_BASE}/api/innomax-projects/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) {
+                throw new Error(`서버 에러: ${res.status}`);
+            }
+            const result = await res.json();
+            console.log("저장 성공:", result);
+            alert("수주건 저장 성공!");
+        }
+        catch (err) {
+            console.error("❌ 수주건 저장 실패:", err);
+            alert("수주건 저장 중 오류 발생");
+        }
+    });
+    //#endregion
+    //#region 수주건 초기화
+    function resetValuesInDiv(divId) {
+        const container = document.getElementById(divId);
+        if (!container)
+            return;
+        // input, select, textarea 전부 초기화
+        const elements = container.querySelectorAll("input, select, textarea");
+        elements.forEach(el => {
+            if (el instanceof HTMLInputElement) {
+                if (el.type === "checkbox" || el.type === "radio") {
+                    el.checked = false;
+                }
+                else {
+                    el.value = "";
+                }
+            }
+            else if (el instanceof HTMLSelectElement) {
+                el.selectedIndex = 0; // 첫 번째 옵션 선택
+            }
+            else if (el instanceof HTMLTextAreaElement) {
+                el.value = "";
+            }
+        });
+    }
+    function resetLayoutBoxes(layoutDiv) {
+        // 내부 박스 모두 제거
+        layoutDiv.querySelectorAll(".drag-box").forEach(box => box.remove());
+    }
+    function resetOrderRegisterPanel() {
+        const panelId = "_panel-수주건등록-2";
+        // 1) 값 초기화
+        resetValuesInDiv(panelId);
+        // 2) 레이아웃 박스 삭제
+        resetLayoutBoxes(Maindom.layout);
+    }
+    MainbtnDom.reset.addEventListener("click", () => {
+        resetOrderRegisterPanel();
+        console.log("🧹 수주등록 패널 초기화 완료");
+    });
+    //#endregion
+    //#region 수주건 불러오기
+    MainbtnDom.read.addEventListener("click", async () => {
+        OrderModalDom.modal.classList.remove("hidden");
+        // 📌 모달 열릴 때 리스트 로드
+        await loadOrderList();
+    });
+    // 닫기 버튼
+    OrderModalDom.btnClose.addEventListener("click", () => {
+        OrderModalDom.modal.classList.add("hidden");
+    });
+    // ===============================
+    // 📌 백엔드에서 수주 리스트 불러오기
+    // ===============================
+    async function loadOrderList() {
+        const tbody = OrderModalDom.tbody;
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2">불러오는 중...</td></tr>`;
+        try {
+            const res = await fetch(`${API_BASE}/api/innomax-projects/innomax/projects`);
+            const list = await res.json();
+            tbody.innerHTML = ""; // 초기화
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2">저장된 수주건이 없습니다.</td></tr>`;
+                return;
+            }
+            list.forEach((row) => {
+                tbody.innerHTML += `
+                <tr>
+                    <td class="border px-2 py-1">${row.code_no}</td>
+                    <td class="border px-2 py-1">${row.equipment_type ?? "-"}</td>
+                    <td class="border px-2 py-1">${row.customer_name ?? "-"}</td>
+                    <td class="border px-2 py-1 text-center">
+                        <button 
+                            class="px-2 py-1 bg-blue-200 rounded text-xs"
+                            onclick="selectOrder('${row.code_no}')">
+                            선택
+                        </button>
+                    </td>
+                </tr>
+            `;
+            });
+        }
+        catch (err) {
+            console.error("❌ 리스트 로드 실패:", err);
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2 text-red-500">불러오기 실패</td></tr>`;
+        }
+    }
+    window.selectOrder = selectOrder;
+    // ===============================
+    // 📌 특정 수주건 선택 → 상세 불러오기
+    // ===============================
+    async function selectOrder(code_no) {
+        try {
+            const res = await fetch(`${API_BASE}/api/innomax-projects/innomax/project/${code_no}`);
+            const data = await res.json();
+            // detail_json + 박스 JSON 복원
+            restoreOrder(data.detail_json);
+            // 모달 닫기
+            OrderModalDom.modal.classList.add("hidden");
+            await _utils_ModalUtil__WEBPACK_IMPORTED_MODULE_0__.ModalUtil.show({
+                type: "alert",
+                title: "불러오기 완료",
+                message: `수주건 '${code_no}' 이(가) 불러와졌습니다.`,
+                showOk: true,
+                showCancel: false
+            });
+        }
+        catch (err) {
+            console.error("❌ 수주건 선택 실패:", err);
+            alert("수주건 불러오기 실패!");
+        }
+    }
+    // ===============================
+    // 📌 수주건 UI 복원 함수 (폼 + 박스)
+    // ===============================
+    function restoreOrder(saved) {
+        // detail_json → 모든 input/select에 값 채우기
+        const formJson = saved.detail_json;
+        Object.keys(formJson).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.value = formJson[id];
+            }
+        });
+        // 박스 정보 복원
+        resetLayoutBoxes(Maindom.layout);
+        saved.detail_box_json.forEach((box) => {
+            const div = document.createElement("div");
+            div.className = "drag-box";
+            div.style.width = box.width + "px";
+            div.style.height = box.height + "px";
+            div.style.left = box.left + "px";
+            div.style.top = box.top + "px";
+            div.textContent = box.text ?? "";
+            Maindom.layout.appendChild(div);
+        });
+        enableDrag(Maindom.layout);
+        console.log("🎉 수주건 복원 완료");
+    }
+    //#endregion
+    Maindom.layout.style.position = "relative";
+    Maindom.layout.style.minHeight = "400px";
     // -------------------------------------------------------------------
     // 📌 2) TRAUM ONLY 표시
     // -------------------------------------------------------------------
     function applyTraumCondition() {
-        console.log(`🔎 [TRAUM 체크] type=${dom.type.value}`);
-        dom.traumWrap.style.display = dom.type.value === "TRAUM" ? "" : "none";
+        console.log(`🔎 [TRAUM 체크] type=${Maindom.type.value}`);
+        Maindom.traumWrap.style.display = Maindom.type.value === "TRAUM" ? "" : "none";
     }
     applyTraumCondition();
-    dom.type.addEventListener("change", applyTraumCondition);
+    Maindom.type.addEventListener("change", applyTraumCondition);
     // -------------------------------------------------------------------
     // 📌 3) 확인 버튼 클릭 → 박스 생성
     // -------------------------------------------------------------------
-    dom.btnApply.addEventListener("click", () => {
+    Maindom.btnApply.addEventListener("click", () => {
         console.log("📐 [레이아웃 생성 START] ---------------------------");
         // 초기화
-        dom.layout.innerHTML = "";
+        Maindom.layout.innerHTML = "";
         console.log("🧹 기존 layout 박스 삭제 완료");
         const items = [
             { key: "main_1", label: "메인장비-1" },
@@ -702,12 +776,12 @@ function initOrderRegister_detail_Panel(API_BASE) {
         // ● 입력된 값 확인 로그
         console.log("📥 입력값 확인");
         items.forEach(i => {
-            console.log(`   - ${i.label}: ${dom.sizeInputs[i.key].width.value} × ${dom.sizeInputs[i.key].height.value}`);
+            console.log(`   - ${i.label}: ${Maindom.sizeInputs[i.key].width.value} × ${Maindom.sizeInputs[i.key].height.value}`);
         });
         // 유효값 필터링
         const valid = items.map(item => {
-            const w = Number(dom.sizeInputs[item.key].width.value);
-            const h = Number(dom.sizeInputs[item.key].height.value);
+            const w = Number(Maindom.sizeInputs[item.key].width.value);
+            const h = Number(Maindom.sizeInputs[item.key].height.value);
             return { ...item, width: w, height: h };
         }).filter(v => v.width > 0 && v.height > 0);
         console.log("📋 유효 데이터:", valid);
@@ -740,10 +814,10 @@ function initOrderRegister_detail_Panel(API_BASE) {
             box.style.top = `${10 + idx * (pxHeight + 20)}px`;
             // Text
             box.textContent = `${item.label} (${item.width} × ${item.height})`;
-            dom.layout.appendChild(box);
+            Maindom.layout.appendChild(box);
         });
         console.log("🎉 박스 생성 완료. 드래그 기능 활성화");
-        enableDrag(dom.layout);
+        enableDrag(Maindom.layout);
     });
     // -------------------------------------------------------------------
     // 📌 4) 드래그 기능
@@ -1052,7 +1126,7 @@ function initOrderRegister_detail_Panel(API_BASE) {
         // 랜덤 초기 위치
         box.style.left = `${30 + Math.random() * 100}px`;
         box.style.top = `${30 + Math.random() * 100}px`;
-        dom.layout.appendChild(box);
+        Maindom.layout.appendChild(box);
         makeDraggable(box);
         bindRemoveEvent(box);
     }
@@ -1104,43 +1178,6 @@ function initOrderRegister_detail_Panel(API_BASE) {
             return;
         selectEl.addEventListener("change", () => {
             selectEl.style.backgroundColor = "#d0f0ff"; // 변경 시 하늘색
-        });
-    }
-    async function bindChamberEvents(dom) {
-        // 1) Chuck   
-        applySelectHighlight(dom.chuckType);
-        applySelectHighlight(dom.root);
-        // 2) Inner Cup
-        applySelectHighlight(dom.innerCup);
-        // 3) Back Chemical 1, 2
-        applySelectHighlight(dom.backChemical.type1);
-        applySelectHighlight(dom.backChemical.type2);
-        // 4) Cup 1~4
-        for (let i = 1; i <= 4; i++) {
-            applySelectHighlight(dom.cups[`cup${i}`]);
-        }
-        // 5) Dispenser 1~4 + Chemical 1~4
-        for (let d = 1; d <= 4; d++) {
-            const disp = dom.dispensers[`dispenser${d}`];
-            if (!disp)
-                continue;
-            applySelectHighlight(disp.type);
-            for (let c = 1; c <= 4; c++) {
-                applySelectHighlight(disp.chemicals[`chem${c}`]);
-            }
-        }
-        return 1;
-    }
-    function bindChamberEvents_1(dom, chNo) {
-        const header = document.getElementById(`챔버-${chNo}-구조-header`);
-        const body = document.getElementById(`챔버-${chNo}-구조-body`);
-        const btn = document.getElementById(`챔버-${chNo}-구조-toggleBtn`);
-        if (!header || !body || !btn)
-            return;
-        header.addEventListener("click", () => {
-            const hidden = body.style.display === "none";
-            body.style.display = hidden ? "block" : "none";
-            btn.innerText = hidden ? "접기" : "펼치기";
         });
     }
     //#endregion

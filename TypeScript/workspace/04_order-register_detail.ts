@@ -1,3 +1,6 @@
+import { promises } from "dns";
+import { ModalUtil } from "./utils/ModalUtil";
+
 let initOrderRegister_detail_Panel_Initialized = false;
 
 type SizeKey = "main_1" | "main_2" | "local1" | "local2" | "local3" | "local4" | "local5";
@@ -9,73 +12,101 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
     console.log("🟦 [메인장비 사양등록] 패널 초기화 시작");
 
-    // 🔧 실제 1~8 생성
-    const container = document.getElementById("chamber-container")!;
-    for (let i = 1; i <= 8; i++) {
-        container.insertAdjacentHTML("beforeend", createChamberLayout(i));
+    //#region  초기 Dom 수집 및 이벤트 바인딩
 
-        const domChamber = collectChamberDOM(i);
-        bindChamberEvents(domChamber);
-        bindChamberEvents_1(domChamber, i);
+    async function bindChamberEvents(dom: any): Promise<number> {
 
+        // 1) Chuck   
+        applySelectHighlight(dom.chuckType);
 
+        applySelectHighlight(dom.root);
+
+        // 2) Inner Cup
+        applySelectHighlight(dom.innerCup);
+
+        // 3) Back Chemical 1, 2
+        applySelectHighlight(dom.backChemical.type1);
+        applySelectHighlight(dom.backChemical.type2);
+
+        // 4) Cup 1~4
+        for (let i = 1; i <= 4; i++) {
+            applySelectHighlight(dom.cups[`cup${i}`]);
+        }
+
+        // 5) Dispenser 1~4 + Chemical 1~4
+        for (let d = 1; d <= 4; d++) {
+            const disp = dom.dispensers[`dispenser${d}`];
+            if (!disp) continue;
+
+            applySelectHighlight(disp.type);
+
+            for (let c = 1; c <= 4; c++) {
+                applySelectHighlight(disp.chemicals[`chem${c}`]);
+            }
+        }
+        return 1;
     }
+    function bindChamberEvents_1(dom: any, chNo: number) {
+        const header = document.getElementById(`챔버-${chNo}-구조-header`);
+        const body = document.getElementById(`챔버-${chNo}-구조-body`);
+        const btn = document.getElementById(`챔버-${chNo}-구조-toggleBtn`);
 
+        if (!header || !body || !btn) return;
 
+        header.addEventListener("click", () => {
+            const hidden = body.style.display === "none";
 
+            body.style.display = hidden ? "block" : "none";
+            btn.innerText = hidden ? "접기" : "펼치기";
+        });
+    }
+    function collectMainEquipmentDOM(): Record<string, any> {
+        const suffix = "_panel-수주건등록-2";
 
+        const dom = {
+            type: document.getElementById("equipment_type" + suffix) as HTMLSelectElement,
+            inch: document.getElementById("equipment_inch" + suffix) as HTMLSelectElement,
+            traumWrap: document.getElementById("traum_only_wrap" + suffix) as HTMLDivElement,
+            traumSub: document.getElementById("traum_sub" + suffix) as HTMLSelectElement,
+            driveType: document.getElementById("drive_type" + suffix) as HTMLSelectElement,
 
-    // -------------------------------------------------------------------
-    // 📌 1) DOM 요소 수집
-    // -------------------------------------------------------------------
+            layout: document.getElementById("layout-view" + suffix) as HTMLDivElement,
+            btnApply: document.getElementById("장비기본구조-btnApplyLayout" + suffix) as HTMLButtonElement,
 
-    const suffix = "_panel-수주건등록-2";
+            sizeInputs: {
+                main_1: {
+                    width: document.getElementById("main_1_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("main_1_height" + suffix) as HTMLInputElement,
+                },
+                main_2: {
+                    width: document.getElementById("main_2_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("main_2_height" + suffix) as HTMLInputElement,
+                },
+                local1: {
+                    width: document.getElementById("local1_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("local1_height" + suffix) as HTMLInputElement,
+                },
+                local2: {
+                    width: document.getElementById("local2_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("local2_height" + suffix) as HTMLInputElement,
+                },
+                local3: {
+                    width: document.getElementById("local3_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("local3_height" + suffix) as HTMLInputElement,
+                },
+                local4: {
+                    width: document.getElementById("local4_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("local4_height" + suffix) as HTMLInputElement,
+                },
+                local5: {
+                    width: document.getElementById("local5_width" + suffix) as HTMLInputElement,
+                    height: document.getElementById("local5_height" + suffix) as HTMLInputElement,
+                },
+            }
+        };
 
-    const dom = {
-        type: document.getElementById("equipment_type" + suffix) as HTMLSelectElement,
-        inch: document.getElementById("equipment_inch" + suffix) as HTMLSelectElement,
-        traumWrap: document.getElementById("traum_only_wrap" + suffix) as HTMLDivElement,
-        traumSub: document.getElementById("traum_sub" + suffix) as HTMLSelectElement,
-        driveType: document.getElementById("drive_type" + suffix) as HTMLSelectElement,
-
-        layout: document.getElementById("layout-view" + suffix) as HTMLDivElement,
-        btnApply: document.getElementById("장비기본구조-btnApplyLayout" + suffix) as HTMLButtonElement,
-
-        sizeInputs: {
-            main_1: {
-                width: document.getElementById("main_1_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("main_1_height" + suffix) as HTMLInputElement,
-            },
-            main_2: {
-                width: document.getElementById("main_2_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("main_2_height" + suffix) as HTMLInputElement,
-            },
-            local1: {
-                width: document.getElementById("local1_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("local1_height" + suffix) as HTMLInputElement,
-            },
-            local2: {
-                width: document.getElementById("local2_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("local2_height" + suffix) as HTMLInputElement,
-            },
-            local3: {
-                width: document.getElementById("local3_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("local3_height" + suffix) as HTMLInputElement,
-            },
-            local4: {
-                width: document.getElementById("local4_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("local4_height" + suffix) as HTMLInputElement,
-            },
-            local5: {
-                width: document.getElementById("local5_width" + suffix) as HTMLInputElement,
-                height: document.getElementById("local5_height" + suffix) as HTMLInputElement,
-            },
-        } as Record<SizeKey, { width: HTMLInputElement; height: HTMLInputElement }>
-
-
-
-    };
-
+        return dom;  // ✅ 반환 필수
+    }
     function collectChamberDOM(chNo: number) {
         const suffix = "_panel-수주건등록-2";
 
@@ -134,30 +165,345 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
         return dom;
     }
+    function collectOrderButtons(suffix: string) {
+        return {
+            save: document.getElementById("btn-order-save" + suffix) as HTMLButtonElement,
+            read: document.getElementById("btn-order-read" + suffix) as HTMLButtonElement,
+            edit: document.getElementById("btn-order-edit" + suffix) as HTMLButtonElement,
+            reset: document.getElementById("btn-reset" + suffix) as HTMLButtonElement,
+        };
+    }
+
+    function collectOrderLoadModalDOM(suffix: string) {
+        return {
+            modal: document.getElementById("modal-order-" + suffix) as HTMLDivElement,
+            table: document.getElementById("order-list-table" + suffix) as HTMLTableElement,
+            tbody: document.getElementById("order-list-body" + suffix) as HTMLTableSectionElement,
+            btnClose: document.getElementById("btn-close" + suffix) as HTMLButtonElement,
+        };
+    }
 
 
-    dom.layout.style.position = "relative";
-    dom.layout.style.minHeight = "400px";
+    const MainbtnDom = collectOrderButtons("_panel-수주건등록-2");
+    const OrderModalDom = collectOrderLoadModalDOM("_panel-수주건등록-2");
+    const Maindom = collectMainEquipmentDOM();
+    const container = document.getElementById("chamber-container")!; // 🔧 실제 1~8 생성
+    for (let i = 1; i <= 8; i++) {
+        container.insertAdjacentHTML("beforeend", createChamberLayout(i));
+
+        const domChamber = collectChamberDOM(i);
+        bindChamberEvents(domChamber);
+        bindChamberEvents_1(domChamber, i);
+    }
+    //#endregion
+
+
+
+
+
+
+
+
+    //#region 수주건 저장
+    function collectValuesFromDiv(divId: string) {
+        const container = document.getElementById(divId);
+        if (!container) return {};
+
+        const result: Record<string, any> = {};
+
+        // input, select, textarea 모두 수집
+        const elements = container.querySelectorAll("input, select, textarea");
+
+        elements.forEach((el) => {
+            const id = el.id;
+            if (!id) return;
+
+            if (el instanceof HTMLInputElement) result[id] = el.value;
+            else if (el instanceof HTMLSelectElement) result[id] = el.value;
+            else if (el instanceof HTMLTextAreaElement) result[id] = el.value;
+        });
+
+        return result;
+    }
+
+
+    function collectBoxes(container: HTMLElement) {
+        const result: any[] = [];
+
+        const boxes = container.querySelectorAll(".drag-box");
+
+        boxes.forEach((el, idx) => {
+            const box = el as HTMLElement;
+
+            const style = window.getComputedStyle(box);
+
+            result.push({
+                id: box.id,
+                width: parseFloat(style.width),
+                height: parseFloat(style.height),
+                left: parseFloat(style.left),
+                top: parseFloat(style.top),
+                text: box.textContent ?? ""
+            });
+        });
+
+
+        return result;
+    }
+
+
+
+
+    MainbtnDom.save.addEventListener("click", async () => {
+
+        // 📌 1) 패널 내부 모든 input/select 값 수집
+        const detail_json = collectValuesFromDiv("_panel-수주건등록-2");
+        console.log("detail_json:", detail_json);
+
+        // 📌 2) 레이아웃 박스 정보 수집
+        const detail_box_json = collectBoxes(Maindom.layout);
+        console.log("detail_box_json:", detail_box_json);
+
+        const code_no = (document.getElementById("order_number_panel-수주건등록-2") as HTMLInputElement).value.trim();
+        if (!code_no) {
+            await ModalUtil.show({ type: "alert", title: "알림", showOk: true, showCancel: false, message: "수주코드가 비어 있습니다." });
+            return;
+        }
+
+        // 📌 3) 최종 Payload 구성
+        const payload = {
+            code_no,
+            detail_json,
+            detail_box_json,
+        };
+
+        console.log("최종 payload:", payload);
+
+        try {
+            // 📌 4) 서버로 전송
+            const res = await fetch(`${API_BASE}/api/innomax-projects/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                throw new Error(`서버 에러: ${res.status}`);
+            }
+
+            const result = await res.json();
+            console.log("저장 성공:", result);
+
+            alert("수주건 저장 성공!");
+
+        } catch (err) {
+            console.error("❌ 수주건 저장 실패:", err);
+            alert("수주건 저장 중 오류 발생");
+        }
+
+    });
+    //#endregion
+
+
+    //#region 수주건 초기화
+
+    function resetValuesInDiv(divId: string) {
+        const container = document.getElementById(divId);
+        if (!container) return;
+
+        // input, select, textarea 전부 초기화
+        const elements = container.querySelectorAll("input, select, textarea");
+
+        elements.forEach(el => {
+            if (el instanceof HTMLInputElement) {
+                if (el.type === "checkbox" || el.type === "radio") {
+                    el.checked = false;
+                } else {
+                    el.value = "";
+                }
+            }
+            else if (el instanceof HTMLSelectElement) {
+                el.selectedIndex = 0;   // 첫 번째 옵션 선택
+            }
+            else if (el instanceof HTMLTextAreaElement) {
+                el.value = "";
+            }
+        });
+    }
+
+    function resetLayoutBoxes(layoutDiv: HTMLElement) {
+        // 내부 박스 모두 제거
+        layoutDiv.querySelectorAll(".drag-box").forEach(box => box.remove());
+    }
+
+    function resetOrderRegisterPanel() {
+        const panelId = "_panel-수주건등록-2";
+
+        // 1) 값 초기화
+        resetValuesInDiv(panelId);
+
+        // 2) 레이아웃 박스 삭제
+        resetLayoutBoxes(Maindom.layout);
+    }
+
+    MainbtnDom.reset.addEventListener("click", () => {
+        resetOrderRegisterPanel();
+        console.log("🧹 수주등록 패널 초기화 완료");
+    });
+
+
+
+    //#endregion
+
+
+
+    //#region 수주건 불러오기
+
+    MainbtnDom.read.addEventListener("click", async () => {
+        OrderModalDom.modal.classList.remove("hidden");
+
+        // 📌 모달 열릴 때 리스트 로드
+        await loadOrderList();
+    });
+
+    // 닫기 버튼
+    OrderModalDom.btnClose.addEventListener("click", () => {
+        OrderModalDom.modal.classList.add("hidden");
+    });
+
+    // ===============================
+    // 📌 백엔드에서 수주 리스트 불러오기
+    // ===============================
+    async function loadOrderList() {
+        const tbody = OrderModalDom.tbody;
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2">불러오는 중...</td></tr>`;
+
+        try {
+            const res = await fetch(`${API_BASE}/api/innomax-projects/innomax/projects`);
+            const list = await res.json();
+
+            tbody.innerHTML = ""; // 초기화
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2">저장된 수주건이 없습니다.</td></tr>`;
+                return;
+            }
+
+            list.forEach((row: any) => {
+                tbody.innerHTML += `
+                <tr>
+                    <td class="border px-2 py-1">${row.code_no}</td>
+                    <td class="border px-2 py-1">${row.equipment_type ?? "-"}</td>
+                    <td class="border px-2 py-1">${row.customer_name ?? "-"}</td>
+                    <td class="border px-2 py-1 text-center">
+                        <button 
+                            class="px-2 py-1 bg-blue-200 rounded text-xs"
+                            onclick="selectOrder('${row.code_no}')">
+                            선택
+                        </button>
+                    </td>
+                </tr>
+            `;
+            });
+        } catch (err) {
+            console.error("❌ 리스트 로드 실패:", err);
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center py-2 text-red-500">불러오기 실패</td></tr>`;
+        }
+    }
+
+    (window as any).selectOrder = selectOrder;
+
+
+    // ===============================
+    // 📌 특정 수주건 선택 → 상세 불러오기
+    // ===============================
+    async function selectOrder(code_no: string) {
+        try {
+            const res = await fetch(`${API_BASE}/api/innomax-projects/innomax/project/${code_no}`);
+            const data = await res.json();
+
+            // detail_json + 박스 JSON 복원
+            restoreOrder(data.detail_json);
+
+            // 모달 닫기
+            OrderModalDom.modal.classList.add("hidden");
+
+            await ModalUtil.show({
+                type: "alert",
+                title: "불러오기 완료",
+                message: `수주건 '${code_no}' 이(가) 불러와졌습니다.`,
+                showOk: true,
+                showCancel: false
+            });
+
+        } catch (err) {
+            console.error("❌ 수주건 선택 실패:", err);
+            alert("수주건 불러오기 실패!");
+        }
+    }
+
+    // ===============================
+    // 📌 수주건 UI 복원 함수 (폼 + 박스)
+    // ===============================
+    function restoreOrder(saved: any) {
+
+        // detail_json → 모든 input/select에 값 채우기
+        const formJson = saved.detail_json;
+
+        Object.keys(formJson).forEach(id => {
+            const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement;
+
+            if (el) {
+                el.value = formJson[id];
+            }
+        });
+
+        // 박스 정보 복원
+        resetLayoutBoxes(Maindom.layout);
+
+        saved.detail_box_json.forEach((box: any) => {
+            const div = document.createElement("div");
+            div.className = "drag-box";
+            div.style.width = box.width + "px";
+            div.style.height = box.height + "px";
+            div.style.left = box.left + "px";
+            div.style.top = box.top + "px";
+            div.textContent = box.text ?? "";
+            Maindom.layout.appendChild(div);
+        });
+
+        enableDrag(Maindom.layout);
+
+        console.log("🎉 수주건 복원 완료");
+    }
+
+    //#endregion
+
+
+    Maindom.layout.style.position = "relative";
+    Maindom.layout.style.minHeight = "400px";
 
     // -------------------------------------------------------------------
     // 📌 2) TRAUM ONLY 표시
     // -------------------------------------------------------------------
     function applyTraumCondition() {
-        console.log(`🔎 [TRAUM 체크] type=${dom.type.value}`);
-        dom.traumWrap.style.display = dom.type.value === "TRAUM" ? "" : "none";
+        console.log(`🔎 [TRAUM 체크] type=${Maindom.type.value}`);
+        Maindom.traumWrap.style.display = Maindom.type.value === "TRAUM" ? "" : "none";
     }
     applyTraumCondition();
-    dom.type.addEventListener("change", applyTraumCondition);
+    Maindom.type.addEventListener("change", applyTraumCondition);
 
     // -------------------------------------------------------------------
     // 📌 3) 확인 버튼 클릭 → 박스 생성
     // -------------------------------------------------------------------
-    dom.btnApply.addEventListener("click", () => {
+    Maindom.btnApply.addEventListener("click", () => {
 
         console.log("📐 [레이아웃 생성 START] ---------------------------");
 
         // 초기화
-        dom.layout.innerHTML = "";
+        Maindom.layout.innerHTML = "";
         console.log("🧹 기존 layout 박스 삭제 완료");
 
         const items: { key: SizeKey; label: string }[] = [
@@ -174,14 +520,14 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         console.log("📥 입력값 확인");
         items.forEach(i => {
             console.log(
-                `   - ${i.label}: ${dom.sizeInputs[i.key].width.value} × ${dom.sizeInputs[i.key].height.value}`
+                `   - ${i.label}: ${Maindom.sizeInputs[i.key].width.value} × ${Maindom.sizeInputs[i.key].height.value}`
             );
         });
 
         // 유효값 필터링
         const valid = items.map(item => {
-            const w = Number(dom.sizeInputs[item.key].width.value);
-            const h = Number(dom.sizeInputs[item.key].height.value);
+            const w = Number(Maindom.sizeInputs[item.key].width.value);
+            const h = Number(Maindom.sizeInputs[item.key].height.value);
 
             return { ...item, width: w, height: h };
         }).filter(v => v.width > 0 && v.height > 0);
@@ -229,13 +575,13 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
             // Text
             box.textContent = `${item.label} (${item.width} × ${item.height})`;
 
-            dom.layout.appendChild(box);
+            Maindom.layout.appendChild(box);
         });
 
 
         console.log("🎉 박스 생성 완료. 드래그 기능 활성화");
 
-        enableDrag(dom.layout);
+        enableDrag(Maindom.layout);
     });
 
     // -------------------------------------------------------------------
@@ -572,7 +918,7 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
         box.style.left = `${30 + Math.random() * 100}px`;
         box.style.top = `${30 + Math.random() * 100}px`;
 
-        dom.layout.appendChild(box);
+        Maindom.layout.appendChild(box);
 
         makeDraggable(box);
         bindRemoveEvent(box);
@@ -653,54 +999,7 @@ export function initOrderRegister_detail_Panel(API_BASE: string) {
 
 
 
-    async function bindChamberEvents(dom: any): Promise<number> {
 
-        // 1) Chuck   
-        applySelectHighlight(dom.chuckType);
-
-        applySelectHighlight(dom.root);
-
-        // 2) Inner Cup
-        applySelectHighlight(dom.innerCup);
-
-        // 3) Back Chemical 1, 2
-        applySelectHighlight(dom.backChemical.type1);
-        applySelectHighlight(dom.backChemical.type2);
-
-        // 4) Cup 1~4
-        for (let i = 1; i <= 4; i++) {
-            applySelectHighlight(dom.cups[`cup${i}`]);
-        }
-
-        // 5) Dispenser 1~4 + Chemical 1~4
-        for (let d = 1; d <= 4; d++) {
-            const disp = dom.dispensers[`dispenser${d}`];
-            if (!disp) continue;
-
-            applySelectHighlight(disp.type);
-
-            for (let c = 1; c <= 4; c++) {
-                applySelectHighlight(disp.chemicals[`chem${c}`]);
-            }
-        }
-        return 1;
-    }
-
-
-    function bindChamberEvents_1(dom: any, chNo: number) {
-        const header = document.getElementById(`챔버-${chNo}-구조-header`);
-        const body = document.getElementById(`챔버-${chNo}-구조-body`);
-        const btn = document.getElementById(`챔버-${chNo}-구조-toggleBtn`);
-
-        if (!header || !body || !btn) return;
-
-        header.addEventListener("click", () => {
-            const hidden = body.style.display === "none";
-
-            body.style.display = hidden ? "block" : "none";
-            btn.innerText = hidden ? "접기" : "펼치기";
-        });
-    }
 
 
 

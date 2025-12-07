@@ -270,6 +270,7 @@
                                                     <option>삼성종합기술원_수원</option>
                                                     <option>SK실트론_구미</option>
                                                     <option>ON-SEMI_부천</option>
+                                                    <option>AMKOR-5_송도</option>
                                                 </select>
                                             </div>
 
@@ -493,6 +494,40 @@
 
 
                                 </div>
+
+                                <!-- 수주건 불러오기 모달 -->
+                                <div id="modal-order-_panel-수주건등록-2" class="fixed inset-0 bg-black/40 hidden z-50">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-white rounded-lg shadow-xl w-[600px] p-4">
+
+                                            <h2 class="text-lg font-bold mb-3">수주건 불러오기</h2>
+
+                                            <!-- 데이터 테이블 -->
+                                            <table class="w-full border text-sm" id="order-list-table_panel-수주건등록-2">
+                                                <thead class="bg-gray-200">
+                                                    <tr>
+                                                        <th class="border px-2 py-1 w-32">수주번호</th>
+                                                        <th class="border px-2 py-1 w-32">장비명</th>
+                                                        <th class="border px-2 py-1 w-32">고객사</th>
+                                                        <th class="border px-2 py-1 w-20">선택</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="order-list-body_panel-수주건등록-2">
+                                                    <!-- 데이터 바인딩 영역 -->
+                                                </tbody>
+                                            </table>
+
+                                            <div class="mt-4 flex justify-end">
+                                                <button class="px-4 py-2 bg-gray-300 rounded"
+                                                    id ="btn-close_panel-수주건등록-2">
+                                                    닫기
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <!-- Panel 1 -->

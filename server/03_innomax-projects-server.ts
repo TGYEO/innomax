@@ -3,81 +3,82 @@
 import express, { Request, Response } from "express";
 import { Pool } from "pg";
 
-export interface InnoMaxProjectDetail {
-  orderNo: string;
-  equipName: string;
-  clientName: string;
-  packDate: string | null;
-  deliveryDate: string | null;
-
-  mfgMain: string;
-  mfgSub: string;
-  mfgCompany: string;
-
-  plcMain: string;
-  plcSub: string;
-  plcCompany: string;
-
-  wireMain: string;
-  wireSub: string;
-  wireCompany: string;
-
-  setupMain: string;
-  setupSub: string;
-}
 
 export default function innomaxProjectsRouter(pool: Pool) {
   const router = express.Router();
 
-  // ✅ 수주건 저장 (INSERT / UPDATE)
+
+
   router.post("/", async (req: Request, res: Response) => {
-    try {
-      const detail = req.body as InnoMaxProjectDetail;
-      const id = detail.orderNo?.trim();
+    const { code_no, detail_json, detail_box_json } = req.body;
 
-      if (!id) {
-        return res
-          .status(400)
-          .json({ ok: false, message: "수주건번호(orderNo)가 없습니다." });
-      }
-
-      const query = `
-        INSERT INTO public.innomax_projects (code_no, detail_json)
-        VALUES ($1, $2)
-        ON CONFLICT (code_no)
-        DO UPDATE SET detail_json = EXCLUDED.detail_json
-      `;
-
-      await pool.query(query, [id, detail]);
-
-      return res.json({ ok: true, message: "저장되었습니다." });
-    } catch (err) {
-      console.error("❌ [innomax_projects] save error:", err);
-      return res
-        .status(500)
-        .json({ ok: false, message: "서버 오류가 발생했습니다." });
+    if (!code_no) {
+      return res.status(400).json({ error: "code_no is required" });
     }
-  });
 
-  // ✅ 수주건 리스트 조회
-  router.get("/", async (req: Request, res: Response) => {
     try {
-      const { rows } = await pool.query(
-        `
-        SELECT code_no, detail_json
-        FROM public.innomax_projects
-        ORDER BY code_no DESC
-      `
+      // detail_json 최종 저장 구조
+      const saveJson = {
+        detail_json,
+        detail_box_json
+      };
+
+      await pool.query(
+        `INSERT INTO innomax_projects (code_no, detail_json)
+             VALUES ($1, $2)
+             ON CONFLICT (code_no) DO UPDATE SET detail_json = EXCLUDED.detail_json`,
+        [code_no, saveJson]
       );
 
-      return res.json({ ok: true, rows });
+      res.json({ success: true, code_no });
     } catch (err) {
-      console.error("❌ [innomax_projects] list error:", err);
-      return res
-        .status(500)
-        .json({ ok: false, message: "조회 중 서버 오류가 발생했습니다." });
+      console.error("❌ 프로젝트 저장 실패:", err);
+      res.status(500).json({ error: "DB 저장 실패" });
     }
   });
+
+
+
+  //수주건 일단 전체 조회함
+  router.get("/innomax/projects", async (req: Request, res: Response) => {
+    try {
+      const result = await pool.query(`
+            SELECT 
+                code_no,
+                detail_json->'detail_json'->>'equipment_type_panel-수주건등록-2' AS equipment_type,
+                detail_json->'detail_json'->>'customer_name_panel-수주건등록-2' AS customer_name
+            FROM innomax_projects
+            ORDER BY code_no DESC
+        `);
+
+      res.json(result.rows);
+    } catch (err) {
+      console.error("❌ 프로젝트 리스트 조회 실패:", err);
+      res.status(500).json({ error: "DB 조회 실패" });
+    }
+  });
+
+  //특정코드 수주건만  조회함
+  router.get("/innomax/project/:code_no", async (req: Request, res: Response) => {
+    const { code_no } = req.params;
+
+    try {
+      const result = await pool.query(
+        `SELECT detail_json FROM innomax_projects WHERE code_no = $1`,
+        [code_no]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: "NOT_FOUND", message: "수주건을 찾을 수 없습니다." });
+      }
+
+      res.json(result.rows[0]);   // { detail_json: {...} }
+    } catch (err) {
+      console.error("❌ 수주건 조회 실패:", err);
+      res.status(500).json({ error: "DB_ERROR", message: "데이터 조회 실패" });
+    }
+  });
+
 
   return router;
 }
