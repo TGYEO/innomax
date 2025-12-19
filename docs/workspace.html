@@ -10,7 +10,7 @@
 </head>
 
 
-<body class="h-dvh overflow-hidden bg-[#393E46] flex flex-col gap-6 text-base font-medium">
+<body class="h-dvh overflow-hidden bg-[#FBFBFB] flex flex-col gap-6 text-base font-medium">
 
 
 
@@ -18,7 +18,7 @@
     <!-- ===== 레이아웃 ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 min-h-0 flex-1 px-6 pb-6 p-3 ">
 
-        <aside class="rounded-xl border border-[#EEEEEE] bg-[#EEEEEE] shadow-2xl flex flex-col overflow-hidden"
+        <aside class="rounded-xl border border-[#FAF7F0] bg-[#FAF7F0] shadow-2xl flex flex-col overflow-hidden"
             id="sidebar">
 
             <nav class="p-2 space-y-4">
@@ -155,11 +155,11 @@
 
         <!-- ===== 메인 작업영역 ===== -->
         <main id="workspace"
-            class="flex-1 min-h-0 rounded-xl border border-[#EEEEEE] bg-[#EEEEEE] shadow-2xl flex flex-col overflow-hidden min-w-0"
+            class="flex-1 min-h-0 rounded-xl border border-[#FAF7F0] bg-[#FAF7F0] shadow-2xl flex flex-col overflow-hidden min-w-0"
             aria-live="polite">
 
             <header class="grid grid-cols-[auto_1fr_auto] items-center gap-4
-               bg-[#EEEEEE] text-black px-6 py-2 rounded-sm ring-2 ring-blue-500/50">
+               bg-[#FAF7F0] text-black px-6 py-2 rounded-sm ring-2 ring-blue-500/50">
 
                 <!-- 좌측: 앱 이름 -->
                 <div class="flex items-center gap-3">
@@ -277,39 +277,209 @@
             <!-- 실제 컨텐츠 패널 -->
             <section class="overflow-hidden flex-1 space-y-0">
 
-                <!-- 📊 장비 현황 대시보드 -->
+                <!-- 📌📌📌📌📌📌📌 장비 현황 대시보드 -->
                 <div id="panel-dashboard" class="hidden p-1">
 
 
                 </div>
 
-                <!-- 📌 수주건등록 패널 -->
-                <section id="panel-수주건등록" class="hidden p-1">
-                    <div class="w-full">
-                        <!-- ▲ 탭 영역 -->
-                        <div class="flex border-b border-gray-300 bg-gray-100">
 
+                <!-- 📌📌📌📌📌📌📌 수주건등록 패널 -->
+                <section id="panel-수주건등록" class="hidden p-1 border border-[#FAF7F0] bg-[#FAF7F0]">
+                    <div class="w-full">
+                        <div class="flex border border-[#FAF7F0] bg-[#FAF7F0] rounded-t-lg shadow-md">
+
+
+                            <button data-tab="_panel-수주건등록-1"
+                                class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
+                                수주건 등록
+                            </button>
 
                             <button data-tab="_panel-수주건등록-2"
                                 class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
-                                메인장비 사양등록
+                                수주건 사양등록
                             </button>
 
                             <button data-tab="_panel-수주건등록-3"
                                 class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
-                                개조장비 사양등록
+                                수주건 PMS 등록
                             </button>
 
-                            <button data-tab="_panel-수주건등록-1"
-                                class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
-                                수주건등록
-                            </button>
+
                         </div>
 
                         <!-- ▼ 탭 콘텐츠 영역 -->
                         <div
-                            class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[730px] border border-[#000000] relative overflow-hidden">
+                            class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[850px] border border-[#000000] relative overflow-hidden">
 
+                            <!-- Panel 1 -->
+                            <div id="_panel-수주건등록-1"
+                                class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
+                                <!--🔹 좌측 입력 Form-->
+                                <div class="bg-white rounded-xl shadow p-2 space-y-3 text-sm">
+
+                                    <!-- 1) 수주건번호 / 장비명 / 고객사 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">수주건번호</label>
+                                            <input type="text" id="orderNo"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5"
+                                                placeholder="ISS25-001S">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">장비명</label>
+                                            <input type="text" id="equipName"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5"
+                                                placeholder="PR STRIP">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">고객사</label>
+                                            <select id="clientName"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
+                                                <option value="">선택하세요</option>
+                                                <option value="AMKOR-5 송도">AMKOR-5 송도</option>
+                                                <option value="AMKOR-4 광주">AMKOR-4 광주</option>
+                                                <option value="NEPES 1공장 오창">NEPES 1공장 오창</option>
+                                                <option value="NEPES 2공장 오창">NEPES 2공장 오창</option>
+                                                <option value="ON-SEMI 부천">ON-SEMI 부천</option>
+                                                <option value="SK-실트론 구미">SK-실트론 구미</option>
+                                                <option value="매그너칩 구미">매그너칩 구미</option>
+                                                <option value="KEC 구미">KEC 구미</option>
+                                                <option value="와이솔 오산">와이솔 오산</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- 2) 포장예정일 / 납품예정일 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">포장예정일</label>
+                                            <input type="date" id="packDate"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">납품예정일</label>
+                                            <input type="date" id="deliveryDate"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 3) 제작 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">제작담당 (정)</label>
+                                            <input type="text" id="mfgMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">제작담당 (부)</label>
+                                            <input type="text" id="mfgSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">제작업체</label>
+                                            <input type="text" id="mfgCompany"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 4) PLC 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PLC담당 (정)</label>
+                                            <input type="text" id="plcMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PLC담당 (부)</label>
+                                            <input type="text" id="plcSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PLC업체</label>
+                                            <input type="text" id="plcCompany"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 5) 배선 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">배선담당 (정)</label>
+                                            <input type="text" id="wireMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">배선담당 (부)</label>
+                                            <input type="text" id="wireSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">배선업체</label>
+                                            <input type="text" id="wireCompany"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 6) 셋업 담당 2개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">셋업담당 (정)</label>
+                                            <input type="text" id="setupMain"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">셋업담당 (부)</label>
+                                            <input type="text" id="setupSub"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 저장 버튼 -->
+                                    <button id="btnSaveOrder"
+                                        class="w-full mt-2 bg-indigo-600 text-white py-2 rounded-lg text-sm hover:bg-indigo-700">
+                                        수주건 저장
+                                    </button>
+
+                                </div>
+
+                                <!--🔹 우측 수주건 리스트 (독립형 긴 패널)-->
+                                <div class="bg-white rounded-xl shadow p-6 h-[600px] flex flex-col">
+
+                                    <!-- 내부 스크롤 영역 -->
+                                    <div class="overflow-x-auto overflow-y-auto flex-1 border rounded-lg">
+                                        <table class="min-w-full text-sm text-gray-700">
+                                            <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="border px-3 py-2">No</th>
+                                                    <th class="border px-3 py-2">수주건번호</th>
+                                                    <th class="border px-3 py-2">장비명</th>
+                                                    <th class="border px-3 py-2">고객사</th>
+                                                    <th class="border px-3 py-2">포장예정일</th>
+                                                    <th class="border px-3 py-2">납품예정일</th>
+                                                    <th class="border px-3 py-2 w-20">관리</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="orderListBody" class="divide-y">
+                                                <!-- JS로 데이터가 채워짐 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
 
                             <!-- 장비 사양을 정하는 탭입니다. -->
                             <div id="_panel-수주건등록-2"
@@ -628,174 +798,7 @@
 
                             </div>
 
-                            <!-- Panel 1 -->
-                            <div id="_panel-수주건등록-1"
-                                class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
-                                <!--🔹 좌측 입력 Form-->
-                                <div class="bg-white rounded-xl shadow p-2 space-y-3 text-sm">
 
-                                    <!-- 1) 수주건번호 / 장비명 / 고객사 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">수주건번호</label>
-                                            <input type="text" id="orderNo"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5"
-                                                placeholder="ISS25-001S">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">장비명</label>
-                                            <input type="text" id="equipName"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5"
-                                                placeholder="PR STRIP">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">고객사</label>
-                                            <select id="clientName"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
-                                                <option value="">선택하세요</option>
-                                                <option value="AMKOR-5 송도">AMKOR-5 송도</option>
-                                                <option value="AMKOR-4 광주">AMKOR-4 광주</option>
-                                                <option value="NEPES 1공장 오창">NEPES 1공장 오창</option>
-                                                <option value="NEPES 2공장 오창">NEPES 2공장 오창</option>
-                                                <option value="ON-SEMI 부천">ON-SEMI 부천</option>
-                                                <option value="SK-실트론 구미">SK-실트론 구미</option>
-                                                <option value="매그너칩 구미">매그너칩 구미</option>
-                                                <option value="KEC 구미">KEC 구미</option>
-                                                <option value="와이솔 오산">와이솔 오산</option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-
-                                    <!-- 2) 포장예정일 / 납품예정일 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">포장예정일</label>
-                                            <input type="date" id="packDate"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">납품예정일</label>
-                                            <input type="date" id="deliveryDate"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-                                    </div>
-
-                                    <!-- 3) 제작 담당 3개 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">제작담당 (정)</label>
-                                            <input type="text" id="mfgMain"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">제작담당 (부)</label>
-                                            <input type="text" id="mfgSub"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">제작업체</label>
-                                            <input type="text" id="mfgCompany"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-                                    </div>
-
-                                    <!-- 4) PLC 담당 3개 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">PLC담당 (정)</label>
-                                            <input type="text" id="plcMain"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">PLC담당 (부)</label>
-                                            <input type="text" id="plcSub"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">PLC업체</label>
-                                            <input type="text" id="plcCompany"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-                                    </div>
-
-                                    <!-- 5) 배선 담당 3개 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">배선담당 (정)</label>
-                                            <input type="text" id="wireMain"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">배선담당 (부)</label>
-                                            <input type="text" id="wireSub"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">배선업체</label>
-                                            <input type="text" id="wireCompany"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-                                    </div>
-
-                                    <!-- 6) 셋업 담당 2개 -->
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">셋업담당 (정)</label>
-                                            <input type="text" id="setupMain"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">셋업담당 (부)</label>
-                                            <input type="text" id="setupSub"
-                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
-                                        </div>
-                                    </div>
-
-                                    <!-- 저장 버튼 -->
-                                    <button id="btnSaveOrder"
-                                        class="w-full mt-2 bg-indigo-600 text-white py-2 rounded-lg text-sm hover:bg-indigo-700">
-                                        수주건 저장
-                                    </button>
-
-                                </div>
-
-                                <!--🔹 우측 수주건 리스트 (독립형 긴 패널)-->
-                                <div class="bg-white rounded-xl shadow p-6 h-[600px] flex flex-col">
-
-                                    <!-- 내부 스크롤 영역 -->
-                                    <div class="overflow-x-auto overflow-y-auto flex-1 border rounded-lg">
-                                        <table class="min-w-full text-sm text-gray-700">
-                                            <thead class="bg-gray-100">
-                                                <tr>
-                                                    <th class="border px-3 py-2">No</th>
-                                                    <th class="border px-3 py-2">수주건번호</th>
-                                                    <th class="border px-3 py-2">장비명</th>
-                                                    <th class="border px-3 py-2">고객사</th>
-                                                    <th class="border px-3 py-2">포장예정일</th>
-                                                    <th class="border px-3 py-2">납품예정일</th>
-                                                    <th class="border px-3 py-2 w-20">관리</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody id="orderListBody" class="divide-y">
-                                                <!-- JS로 데이터가 채워짐 -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-                            </div>
 
 
                             <!-- Panel 3 -->
