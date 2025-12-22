@@ -405,6 +405,12 @@ function initOrderRegister_tab_1(API_BASE) {
     const plcMain_orderRegisterPage_tab_1 = document.getElementById("plcMain_orderRegisterPage_tab_1");
     const plcSub_orderRegisterPage_tab_1 = document.getElementById("plcSub_orderRegisterPage_tab_1");
     const plcCompany_orderRegisterPage_tab_1 = document.getElementById("plcCompany_orderRegisterPage_tab_1");
+    const pcGuiMain_orderRegisterPage_tab_1 = document.getElementById("pcGuiMain_orderRegisterPage_tab_1");
+    const pcGuiSub_orderRegisterPage_tab_1 = document.getElementById("pcGuiSub_orderRegisterPage_tab_1");
+    const pcGuiCompany_orderRegisterPage_tab_1 = document.getElementById("pcGuiCompany_orderRegisterPage_tab_1");
+    const pcControlMain_orderRegisterPage_tab_1 = document.getElementById("pcControlMain_orderRegisterPage_tab_1");
+    const pcControlSub_orderRegisterPage_tab_1 = document.getElementById("pcControlSub_orderRegisterPage_tab_1");
+    const pcControlCompany_orderRegisterPage_tab_1 = document.getElementById("pcControlCompany_orderRegisterPage_tab_1");
     const wireMain_orderRegisterPage_tab_1 = document.getElementById("wireMain_orderRegisterPage_tab_1");
     const wireSub_orderRegisterPage_tab_1 = document.getElementById("wireSub_orderRegisterPage_tab_1");
     const wireCompany_orderRegisterPage_tab_1 = document.getElementById("wireCompany_orderRegisterPage_tab_1");
@@ -451,6 +457,12 @@ function initOrderRegister_tab_1(API_BASE) {
         plcMain_orderRegisterPage_tab_1.value = "";
         plcSub_orderRegisterPage_tab_1.value = "";
         plcCompany_orderRegisterPage_tab_1.value = "";
+        pcControlMain_orderRegisterPage_tab_1.value = "";
+        pcControlSub_orderRegisterPage_tab_1.value = "";
+        pcControlCompany_orderRegisterPage_tab_1.value = "";
+        pcGuiMain_orderRegisterPage_tab_1.value = "";
+        pcGuiSub_orderRegisterPage_tab_1.value = "";
+        pcGuiCompany_orderRegisterPage_tab_1.value = "";
         wireMain_orderRegisterPage_tab_1.value = "";
         wireSub_orderRegisterPage_tab_1.value = "";
         wireCompany_orderRegisterPage_tab_1.value = "";
@@ -594,6 +606,12 @@ function initOrderRegister_tab_1(API_BASE) {
                 plcMain: plcMain_orderRegisterPage_tab_1.value,
                 plcSub: plcSub_orderRegisterPage_tab_1.value,
                 plcCompany: plcCompany_orderRegisterPage_tab_1.value,
+                pcControlMain: pcControlMain_orderRegisterPage_tab_1.value,
+                pcControlSub: pcControlSub_orderRegisterPage_tab_1.value,
+                pcControlCompany: pcControlCompany_orderRegisterPage_tab_1.value,
+                pcGuiMain: pcGuiMain_orderRegisterPage_tab_1.value,
+                pcGuiSub: pcGuiSub_orderRegisterPage_tab_1.value,
+                pcGuiCompany: pcGuiCompany_orderRegisterPage_tab_1.value,
                 wireMain: wireMain_orderRegisterPage_tab_1.value,
                 wireSub: wireSub_orderRegisterPage_tab_1.value,
                 wireCompany: wireCompany_orderRegisterPage_tab_1.value,
@@ -648,6 +666,12 @@ function initOrderRegister_tab_1(API_BASE) {
             plcMain: plcMain_orderRegisterPage_tab_1.value,
             plcSub: plcSub_orderRegisterPage_tab_1.value,
             plcCompany: plcCompany_orderRegisterPage_tab_1.value,
+            pcControlMain: pcControlMain_orderRegisterPage_tab_1.value,
+            pcControlSub: pcControlSub_orderRegisterPage_tab_1.value,
+            pcControlCompany: pcControlCompany_orderRegisterPage_tab_1.value,
+            pcGuiMain: pcGuiMain_orderRegisterPage_tab_1.value,
+            pcGuiSub: pcGuiSub_orderRegisterPage_tab_1.value,
+            pcGuiCompany: pcGuiCompany_orderRegisterPage_tab_1.value,
             wireMain: wireMain_orderRegisterPage_tab_1.value,
             wireSub: wireSub_orderRegisterPage_tab_1.value,
             wireCompany: wireCompany_orderRegisterPage_tab_1.value,
@@ -782,6 +806,12 @@ function initOrderRegister_tab_1(API_BASE) {
                         plcMain_orderRegisterPage_tab_1.value = detail.plcMain;
                         plcSub_orderRegisterPage_tab_1.value = detail.plcSub;
                         plcCompany_orderRegisterPage_tab_1.value = detail.plcCompany;
+                        pcControlMain_orderRegisterPage_tab_1.value = detail.pcControlMain;
+                        pcControlSub_orderRegisterPage_tab_1.value = detail.pcControlSub;
+                        pcControlCompany_orderRegisterPage_tab_1.value = detail.pcControlCompany;
+                        pcGuiMain_orderRegisterPage_tab_1.value = detail.pcGuiMain;
+                        pcGuiSub_orderRegisterPage_tab_1.value = detail.pcGuiSub;
+                        pcGuiCompany_orderRegisterPage_tab_1.value = detail.pcGuiCompany;
                         wireMain_orderRegisterPage_tab_1.value = detail.wireMain;
                         wireSub_orderRegisterPage_tab_1.value = detail.wireSub;
                         wireCompany_orderRegisterPage_tab_1.value = detail.wireCompany;

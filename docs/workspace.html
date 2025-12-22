@@ -419,7 +419,50 @@
                                         </div>
                                     </div>
 
-                                    <!-- 5) 배선 담당 3개 -->
+                                    <!-- 5) PC(GUI) 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PC(GUI)담당 (정)</label>
+                                            <input type="text" id="pcGuiMain_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PC(GUI)담당 (부)</label>
+                                            <input type="text" id="pcGuiSub_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PC(GUI)업체</label>
+                                            <input type="text" id="pcGuiCompany_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+                                    <!-- 6) PC(제어) 담당 3개 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PC(제어)담당 (정)</label>
+                                            <input type="text" id="pcControlMain_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PC(제어)담당 (부)</label>
+                                            <input type="text" id="pcControlSub_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PC(제어)업체</label>
+                                            <input type="text" id="pcControlCompany_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+                                    </div>
+
+
+                                    <!-- 7) 배선 담당 3개 -->
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div>
                                             <label class="block text-gray-700 font-semibold mb-1">배선담당 (정)</label>
@@ -440,7 +483,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- 6) 셋업 담당 2개 -->
+                                    <!-- 8) 셋업 담당 2개 -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div>
                                             <label class="block text-gray-700 font-semibold mb-1">셋업담당 (정)</label>
@@ -455,7 +498,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- 7) 장비군 선택 -->
+                                    <!-- 9) 장비군 선택 -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                                         <div>
@@ -592,285 +635,38 @@
 
                             <!-- Panel 2 -->
                             <div id="orderRegisterPage_tab_2"
-                                class="tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300">
+                                class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
 
-                                <div class="flex w-full h-full gap-2">
+                            
+                                    <!-- ▼ 옵션 선택 -->
+                                    <div class="bg-[#fcfcfc] border border-[#000000] rounded-xl shadow p-2 space-y-3 text-sm">
 
-                                    <!-- ▼ 옵션 선택 패널 (왼쪽) -->
-                                    <div id="option-select_panel-수주건등록-2"
-                                        class="basis-1/3 p-2 border border-[#000000] overflow-y-auto space-y-2 round-lg">
-
-                                        <button id="btn-order-save_panel-수주건등록-2"
-                                            class="px-4 py-2 text-sm font-semibold border border-green-300 bg-green-100">
-                                            수주건 저장
-                                        </button>
-
-                                        <button id="btn-order-read_panel-수주건등록-2"
+                                        <button id="readOrder_orderRegisterPage_tab_2"
                                             class="px-4 py-2 text-sm font-semibold border border-gray-300 bg-gray-100">
                                             수주건 불러오기
                                         </button>
 
-                                        <button id="btn-order-edit_panel-수주건등록-2"
+                                        <button id="specSave_orderRegisterPage_tab_2"
+                                            class="px-4 py-2 text-sm font-semibold border border-green-300 bg-green-100">
+                                            사양 저장하기
+                                        </button>
+
+                                        
+                                        <button id="specEdit_orderRegisterPage_tab_2"
                                             class="px-4 py-2 text-sm font-semibold border border-orange-300 bg-orange-100">
-                                            수주건 수정
+                                            사양 수정하기
                                         </button>
-
-                                        <button id="btn-reset_panel-수주건등록-2"
-                                            class="px-4 py-2 text-sm font-semibold border border-red-300 bg-red-100">
-                                            작성 초기화
-                                        </button>
-
-
-                                        <div id="장비기본정보" class="p-2 border border-[#000000]">
-                                            <div class="opt-row p-1">
-                                                <label class="opt-label">수주번호</label>
-                                                <input type="text" id="order_number_panel-수주건등록-2"
-                                                    class="w-full border border-[#000000] rounded-lg p-1.5">
-
-                                            </div>
-
-                                            <div class="opt-row p-1">
-                                                <label class="opt-label">장비 명</label>
-                                                <input type="text" id="equpiment_name_panel-수주건등록-2"
-                                                    class="w-full border border-[#000000] rounded-lg p-1.5">
-                                            </div>
-
-                                            <div class="opt-row p-1">
-                                                <label class="opt-label">고객사</label>
-                                                <select id="client_name_panel-수주건등록-2"
-                                                    class="w-full border border-[#000000] rounded-lg p-1.5 bg-white">
-                                                    <option value="">선택하세요</option>
-                                                    <option>DB하이텍_부천</option>
-                                                    <option>DB하이텍_상우</option>
-                                                    <option>NEPES 1공장_오창</option>
-                                                    <option>NEPES 2공장_오창</option>
-                                                    <option>삼성종합기술원_수원</option>
-                                                    <option>SK실트론_구미</option>
-                                                    <option>ON-SEMI_부천</option>
-                                                    <option>AMKOR-5_송도</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="grid grid-cols-2 gap-4 p-1">
-
-                                                <!-- 계약일 -->
-                                                <div class="flex items-center gap-2">
-                                                    <label class="opt-label w-16 text-right">계약일</label>
-                                                    <input type="date" id="contract-Date_panel-수주건등록-2"
-                                                        class="border border-[#000000] rounded-lg p-1.5 w-full">
-                                                </div>
-
-                                                <!-- 납기일 -->
-                                                <div class="flex items-center gap-2">
-                                                    <label class="opt-label w-16 text-right">납기일</label>
-                                                    <input type="date" id="due-Date_panel-수주건등록-2"
-                                                        class="border border-[#000000] rounded-lg p-1.5 w-full">
-                                                </div>
-
-                                            </div>
-
-
-
-
-
-
-                                        </div>
-
-                                        <div id="장비기본구조" class="p-1.5 border border-[#000000] space-y-2">
-
-                                            <!-- 장비 타입 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">장비 타입</label>
-                                                <select id="equipment_type_panel-수주건등록-2" class="opt-input p-1.5">
-                                                    <option>TRAUM</option>
-                                                    <option>ASTRO</option>
-                                                    <option>TETTIS</option>
-                                                    <option>DRYER</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- 장비 인치 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">장비 인치</label>
-                                                <select id="equipment_inch_panel-수주건등록-2" class="opt-input p-1.5">
-                                                    <option>4</option>
-                                                    <option>6</option>
-                                                    <option>8</option>
-                                                    <option>12</option>
-                                                    <option>마스크</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- TRAUM ONLY -->
-                                            <div class="opt-row p-1.5" id="traum_only_wrap_panel-수주건등록-2"
-                                                style="display:none">
-                                                <label class="opt-label">Cassette / LESS</label>
-                                                <select id="traum_sub_panel-수주건등록-2" class="opt-input p-1.5">
-                                                    <option>LESS</option>
-                                                    <option>Cassette</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- 설비 구동 방식 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">설비 구동 방식</label>
-                                                <select id="drive_type_panel-수주건등록-2" class="opt-input p-1.5">
-                                                    <option>오토 설비</option>
-                                                    <option>메뉴얼 설비</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- 메인장비 - 1 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">메인장비-1 사이즈</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="main_1_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="main_1_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 메인장비 - 2 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">메인장비-2 사이즈</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="main_2_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="main_2_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 로컬유닛 1 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">로컬유닛-1</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="local1_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="local1_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 로컬유닛 2 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">로컬유닛-2</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="local2_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="local2_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 로컬유닛 3 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">로컬유닛-3</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="local3_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="local3_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 로컬유닛 4 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">로컬유닛-4</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="local4_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="local4_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 로컬유닛 5 -->
-                                            <div class="opt-row p-1.5">
-                                                <label class="opt-label">로컬유닛-5</label>
-                                                <div class="flex items-center gap-1.5">
-                                                    <input id="local5_width_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="가로">
-                                                    <span>×</span>
-                                                    <input id="local5_height_panel-수주건등록-2" type="number"
-                                                        class="opt-input w-20 p-1.5" placeholder="세로">
-                                                </div>
-                                            </div>
-
-                                            <!-- 확인 버튼 -->
-                                            <div class="flex justify-end mt-3 p-1.5">
-                                                <button id="장비기본구조-btnApplyLayout_panel-수주건등록-2"
-                                                    class="px-4 py-1.5 rounded bg-blue-600 text-white text-sm hover:bg-blue-700">
-                                                    확인
-                                                </button>
-                                            </div>
-
-                                        </div>
-
-
-
-
-                                        <div id="chamber-container"></div>
-
-
-
-
 
 
                                     </div>
 
 
-                                    <div id="layout-view_panel-수주건등록-2" class="basis-2/3 p-1 border border-[#b40d0d]">
-                                    </div>
 
-
-                                    <!-- ▼ 공통 스타일 -->
-                                    <style>
-                                        .opt-row {
-                                            display: grid;
-                                            grid-template-columns: 120px 1fr;
-                                            gap: 6px;
-                                            align-items: center;
-                                        }
-
-                                        .opt-label {
-                                            font-size: 13px;
-                                            font-weight: 600;
-                                            color: #333;
-                                        }
-
-                                        .opt-input {
-                                            border: 1px solid #999;
-                                            border-radius: 4px;
-                                            padding: 4px 6px;
-                                            font-size: 13px;
-                                        }
-
-                                        .drag-box {
-                                            position: absolute;
-                                            height: 60px;
-                                            border: 1px solid #3488ee;
-                                            background: #e7f1ff;
-                                            font-size: 11px;
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            cursor: move;
-                                            user-select: none;
-                                        }
-                                    </style>
+                                  
 
 
 
-
-                                </div>
+                                
 
                                 <!-- 수주건 불러오기 모달 -->
                                 <div id="modal-order-_panel-수주건등록-2" class="fixed inset-0 bg-black/40 hidden z-50">
