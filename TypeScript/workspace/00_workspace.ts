@@ -3,10 +3,7 @@ import { initUserRegisterPanel } from "./03_user-register";
 import { initView } from "./02_view";
 import { initDashboardPanel } from "./01_dashboard";
 import { LoadingUtil } from "./utils/loading";
-import { initOrderRegisterPanel } from "./04_order-register";
-import { initWorkAssignPanel } from "./06_work-assign";
-import { initWorkProgressPanel } from "./07_work-progress";
-import { initProgressPanel } from "./05_progress-panel";
+import { initOrderRegister_main } from "./04_order-register_main";
 import { setMaxIdleHTTPParsers } from "http";
 
 import { ModalUtil } from "./utils/ModalUtil";
@@ -177,21 +174,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           await initUserRegisterPanel(API_BASE);
         } 
 
-        else if (id.includes("수주건등록")) {
-          await initOrderRegisterPanel(API_BASE);
+        else if (id.includes("orderRegisterPage")) {
+          await initOrderRegister_main(API_BASE);
         } 
         
-        else if (id.includes("업무할당")) {
-          await initWorkAssignPanel(API_BASE);
-        } 
-        
-        else if (id.includes("진행상황보고")) {
-          await initWorkProgressPanel(API_BASE);
-        } 
-        
-        else if (id.includes("진행상황-한눈에보기")) {
-          await initProgressPanel(API_BASE);
-        }
+     
         
 
         console.debug(`[TAB] ${id} 초기화 완료`);

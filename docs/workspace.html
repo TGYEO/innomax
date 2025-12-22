@@ -290,17 +290,17 @@
                         <div class="flex border border-[#efece5] bg-[#efece5] rounded-t-lg shadow-md">
 
 
-                            <button data-tab="orderRegisterPage_tab_1"
+                            <button data-tab-target="orderRegisterPage_tab_1"
                                 class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
                                 수주건 등록
                             </button>
 
-                            <button data-tab="orderRegisterPage_tab_2"
+                            <button data-tab-target="orderRegisterPage_tab_2"
                                 class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
                                 수주건 사양등록
                             </button>
 
-                            <button data-tab="orderRegisterPage_tab_3"
+                            <button data-tab-target="orderRegisterPage_tab_3"
                                 class="tab-btn px-4 py-2 text-sm font-semibold border-r border-gray-300">
                                 수주건 PMS 등록
                             </button>
@@ -309,14 +309,14 @@
                         </div>
 
                         <!-- ▼ 탭 콘텐츠 영역 -->
-                        <div
-                            class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[850px] relative overflow-hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[850px] relative overflow-hidden">
 
                             <!-- Panel 1 -->
                             <div id="orderRegisterPage_tab_1"
                                 class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
                                 <!--🔹 좌측 입력 Form-->
-                                <div class="bg-[#efece5] border border-[#000000] rounded-xl shadow p-2 space-y-3 text-sm">
+                                <div
+                                    class="bg-[#efece5] border border-[#000000] rounded-xl shadow p-2 space-y-3 text-sm">
 
                                     <!-- 1) 수주건번호 / 장비명 / 고객사 -->
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -455,7 +455,8 @@
                                 </div>
 
                                 <!--🔹 우측 수주건 리스트 (독립형 긴 패널)-->
-                                <div class="bg-[#efece5] border border-[#000000] rounded-xl shadow p-6 h-[600px] flex flex-col">
+                                <div
+                                    class="bg-[#efece5] border border-[#000000] rounded-xl shadow p-6 h-[600px] flex flex-col">
 
                                     <!-- 내부 스크롤 영역 -->
                                     <div class="overflow-x-auto overflow-y-auto flex-1 border rounded-lg">
@@ -839,6 +840,33 @@
 
 
 
+
+
+
+                    <div id="progressModal_orderRegisterPage"
+                        class="hidden fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center">
+                        <div class="bg-white rounded-lg shadow-lg w-[300px] p-6 text-center">
+                            <h2 class="text-lg font-bold mb-4">처리 중...</h2>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="progressBar_orderRegisterPage" class="bg-blue-600 h-2.5 rounded-full"
+                                    style="width: 0%;">
+                                </div>
+                            </div>
+                            <p id="progressMessage_orderRegisterPage" class="text-sm text-gray-600 mt-4">잠시만 기다려주세요.</p>
+                        </div>
+                        <style>
+                            /* 프로그레스바 모달 */
+                            #progressModal {
+                                display: none;
+                                /* 기본적으로 숨김 */
+                            }
+
+                            #progressModal.active {
+                                display: flex;
+                                /* 활성화 시 flex로 표시 */
+                            }
+                        </style>
+                    </div>
 
 
                 </section>
