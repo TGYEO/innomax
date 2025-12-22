@@ -81,13 +81,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const allowed = ["장혜용", "여태검"];
         const current = (userName?.textContent ?? "").trim();
         if (!allowed.includes(current)) {
-          const ok = await ModalUtil.show({
-            type: "alert",
-            title: "접근 권한",
-            message: "접근 권한이 없습니다.",
-            showOk: true,
-            showCancel: false
-          });
+          const ok = await ModalUtil.confirm({
+              title: "접근 권한",
+              message: "사용자 관리 권한이 없습니다.",
+              type: "warning",
+            });
           if (ok) {
             return; // ❗ showPanel 실행 전 return → 패널이 안 보임
           } else {
@@ -130,17 +128,15 @@ document.addEventListener("DOMContentLoaded", async () => {
           // 여기서 allowed 배열을 실제 권한 체크에 사용
           const currentUser = (userName?.textContent ?? "").trim();
           if (!allowed.includes(currentUser)) {
-            const ok = await ModalUtil.show({
-              type: "alert",
+            const ok = await ModalUtil.confirm({
               title: "접근 권한",
-              message: "접근 권한이 없습니다.",
-              showOk: true,
-              showCancel: false
+              message: "수주건 등록 권한이 없습니다.",
+              type: "warning",
             });
             if (ok) {
-              return; // ❗ showPanel 실행 전 return → 패널이 안 보임
+              return false; // 권한 없음
             } else {
-              return; // ❗ showPanel 실행 전 return → 패널이 안 보임
+              return false; // 권한 없음
             }
           }
 
@@ -168,18 +164,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (id.includes("대시보드")) {
           await initDashboardPanel(API_BASE);
-        } 
-        
+        }
+
         else if (id.includes("사용자-관리")) {
           await initUserRegisterPanel(API_BASE);
-        } 
+        }
 
         else if (id.includes("orderRegisterPage")) {
           await initOrderRegister_main(API_BASE);
-        } 
-        
-     
-        
+        }
+
+
+
 
         console.debug(`[TAB] ${id} 초기화 완료`);
       } catch (err) {

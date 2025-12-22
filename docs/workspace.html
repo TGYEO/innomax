@@ -18,14 +18,14 @@
     <!-- ===== 레이아웃 ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 min-h-0 flex-1 px-6 pb-6 p-3 ">
 
-        <aside class="rounded-xl border border-[#FAF7F0] bg-[#efece5] shadow-2xl flex flex-col overflow-hidden"
+        <aside class="rounded-xl border border-[#FAF7F0] bg-[#c8e2f7] shadow-2xl flex flex-col overflow-hidden"
             id="sidebar">
 
             <nav class="p-2 space-y-4">
 
                 <div class="flex items-center gap-4">
                     <div class="relative h-[40px] flex items-center">
-                        <img src="static/logo.png" alt="업무관리 시스템" class="h-10 object-contain drop-shadow-lg" />
+                        <img src="static/logo.png" alt="업무관리 시스템" class="h-10 object-contain shadow-2xl" />
                     </div>
                 </div>
 
@@ -64,7 +64,7 @@
 
                         <!-- 사용자관리 (공통메뉴) -->
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[20px] text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[17px] text-gray-700 hover:bg-gray-100"
                             data-panel="panel-사용자-관리">
                             사용자 관리
                         </button>
@@ -74,20 +74,20 @@
                 <!-- 📌 직원 전용 -->
                 <div>
                     <button id="btnStaffGroup"
-                        class="flex items-center justify-between w-full px-5 py-3 rounded-lg text-[14px] text-gray-700 hover:bg-gray-100">
+                        class="flex items-center justify-between w-full px-5 py-3 rounded-lg text-[20px] text-gray-700 hover:bg-gray-100">
                         <span>직원 전용</span>
                         <span id="iconStaffArrow" class="transition-transform">▼</span>
                     </button>
 
                     <div id="staffGroupContent" class="mt-2 space-y-2 pl-3 hidden">
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[14px] text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[17px] text-gray-700 hover:bg-gray-100"
                             data-panel="panel-진행상황보고">
                             진행상황보고
                         </button>
 
                         <button
-                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[14px] text-gray-700 hover:bg-gray-100"
+                            class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[17px] text-gray-700 hover:bg-gray-100"
                             data-panel="panel-요청사항">
                             요청사항
                         </button>
@@ -155,11 +155,11 @@
 
         <!-- ===== 메인 작업영역 ===== -->
         <main id="workspace"
-            class="flex-1 min-h-0 rounded-xl border border-[#FAF7F0] bg-[#efece5] shadow-2xl flex flex-col overflow-hidden min-w-0"
+            class="flex-1 min-h-0 rounded-xl border border-[#FAF7F0] bg-[#c8e2f7] shadow-2xl flex flex-col overflow-hidden min-w-0"
             aria-live="polite">
 
             <header class="grid grid-cols-[auto_1fr_auto] items-center gap-4
-               bg-[#efece5] text-black px-6 py-2 rounded-sm ring-2 ring-blue-500/50">
+               bg-[#c8e2f7] text-black px-6 py-2 rounded-sm ring-2 ring-blue-500/50">
 
                 <!-- 좌측: 앱 이름 -->
                 <div class="flex items-center gap-3">
@@ -285,9 +285,9 @@
 
 
                 <!-- 📌📌📌📌📌📌📌 수주건등록 패널 -->
-                <section id="panel-orderRegisterPage" class="hidden p-4 border border-[#efece5] bg-[#efece5]">
+                <section id="panel-orderRegisterPage" class="hidden p-4 border border-[#fcfcfc] bg-[#fcfcfc]">
                     <div class="w-full">
-                        <div class="flex border border-[#efece5] bg-[#efece5] rounded-t-lg shadow-md">
+                        <div class="flex border border-[#fcfcfc] bg-[#fcfcfc] rounded-t-lg shadow-md">
 
 
                             <button data-tab-target="orderRegisterPage_tab_1"
@@ -316,26 +316,29 @@
                                 class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
                                 <!--🔹 좌측 입력 Form-->
                                 <div
-                                    class="bg-[#efece5] border border-[#000000] rounded-xl shadow p-2 space-y-3 text-sm">
+                                    class="bg-[#fcfcfc] border border-[#000000] rounded-xl shadow p-2 space-y-3 text-sm">
 
                                     <!-- 1) 수주건번호 / 장비명 / 고객사 -->
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">수주건번호</label>
+                                            <label class="block text-gray-700 font-semibold mb-1">수주건번호 <span
+                                                    class="text-red-500">*</span></label>
                                             <input type="text" id="orderNo_orderRegisterPage_tab_1"
                                                 class="w-full border border-[#2770b4] rounded-lg p-1.5"
                                                 placeholder="수주번호 입력....">
                                         </div>
 
                                         <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">장비명</label>
+                                            <label class="block text-gray-700 font-semibold mb-1">장비명 <span
+                                                    class="text-red-500">*</span></label>
                                             <input type="text" id="equipName_orderRegisterPage_tab_1"
                                                 class="w-full border border-[#2770b4] rounded-lg p-1.5"
                                                 placeholder="장비명 입력....">
                                         </div>
 
                                         <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">고객사</label>
+                                            <label class="block text-gray-700 font-semibold mb-1">고객사 <span
+                                                    class="text-red-500">*</span></label>
                                             <select id="clientName_orderRegisterPage_tab_1"
                                                 class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
                                                 <option value="">선택하세요</option>
@@ -348,6 +351,10 @@
                                                 <option value="매그너칩 구미">매그너칩 구미</option>
                                                 <option value="KEC 구미">KEC 구미</option>
                                                 <option value="와이솔 오산">와이솔 오산</option>
+                                                <option value="LB 세미콘 청북">LB 세미콘 청북</option>
+                                                <option value="LB 세미콘 구미">LB 세미콘 구미</option>
+                                                <option value="DB 하이텍 부천">DB 하이텍 부천</option>
+                                                <option value="DB 하이텍 상우">DB 하이텍 상우</option>
                                             </select>
                                         </div>
 
@@ -356,13 +363,15 @@
                                     <!-- 2) 포장예정일 / 납품예정일 -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">포장예정일</label>
+                                            <label class="block text-gray-700 font-semibold mb-1">포장예정일 <span
+                                                    class="text-red-500">*</span></label>
                                             <input type="date" id="packDate_orderRegisterPage_tab_1"
                                                 class="w-full border border-[#2770b4] rounded-lg p-1.5">
                                         </div>
 
                                         <div>
-                                            <label class="block text-gray-700 font-semibold mb-1">납품예정일</label>
+                                            <label class="block text-gray-700 font-semibold mb-1">납품예정일 <span
+                                                    class="text-red-500">*</span></label>
                                             <input type="date" id="deliveryDate_orderRegisterPage_tab_1"
                                                 class="w-full border border-[#2770b4] rounded-lg p-1.5">
                                         </div>
@@ -446,30 +455,129 @@
                                         </div>
                                     </div>
 
-                                    <!-- 저장 버튼 -->
-                                    <button id="btnSaveOrder_orderRegisterPage_tab_1"
-                                        class="w-full mt-2 bg-indigo-600 text-white py-2 rounded-lg text-sm hover:bg-indigo-700">
-                                        수주건 저장
-                                    </button>
+                                    <!-- 7) 장비군 선택 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">장비군 선택 <span
+                                                    class="text-red-500">*</label>
+                                            <select id="EquipGroup_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
+                                                <option value="">전체</option>
+                                                <option value="Single">Single</option>
+                                                <option value="Wet">Wet</option>
+                                                <option value="CassetteCleaner">CassetteCleaner</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 버튼 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <button id="btnSaveOrder_orderRegisterPage_tab_1"
+                                            class="w-full mt-2 bg-indigo-600 text-white py-2 rounded-lg text-sm hover:bg-indigo-700">
+                                            수주건 저장
+                                        </button>
+
+                                        <button id="btnEditOrder_orderRegisterPage_tab_1"
+                                            class="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700">
+                                            수주건 수정
+                                        </button>
+                                    </div>
+
 
                                 </div>
 
                                 <!--🔹 우측 수주건 리스트 (독립형 긴 패널)-->
                                 <div
-                                    class="bg-[#efece5] border border-[#000000] rounded-xl shadow p-6 h-[600px] flex flex-col">
+                                    class="bg-[#fcfcfc] border border-[#000000] rounded-xl shadow p-6 h-[850px] flex flex-col">
 
+
+
+                                    <!-- 드롭다운 필터 -->
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <!-- 년도 드롭다운 -->
+                                        <div>
+                                            <label for="filterYear_orderRegisterPage_tab_1"
+                                                class="block text-gray-700 font-semibold mb-1">년도</label>
+                                            <select id="filterYear_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
+                                                <option value="전체">전체</option>
+                                                <option value="2013">2013</option>
+                                                <option value="2014">2014</option>
+                                                <option value="2015">2015</option>
+                                                <option value="2016">2016</option>
+                                                <option value="2017">2017</option>
+                                                <option value="2018">2018</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2026">2026</option>
+
+                                            </select>
+                                        </div>
+
+                                        <!-- 장비군 드롭다운 -->
+                                        <div>
+                                            <label for="filterEquipGroup_orderRegisterPage_tab_1"
+                                                class="block text-gray-700 font-semibold mb-1">장비군</label>
+                                            <select id="filterEquipGroup_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
+                                                <option value="전체">전체</option>
+                                                <option value="Single">Single</option>
+                                                <option value="Wet">Wet</option>
+                                                <option value="CassetteCleaner">CassetteCleaner</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- 고객사 드롭다운 -->
+                                        <div>
+                                            <label for="filterClient_orderRegisterPage_tab_1"
+                                                class="block text-gray-700 font-semibold mb-1">고객사</label>
+                                            <select id="filterClient_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5 bg-white">
+                                                <option value="전체">전체</option>
+                                                <option value="AMKOR-5 송도">AMKOR-5 송도</option>
+                                                <option value="AMKOR-4 광주">AMKOR-4 광주</option>
+                                                <option value="NEPES 1공장 오창">NEPES 1공장 오창</option>
+                                                <option value="NEPES 2공장 오창">NEPES 2공장 오창</option>
+                                                <option value="ON-SEMI 부천">ON-SEMI 부천</option>
+                                                <option value="SK-실트론 구미">SK-실트론 구미</option>
+                                                <option value="매그너칩 구미">매그너칩 구미</option>
+                                                <option value="KEC 구미">KEC 구미</option>
+                                                <option value="와이솔 오산">와이솔 오산</option>
+                                                <option value="LB 세미콘 청북">LB 세미콘 청북</option>
+                                                <option value="LB 세미콘 구미">LB 세미콘 구미</option>
+                                                <option value="DB 하이텍 부천">DB 하이텍 부천</option>
+                                                <option value="DB 하이텍 상우">DB 하이텍 상우</option>
+
+                                            </select>
+                                        </div>
+
+                                        <!-- 초기화버튼 -->
+                                        <div>
+                                            <label for="filterResetbtn_orderRegisterPage_tab_1"
+                                                class="block text-gray-700 font-semibold mb-1">초기화</label>
+                                            <button id="filterResetbtn_orderRegisterPage_tab_1"
+                                                class="px-4 py-2 text-sm font-semibold border border-green-300 bg-green-100">
+                                                초기화
+                                            </button>
+                                        </div>
+
+
+                                    </div>
                                     <!-- 내부 스크롤 영역 -->
-                                    <div class="overflow-x-auto overflow-y-auto flex-1 border rounded-lg">
+                                    <div
+                                        class="overflow-x-auto overflow-y-auto flex-1 border border-[#2770b4] rounded-lg">
                                         <table class="min-w-full text-sm text-gray-700">
-                                            <thead class="bg-gray-100">
+                                            <thead class="bg-gray-200 border-b border-gray-700">
                                                 <tr>
-                                                    <th class="border px-3 py-2">No</th>
-                                                    <th class="border px-3 py-2">수주건번호</th>
-                                                    <th class="border px-3 py-2">장비명</th>
-                                                    <th class="border px-3 py-2">고객사</th>
-                                                    <th class="border px-3 py-2">포장예정일</th>
-                                                    <th class="border px-3 py-2">납품예정일</th>
-                                                    <th class="border px-3 py-2 w-20">관리</th>
+                                                    <th class="border px-3 py-2 w-[80px]">수주건번호</th>
+                                                    <th class="border px-3 py-2 w-[250px]">장비명</th>
+                                                    <th class="border px-3 py-2 w-[100px]">고객사</th>
                                                 </tr>
                                             </thead>
 
@@ -900,6 +1008,10 @@
                                         <option value="매그너칩 구미">매그너칩 구미</option>
                                         <option value="KEC 구미">KEC 구미</option>
                                         <option value="와이솔 오산">와이솔 오산</option>
+                                        <option value="LB 세미콘 청북">LB 세미콘 청북</option>
+                                        <option value="LB 세미콘 구미">LB 세미콘 구미</option>
+                                        <option value="DB 하이텍 부천">DB 하이텍 부천</option>
+                                        <option value="DB 하이텍 상우">DB 하이텍 상우</option>
                                     </select>
 
                                     <!-- 🔹 Step 2: 수주건 선택 -->
