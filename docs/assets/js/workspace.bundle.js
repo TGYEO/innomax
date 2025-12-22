@@ -18102,7 +18102,7 @@ function initLocalTabNavigation() {
         // 3) 버튼 스타일 적용
         navButtons.forEach((btn) => {
             const active = btn.dataset.panel === id;
-            btn.classList.toggle("bg-[#7ce92f]", active);
+            btn.classList.toggle("bg-[#d4f7bf]", active);
             btn.classList.toggle("text-[#000000]", active);
             btn.classList.toggle("font-bold", active);
         });
@@ -18155,7 +18155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
                 }
             }
-            if (id.includes("수주건등록")) {
+            if (id.includes("orderRegisterPage")) {
                 try {
                     const url = `${API_BASE}/api/users`;
                     const res = await fetch(url);
