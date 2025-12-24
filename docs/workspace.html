@@ -311,7 +311,7 @@
                         <!-- ▼ 탭 콘텐츠 영역 -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 h-[850px] relative overflow-hidden">
 
-                            <!-- Panel 1 -->
+                            <!-- Panel 1 수주건 등록   -->
                             <div id="orderRegisterPage_tab_1"
                                 class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
                                 <!--🔹 좌측 입력 Form-->
@@ -633,74 +633,942 @@
                                 </div>
                             </div>
 
-                            <!-- Panel 2 -->
+                            <!-- Panel 2 수주건 사양 등록-->
                             <div id="orderRegisterPage_tab_2"
-                                class="grid grid-cols-1 lg:grid-cols-2 gap-2 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
+                                class="grid grid-cols-1 gap-4 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none overflow-y-auto p-4">
 
-                            
-                                    <!-- ▼ 옵션 선택 -->
-                                    <div class="bg-[#fcfcfc] border border-[#000000] rounded-xl shadow p-2 space-y-3 text-sm">
+                                <div
+                                    class="bg-white border border-gray-300 rounded-xl shadow-sm p-3 flex flex-col space-y-6">
 
+                                    <div class="flex flex-wrap gap-2 pb-4 border-b border-gray-100">
                                         <button id="readOrder_orderRegisterPage_tab_2"
-                                            class="px-4 py-2 text-sm font-semibold border border-gray-300 bg-gray-100">
+                                            class="px-4 py-2 text-sm font-semibold border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors">
                                             수주건 불러오기
                                         </button>
 
                                         <button id="specSave_orderRegisterPage_tab_2"
-                                            class="px-4 py-2 text-sm font-semibold border border-green-300 bg-green-100">
+                                            class="px-4 py-2 text-sm font-semibold border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 rounded-md transition-colors">
                                             사양 저장하기
                                         </button>
 
-                                        
                                         <button id="specEdit_orderRegisterPage_tab_2"
-                                            class="px-4 py-2 text-sm font-semibold border border-orange-300 bg-orange-100">
+                                            class="px-4 py-2 text-sm font-semibold border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 rounded-md transition-colors">
                                             사양 수정하기
                                         </button>
-
-
                                     </div>
 
+                                    <!-- 💛-->
+                                    <div id="singleBasicSpec_orderRegisterPage_tab_2"
+                                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
 
 
-                                  
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-gray-700 font-bold mb-2 text-[50px]">BASIC</label>
+                                            <label
+                                                class="block text-gray-700 font-bold mb-2 text-[50px] p-8">CONFIG</label>
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-gray-700 font-bold mb-2">WAFER INCH</label>
+
+                                            <select id="Use_Inch1_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 Inch 를 선택하세요</option>
+                                                <option value="12Inch">12 Inch</option>
+                                                <option value="8Inch">8 Inch</option>
+                                                <option value="6Inch">6 Inch</option>
+                                                <option value="4Inch">4 Inch</option>
+                                            </select>
+
+                                            <select id="Use_Inch2_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 Inch 를 선택하세요(겸용시)</option>
+                                                <option value="12Inch">12 Inch</option>
+                                                <option value="8Inch">8 Inch</option>
+                                                <option value="6Inch">6 Inch</option>
+                                                <option value="4Inch">4 Inch</option>
+                                            </select>
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+
+                                        </div>
+
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-blue-700 font-bold mb-2 text-[50px]">LOADER</label>
+                                            <label
+                                                class="block text-blue-700 font-bold mb-2 text-[50px] p-8">CONFIG</label>
+
+                                        </div>
 
 
 
-                                
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
 
-                                <!-- 수주건 불러오기 모달 -->
-                                <div id="modal-order-_panel-수주건등록-2" class="fixed inset-0 bg-black/40 hidden z-50">
-                                    <div class="absolute inset-0 flex items-center justify-center">
-                                        <div class="bg-white rounded-lg shadow-xl w-[600px] p-4">
+                                            <label class="block text-blue-700 font-bold mb-2">LOADER-1</label>
 
-                                            <h2 class="text-lg font-bold mb-3">수주건 불러오기</h2>
+                                            <select id="loader1_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
 
-                                            <!-- 데이터 테이블 -->
-                                            <table class="w-full border text-sm" id="order-list-table_panel-수주건등록-2">
-                                                <thead class="bg-gray-200">
-                                                    <tr>
-                                                        <th class="border px-2 py-1 w-32">수주번호</th>
-                                                        <th class="border px-2 py-1 w-32">장비명</th>
-                                                        <th class="border px-2 py-1 w-32">고객사</th>
-                                                        <th class="border px-2 py-1 w-20">선택</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="order-list-body_panel-수주건등록-2">
-                                                    <!-- 데이터 바인딩 영역 -->
-                                                </tbody>
-                                            </table>
+                                            <select id="loader1_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="Brooks">브룩스</option>
+                                                <option value="Symphonia">심포니아</option>
+                                                <option value="InnomaxLoader">이노맥스 로더</option>
+                                            </select>
 
-                                            <div class="mt-4 flex justify-end">
-                                                <button class="px-4 py-2 bg-gray-300 rounded"
-                                                    id="btn-close_panel-수주건등록-2">
-                                                    닫기
-                                                </button>
+                                            <select id="loader1_mappingSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="FoupMapping">Foup 맵핑</option>
+                                                <option value="RobotMapping">Robot 맵핑</option>
+                                                <option value="InnomaxMapping">이노맥스 맵핑</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="loader1_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="loader1_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="loader1_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="loader1_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-blue-700 font-bold mb-2">LOADER-2</label>
+
+                                            <select id="loader2_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="loader2_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="Brooks">브룩스</option>
+                                                <option value="Symphonia">심포니아</option>
+                                                <option value="InnomaxLoader">이노맥스 로더</option>
+                                            </select>
+
+                                            <select id="loader2_mappingSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="FoupMapping">Foup 맵핑</option>
+                                                <option value="RobotMapping">Robot 맵핑</option>
+                                                <option value="InnomaxMapping">이노맥스 맵핑</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="loader2_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="loader2_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="loader2_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="loader2_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-blue-700 font-bold mb-2">LOADER-3</label>
+
+                                            <select id="loader3_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="loader3_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="Brooks">브룩스</option>
+                                                <option value="Symphonia">심포니아</option>
+                                                <option value="InnomaxLoader">이노맥스 로더</option>
+                                            </select>
+
+                                            <select id="loader3_mappingSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="FoupMapping">Foup 맵핑</option>
+                                                <option value="RobotMapping">Robot 맵핑</option>
+                                                <option value="InnomaxMapping">이노맥스 맵핑</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="loader3_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="loader3_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="loader3_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="loader3_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-blue-700 font-bold mb-2">LOADER-4</label>
+
+                                            <select id="loader4_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="loader4_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="Brooks">브룩스</option>
+                                                <option value="Symphonia">심포니아</option>
+                                                <option value="InnomaxLoader">이노맥스 로더</option>
+                                            </select>
+
+                                            <select id="loader4_mappingSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="FoupMapping">Foup 맵핑</option>
+                                                <option value="RobotMapping">Robot 맵핑</option>
+                                                <option value="InnomaxMapping">이노맥스 맵핑</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="loader4_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="loader4_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="loader4_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="loader4_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-green-700 font-bold mb-2 text-[50px]">ROBOT</label>
+                                            <label
+                                                class="block text-green-700 font-bold mb-2 text-[50px] p-8">CONFIG</label>
+
+                                        </div>
+
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-green-700 font-bold mb-2">ROBOT-1</label>
+
+                                            <select id="robot1_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="robot1_usage_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="efem">EFEM</option>
+                                                <option value="transfer">Transfer</option>
+                                            </select>
+
+                                            <select id="robot1_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="rnd">RND</option>
+                                                <option value="koro">KORO</option>
+                                                <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
+                                                <option value="innomax_motor">이노맥스 로봇(Motor)</option>
+
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="robot1_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="robot1_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="robot1_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="robot1_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-green-700 font-bold mb-2">ROBOT-2</label>
+
+                                            <select id="robot2_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="robot2_usage_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="efem">EFEM</option>
+                                                <option value="transfer">Transfer</option>
+                                            </select>
+
+                                            <select id="robot2_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="rnd">RND</option>
+                                                <option value="koro">KORO</option>
+                                                <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
+                                                <option value="innomax_motor">이노맥스 로봇(Motor)</option>
+
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="robot2_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="robot2_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="robot2_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="robot2_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-green-700 font-bold mb-2">ROBOT-3</label>
+
+                                            <select id="robot3_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="robot3_usage_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="efem">EFEM</option>
+                                                <option value="transfer">Transfer</option>
+                                            </select>
+
+                                            <select id="robot3_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="rnd">RND</option>
+                                                <option value="koro">KORO</option>
+                                                <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
+                                                <option value="innomax_motor">이노맥스 로봇(Motor)</option>
+
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="robot3_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="robot3_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="robot3_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="robot3_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-green-700 font-bold mb-2">ROBOT-4</label>
+
+                                            <select id="robot4_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="robot4_usage_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="efem">EFEM</option>
+                                                <option value="transfer">Transfer</option>
+                                            </select>
+
+                                            <select id="robot4_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="rnd">RND</option>
+                                                <option value="koro">KORO</option>
+                                                <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
+                                                <option value="innomax_motor">이노맥스 로봇(Motor)</option>
+
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="robot4_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="robot4_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="robot4_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="robot4_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label
+                                                class="block text-yellow-700 font-bold mb-2 text-[50px]">BUFFER</label>
+                                            <label
+                                                class="block text-yellow-700 font-bold mb-2 text-[50px] p-8">CONFIG</label>
+
+                                        </div>
+
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-yellow-700 font-bold mb-2">BUFFER-1</label>
+
+                                            <select id="buffer1_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="buffer1_centeringUseSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>Centering 사용 여부</option>
+                                                <option value="centering_use">사용</option>
+                                                <option value="centering_not_use">미사용</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-2 gap-1 mt-2 p-2">
+
+                                                <label for="buffer1_allslot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">총슬롯</label>
+                                                <input type="text" id="buffer1_allslot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="총슬롯">
+
+                                                <label for="buffer1_toChamberSlot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">챔버로 가는 슬롯</label>
+                                                <input type="text" id="buffer1_toChamberSlot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="챔버로 가는 슬롯 1 ~ 5">
+
+                                                <label for="buffer1_toLoaderSlot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">로더로 가는 슬롯</label>
+                                                <input type="text" id="buffer1_toLoaderSlot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="로더로 가는 슬롯 6 ~ 10">
                                             </div>
 
                                         </div>
-                                    </div>
-                                </div>
 
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-yellow-700 font-bold mb-2">BUFFER-2</label>
+
+                                            <select id="buffer2_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="buffer2_centeringUseSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>Centering 사용 여부</option>
+                                                <option value="centering_use">사용</option>
+                                                <option value="centering_not_use">미사용</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-2 gap-1 mt-2 p-2">
+
+                                                <label for="buffer2_allslot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">총슬롯</label>
+                                                <input type="text" id="buffer2_allslot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="총슬롯">
+
+                                                <label for="buffer2_toChamberSlot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">챔버로 가는 슬롯</label>
+                                                <input type="text" id="buffer2_toChamberSlot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="챔버로 가는 슬롯 1 ~ 5">
+
+                                                <label for="buffer2_toLoaderSlot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">로더로 가는 슬롯</label>
+                                                <input type="text" id="buffer2_toLoaderSlot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="로더로 가는 슬롯 6 ~ 10">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-red-700 font-bold mb-2 text-[50px]">ETC
+                                                PART</label>
+                                            <label
+                                                class="block text-red-700 font-bold mb-2 text-[50px] p-8">CONFIG</label>
+
+                                        </div>
+
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-red-700 font-bold mb-2">IMMERSION BATH</label>
+
+                                            <select id="immersionBath_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+
+                                            <div class="grid grid-cols-2 gap-1 mt-2 p-2">
+
+                                                <label for="immersionBath_allslot_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">총슬롯</label>
+                                                <input type="text" id="immersionBath_allslot_orderRegisterPage_tab_2"
+                                                    class="w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="총슬롯">
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-red-700 font-bold mb-2">ALIGER</label>
+
+                                            <select id="aliger_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+
+                                            <select id="aliger_brandSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="bluecode">블루코드</option>
+                                            </select>
+
+                                            <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+
+                                                <label for="aliger_model_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">모델명</label>
+                                                <input type="text" id="aliger_model_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2"
+                                                    placeholder="모델명">
+
+                                                <label for="aliger_serialNumber_orderRegisterPage_tab_2"
+                                                    class="block text-gray-700 font-semibold mb-1">시리얼 번호</label>
+                                                <input type="text" id="aliger_serialNumber_orderRegisterPage_tab_2"
+                                                    class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm"
+                                                    placeholder="시리얼 번호">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-red-700 font-bold mb-2">REVERSE UNIT</label>
+
+                                            <select id="reverseUnit_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                            <label class="block text-red-700 font-bold mb-2">CENTERING UNIT</label>
+
+                                            <select id="centeringUnit_useSelection_orderRegisterPage_tab_2"
+                                                class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
+                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="use">사용</option>
+                                                <option value="not_use">미사용</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- 💛-->
+                                    <div id="singleChamber1_Spec_orderRegisterPage_tab_2"
+                                        class="grid grid-flow-col grid-rows-2 gap-4">
+
+                                        <div
+                                            class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm row-span-2">
+
+                                            <label class="block text-purple-700 font-bold mb-2 text-[50px]">CHAMBER-1
+                                            </label>
+                                            <label
+                                                class="block text-purple-700 font-bold mb-2 text-[50px] p-8">CONFIG</label>
+
+                                        </div>
+
+                                        <div
+                                            class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm col-span-1">
+
+                                            <div class="grid grid-cols-4 gap-x-8 gap-y-4">
+
+                                                
+                                                <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-1 shadow-sm">
+
+                                                    <label class="block text-purple-700 font-bold mb-2">DISPENSER-1</label>
+
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2">
+                                                        <label
+                                                            for="dispenser1_use_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-[13px]">사용유무</label>
+                                                        <select
+                                                            id="dispenser1_use_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg text-sm mb-2">
+                                                            <option value="" disabled selected>none</option>
+                                                            <option value="use" selected>USE</option>
+                                                            <option value="not_use" selected>NOT USE</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2">
+                                                        <label
+                                                            for="dispenser1_chemical1_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-[13px]">CHEMICAL-1</label>
+                                                        <select
+                                                            id="dispenser1_chemical1_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg text-sm mb-2">
+                                                            <option value="" disabled selected>none</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2">
+                                                        <label
+                                                            for="dispenser1_chemical2_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-[13px]">CHEMICAL-2</label>
+                                                        <select
+                                                            id="dispenser1_chemical2_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg text-sm mb-2">
+                                                            <option value="" disabled selected>none</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2">
+                                                        <label
+                                                            for="dispenser1_chemical3_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-[13px]">CHEMICAL-3</label>
+                                                        <select
+                                                            id="dispenser1_chemical3_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg text-sm mb-2">
+                                                            <option value="" disabled selected>none</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2">
+                                                        <label
+                                                            for="dispenser1_chemical4_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-[13px]">CHEMICAL-4</label>
+                                                        <select
+                                                            id="dispenser1_chemical4_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg text-sm mb-2">
+                                                            <option value="" disabled selected>none</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2">
+                                                        <label
+                                                            for="dispenser1_updownType_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-[13px]">UP/DOWN 방식</label>
+                                                        <select
+                                                            id="dispenser1_updownType_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg text-sm mb-2">
+                                                            <option value="" disabled selected>none</option>
+                                                            <option value="cylinder" selected>Cylinder</option>
+                                                            <option value="motor" selected>Motor</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--💗-->
+                                                <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                                    <label class="block text-purple-700 font-bold mb-2">DISPENSER-1</label>
+
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical1_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-1</label>
+                                                        <select
+                                                            id="dispenser1_chemical1_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL1</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical2_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-2</label>
+                                                        <select
+                                                            id="dispenser1_chemical2_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL2</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical3_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-3</label>
+                                                        <select
+                                                            id="dispenser1_chemical3_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL3</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical4_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-4</label>
+                                                        <select
+                                                            id="dispenser1_chemical4_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL4</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!--💗-->
+                                                <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                                    <label class="block text-purple-700 font-bold mb-2">DISPENSER-1</label>
+
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical1_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-1</label>
+                                                        <select
+                                                            id="dispenser1_chemical1_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL1</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical2_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-2</label>
+                                                        <select
+                                                            id="dispenser1_chemical2_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL2</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical3_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-3</label>
+                                                        <select
+                                                            id="dispenser1_chemical3_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL3</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical4_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-4</label>
+                                                        <select
+                                                            id="dispenser1_chemical4_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL4</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!--💗-->
+                                                <div class="bg-[#fcfcfc] border border-blue-200 rounded-lg p-4 shadow-sm">
+
+                                                    <label class="block text-purple-700 font-bold mb-2">DISPENSER-1</label>
+
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical1_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-1</label>
+                                                        <select
+                                                            id="dispenser1_chemical1_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL1</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical2_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-2</label>
+                                                        <select
+                                                            id="dispenser1_chemical2_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL2</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical3_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-3</label>
+                                                        <select
+                                                            id="dispenser1_chemical3_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL3</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-3 gap-2 mt-2 p-2">
+                                                        <label
+                                                            for="dispenser1_chemical4_Chamber1_model_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1">CHEMICAL-4</label>
+                                                        <select
+                                                            id="dispenser1_chemical4_Chamber1_useSelection_orderRegisterPage_tab_2"
+                                                            class="col-span-2 w-full border border-gray-300 rounded-lg p-2 text-sm mb-2">
+                                                            <option value="" disabled selected>CHEMICAL4</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                </div>
                             </div>
 
                             <!-- Panel 3 -->
@@ -1338,7 +2206,8 @@
 
                                                     <div style="flex:0 0 auto; margin-left:12px; text-align:right;">
                                                         <div class="text-sm text-indigo-600"
-                                                            style="font-weight:600;color:#ff6b6b;">60%</div>
+                                                            style="font-weight:600;color:#ff6b6b;">
+                                                            60%</div>
                                                     </div>
                                                 </div>
 
