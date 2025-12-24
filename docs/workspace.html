@@ -660,6 +660,18 @@
                                             class="px-4 py-2 text-sm font-semibold border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 rounded-md transition-colors">
                                             사양 수정하기
                                         </button>
+
+                                        <input type="text" id="specOrderNo_orderRegisterPage_tab_2"
+                                            class="border border-gray-300 rounded-lg p-1.5 text-sm" readonly
+                                            placeholder="수주번호">
+
+                                        <input type="text" id="specOrderName_orderRegisterPage_tab_2"
+                                            class="border border-gray-300 rounded-lg p-1.5 text-sm w-[400px]" readonly
+                                            placeholder="장비명">
+
+                                        <input type="text" id="specOrderClient_orderRegisterPage_tab_2"
+                                            class="border border-gray-300 rounded-lg p-1.5 text-sm" readonly
+                                            placeholder="고객명">
                                     </div>
 
                                     <!-- 💛-->
@@ -6976,6 +6988,120 @@
                                             </div>
                                         </div>
 
+                                        <!-- 💛수주건 리스트 모달-->
+                                        <div id="modalOverlay_orderRegisterPage_tab_2"
+                                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+
+                                            <div id="orderList_Modal_orderRegisterPage_tab_2"
+                                                class="bg-[#fcfcfc] border border-[#000000] rounded-xl shadow-2xl p-6 w-[90%] max-w-4xl h-[600px] flex flex-col relative">
+
+                                                <button id="closeModalBtn1_orderList_Modal_orderRegisterPage_tab_2"
+                                                    class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl font-bold">
+                                                    &times;
+                                                </button>
+
+                                                <h2 class="text-xl font-bold mb-4 border-b pb-2">수주 목록 조회</h2>
+
+                                                <div class="flex items-center gap-4 mb-4 flex-wrap">
+                                                    <div>
+                                                        <label for="filterYear_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-xs">년도</label>
+                                                        <select id="filterYear_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="border border-[#2770b4] rounded-lg p-1.5 bg-white text-sm">
+                                                            <option value="전체">전체</option>
+                                                            <option value="전체">전체</option>
+                                                            <option value="2013">2013</option>
+                                                            <option value="2014">2014</option>
+                                                            <option value="2015">2015</option>
+                                                            <option value="2016">2016</option>
+                                                            <option value="2017">2017</option>
+                                                            <option value="2018">2018</option>
+                                                            <option value="2019">2019</option>
+                                                            <option value="2020">2020</option>
+                                                            <option value="2021">2021</option>
+                                                            <option value="2022">2022</option>
+                                                            <option value="2023">2023</option>
+                                                            <option value="2024">2024</option>
+                                                            <option value="2025">2025</option>
+                                                            <option value="2026">2026</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label
+                                                            for="filterEquipGroup_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-xs">장비군</label>
+                                                        <select
+                                                            id="filterEquipGroup_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="border border-[#2770b4] rounded-lg p-1.5 bg-white text-sm">
+                                                            <option value="전체">전체</option>
+                                                            <option value="Single">Single</option>
+                                                            <option value="Wet">Wet</option>
+                                                            <option value="cassetecleaner">카세트클리너</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label
+                                                            for="filterClient_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="block text-gray-700 font-semibold mb-1 text-xs">고객사</label>
+                                                        <select
+                                                            id="filterClient_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="border border-[#2770b4] rounded-lg p-1.5 bg-white text-sm">
+                                                            <option value="전체">전체</option>
+                                                            <option value="AMKOR-5 송도">AMKOR-5 송도</option>
+                                                            <option value="AMKOR-4 광주">AMKOR-4 광주</option>
+                                                            <option value="NEPES 1공장 오창">NEPES 1공장 오창</option>
+                                                            <option value="NEPES 2공장 오창">NEPES 2공장 오창</option>
+                                                            <option value="ON-SEMI 부천">ON-SEMI 부천</option>
+                                                            <option value="SK-실트론 구미">SK-실트론 구미</option>
+                                                            <option value="매그너칩 구미">매그너칩 구미</option>
+                                                            <option value="KEC 구미">KEC 구미</option>
+                                                            <option value="와이솔 오산">와이솔 오산</option>
+                                                            <option value="LB 세미콘 청북">LB 세미콘 청북</option>
+                                                            <option value="LB 세미콘 구미">LB 세미콘 구미</option>
+                                                            <option value="DB 하이텍 부천">DB 하이텍 부천</option>
+                                                            <option value="DB 하이텍 상우">DB 하이텍 상우</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="self-end">
+                                                        <button
+                                                            id="filterResetbtn_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="px-4 py-1.5 text-sm font-semibold border border-green-300 bg-green-100 rounded-lg hover:bg-green-200">
+                                                            초기화
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div
+                                                    class="overflow-x-auto overflow-y-auto flex-1 border border-[#2770b4] rounded-lg bg-white">
+                                                    <table class="min-w-full text-sm text-gray-700">
+                                                        <thead
+                                                            class="bg-gray-200 border-b border-gray-700 sticky top-0">
+                                                            <tr>
+                                                                <th class="border px-3 py-2 w-[80px]">수주건번호</th>
+                                                                <th class="border px-3 py-2 w-[250px]">장비명</th>
+                                                                <th class="border px-3 py-2 w-[100px]">고객사</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody
+                                                            id="orderListBody_orderList_Modal_orderRegisterPage_tab_2"
+                                                            class="divide-y">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="mt-4 flex justify-end">
+                                                    <button id="closeModalBtn2_orderList_Modal_orderRegisterPage_tab_2"
+                                                        class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">닫기</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
 
                                         <style>
                                             #singleTank1Spec_orderRegisterPage_tab_2 {
@@ -7033,80 +7159,88 @@
 
                                     </script>
                                 </div>
-
-
-
-                                <!-- Panel 3 -->
-                                <div id="orderRegisterPage_tab_3"
-                                    class="tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
-                                    <div class="p-4">패널 3 콘텐츠</div>
-                                </div>
-
                             </div>
+
+
+
+                            <!-- Panel 3 -->
+                            <div id="orderRegisterPage_tab_3"
+                                class="tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
+                                <div class="p-4">패널 3 콘텐츠</div>
+                            </div>
+
+
+
                         </div>
 
 
 
 
-                        <script>
-                            // ---------------------------
-                            // 📌 TAB 기능
-                            // ---------------------------
-                            const tabBtns = document.querySelectorAll(".tab-btn");
-                            const tabPanels = document.querySelectorAll(".tab-panel");
 
-                            tabBtns.forEach(btn => {
-                                btn.addEventListener("click", () => {
-                                    const target = btn.getAttribute("data-tab");
+                    </div>
 
-                                    // 버튼 스타일 처리
-                                    tabBtns.forEach(b => b.classList.remove("bg-white"));
-                                    btn.classList.add("bg-white");
 
-                                    // 패널 스위칭 (스무스 모션)
-                                    tabPanels.forEach(panel => {
-                                        if (panel.id === target) {
-                                            panel.classList.remove("opacity-0", "translate-x-10", "pointer-events-none");
-                                            panel.classList.add("opacity-100", "translate-x-0");
-                                        } else {
-                                            panel.classList.remove("opacity-100", "translate-x-0");
-                                            panel.classList.add("opacity-0", "translate-x-10", "pointer-events-none");
-                                        }
-                                    });
+
+
+                    <script>
+                        // ---------------------------
+                        // 📌 TAB 기능
+                        // ---------------------------
+                        const tabBtns = document.querySelectorAll(".tab-btn");
+                        const tabPanels = document.querySelectorAll(".tab-panel");
+
+                        tabBtns.forEach(btn => {
+                            btn.addEventListener("click", () => {
+                                const target = btn.getAttribute("data-tab");
+
+                                // 버튼 스타일 처리
+                                tabBtns.forEach(b => b.classList.remove("bg-white"));
+                                btn.classList.add("bg-white");
+
+                                // 패널 스위칭 (스무스 모션)
+                                tabPanels.forEach(panel => {
+                                    if (panel.id === target) {
+                                        panel.classList.remove("opacity-0", "translate-x-10", "pointer-events-none");
+                                        panel.classList.add("opacity-100", "translate-x-0");
+                                    } else {
+                                        panel.classList.remove("opacity-100", "translate-x-0");
+                                        panel.classList.add("opacity-0", "translate-x-10", "pointer-events-none");
+                                    }
                                 });
                             });
-                        </script>
+                        });
+                    </script>
 
 
 
 
 
 
-                        <div id="progressModal_orderRegisterPage"
-                            class="hidden fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center">
-                            <div class="bg-white rounded-lg shadow-lg w-[300px] p-6 text-center">
-                                <h2 class="text-lg font-bold mb-4">처리 중...</h2>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div id="progressBar_orderRegisterPage" class="bg-blue-600 h-2.5 rounded-full"
-                                        style="width: 0%;">
-                                    </div>
+                    <div id="progressModal_orderRegisterPage"
+                        class="hidden fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center">
+                        <div class="bg-white rounded-lg shadow-lg w-[300px] p-6 text-center">
+                            <h2 class="text-lg font-bold mb-4">처리 중...</h2>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div id="progressBar_orderRegisterPage" class="bg-blue-600 h-2.5 rounded-full"
+                                    style="width: 0%;">
                                 </div>
-                                <p id="progressMessage_orderRegisterPage" class="text-sm text-gray-600 mt-4">잠시만 기다려주세요.
-                                </p>
                             </div>
-                            <style>
-                                /* 프로그레스바 모달 */
-                                #progressModal {
-                                    display: none;
-                                    /* 기본적으로 숨김 */
-                                }
-
-                                #progressModal.active {
-                                    display: flex;
-                                    /* 활성화 시 flex로 표시 */
-                                }
-                            </style>
+                            <p id="progressMessage_orderRegisterPage" class="text-sm text-gray-600 mt-4">잠시만 기다려주세요.
+                            </p>
                         </div>
+                        <style>
+                            /* 프로그레스바 모달 */
+                            #progressModal {
+                                display: none;
+                                /* 기본적으로 숨김 */
+                            }
+
+                            #progressModal.active {
+                                display: flex;
+                                /* 활성화 시 flex로 표시 */
+                            }
+                        </style>
+                    </div>
 
 
                 </section>
