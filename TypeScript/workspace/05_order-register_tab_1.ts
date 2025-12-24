@@ -13,6 +13,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
     // 탭 패널
     const orderNo_orderRegisterPage_tab_1 = document.getElementById("orderNo_orderRegisterPage_tab_1") as HTMLInputElement;
     const equipName_orderRegisterPage_tab_1 = document.getElementById("equipName_orderRegisterPage_tab_1") as HTMLInputElement;
+    const clientEquipName_orderRegisterPage_tab_1 = document.getElementById("clientEquipName_orderRegisterPage_tab_1") as HTMLInputElement;
     const clientName_orderRegisterPage_tab_1 = document.getElementById("clientName_orderRegisterPage_tab_1") as HTMLSelectElement;
     const packDate_orderRegisterPage_tab_1 = document.getElementById("packDate_orderRegisterPage_tab_1") as HTMLInputElement;
     const deliveryDate_orderRegisterPage_tab_1 = document.getElementById("deliveryDate_orderRegisterPage_tab_1") as HTMLInputElement;
@@ -53,6 +54,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
     const requiredElements = [
         orderNo_orderRegisterPage_tab_1,
         equipName_orderRegisterPage_tab_1,
+        clientEquipName_orderRegisterPage_tab_1,
         clientName_orderRegisterPage_tab_1,
         packDate_orderRegisterPage_tab_1,
         deliveryDate_orderRegisterPage_tab_1,
@@ -80,6 +82,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
     function clearOrderRegisterTab1Inputs() {
         orderNo_orderRegisterPage_tab_1.value = "";
         equipName_orderRegisterPage_tab_1.value = "";
+        clientEquipName_orderRegisterPage_tab_1.value = "";
         clientName_orderRegisterPage_tab_1.value = "";
         packDate_orderRegisterPage_tab_1.value = "";
         deliveryDate_orderRegisterPage_tab_1.value = "";
@@ -272,6 +275,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
             orderNo: orderNo_orderRegisterPage_tab_1.value,
             details: {
                 equipName: equipName_orderRegisterPage_tab_1.value,
+                clientEquipName: clientEquipName_orderRegisterPage_tab_1.value,
                 clientName: clientName_orderRegisterPage_tab_1.value,
                 packDate: packDate_orderRegisterPage_tab_1.value,
                 deliveryDate: deliveryDate_orderRegisterPage_tab_1.value,
@@ -345,6 +349,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
         const payload = {
             orderNo: orderNo_orderRegisterPage_tab_1.value,
             equipName: equipName_orderRegisterPage_tab_1.value,
+            clientEquipName: clientEquipName_orderRegisterPage_tab_1.value,
             clientName: clientName_orderRegisterPage_tab_1.value,
             packDate: packDate_orderRegisterPage_tab_1.value,
             deliveryDate: deliveryDate_orderRegisterPage_tab_1.value,
@@ -529,6 +534,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         //불러온 수주건 정보로 입력폼 채우기
                         orderNo_orderRegisterPage_tab_1.value = order.code_no;
                         equipName_orderRegisterPage_tab_1.value = detail.equipName;
+                        clientEquipName_orderRegisterPage_tab_1.value = detail.clientEquipName;
                         clientName_orderRegisterPage_tab_1.value = detail.clientName;
                         packDate_orderRegisterPage_tab_1.value = detail.packDate;
                         deliveryDate_orderRegisterPage_tab_1.value = detail.deliveryDate;
