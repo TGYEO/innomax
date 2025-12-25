@@ -164,7 +164,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
             }
 
             const data = await response.json();
-            let orders = data.data;
+            let orders = data.rows;
 
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a: any, b: any) => {

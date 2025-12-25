@@ -752,7 +752,7 @@ function initOrderRegister_tab_1(API_BASE) {
                 throw new Error("Failed to fetch orders");
             }
             const data = await response.json();
-            let orders = data.data;
+            let orders = data.rows;
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a, b) => {
                 const aNumber = parseInt(a.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
@@ -1092,7 +1092,7 @@ function initOrderRegister_tab_2(API_BASE) {
                 throw new Error("Failed to fetch orders");
             }
             const data = await response.json();
-            let orders = data.data;
+            let orders = data.rows;
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a, b) => {
                 const aNumber = parseInt(a.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
