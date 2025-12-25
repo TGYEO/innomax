@@ -36,7 +36,9 @@ export default function innomaxProjectsRouter(pool: Pool) {
         `SELECT code_no, detail_json FROM innomax_projects`
       );
 
-      res.json({ success: true, data: result.rows });
+      res.json({ success: true, 
+        data: result.rows,
+        rows: result.rows });
     } catch (err) {
       console.error("❌ 데이터 가져오기 실패:", err);
       res.status(500).json({ error: "DB 데이터 가져오기 실패" });

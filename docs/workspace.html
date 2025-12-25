@@ -25,9 +25,12 @@
 
                 <div class="flex items-center gap-4">
                     <div class="relative h-[40px] flex items-center">
-                        <img src="static/logo.png" alt="업무관리 시스템" class="h-10 object-contain shadow-2xl" />
+                        <img src="static/logo.png" alt="업무관리 시스템" class="h-10 object-contain shadow-2xl"
+                            id="logoImage" />
                     </div>
                 </div>
+
+
 
                 <button
                     class="nav-btn w-full text-left px-5 py-3 rounded-lg text-[20px] text-gray-700 hover:bg-gray-100"
@@ -175,7 +178,8 @@
                 <!-- 우측: 사용자 표현 + 로그아웃 -->
                 <div class="flex items-center gap-3 justify-self-end">
 
-
+                    <!-- 스톱워치 -->
+                    <div id="stopwatch" class="text-sm font-semibold text-red-500"></div>
 
                     <!-- Avatar + name -->
                     <button id="userMenuBtn"
@@ -217,6 +221,10 @@
 
                 </div>
             </header>
+
+            
+
+            
 
             <script>
                 (function () {

@@ -434,36 +434,13 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                 throw new Error("Failed to fetch orders");
             }
 
-            // 기존 코드 대체/보완용 (한줄로 빠르게 적용 가능)
             const data = await response.json();
-            console.debug('[fetchAndRenderOrderList] response payload:', data);
+            let orders = data.data;
 
-            // 안전하게 orders 추출 ----> 이렇게 해서 안되면 다른 문제임 무조건 태검 문의 ㄱ ㄱ ㄱ
-            let orders: any[] = [];
-            if (Array.isArray(data)) {
-                orders = data;
-            } else if (Array.isArray(data?.data)) {
-                orders = data.data;
-            } else if (Array.isArray((data as any)?.Data)) { // PascalCase 가능성 대비
-                orders = (data as any).Data;
-            } else if (Array.isArray((data as any)?.projects)) {
-                orders = (data as any).projects;
-            } else {
-                console.warn('[fetchAndRenderOrderList] orders 배열을 찾을 수 없음. payload 구조:', data);
-                // 디버그용 추가 로그: 응답이 문자열(HTML)인지 확인
-                try {
-                    const text = JSON.stringify(data);
-                    console.debug('[fetchAndRenderOrderList] payload as text:', text);
-                } catch (e) {
-                    console.debug('[fetchAndRenderOrderList] payload stringify 실패', e);
-                }
-                orders = []; // 안전하게 빈 배열로 처리
-            }
-
-            // 이후 정렬/렌더링 안전하게 수행
-            orders.sort((a: any, b: any) => {
-                const aNumber = parseInt((a?.code_no?.split('-')[1] ?? '0').substring(0, 3).replace(/\D/g, ''), 10) || 0;
-                const bNumber = parseInt((b?.code_no?.split('-')[1] ?? '0').substring(0, 3).replace(/\D/g, ''), 10) || 0;
+            // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
+            orders = orders.sort((a: any, b: any) => {
+                const aNumber = parseInt(a.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
+                const bNumber = parseInt(b.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
                 return aNumber - bNumber;
             });
 
