@@ -194,7 +194,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
         const orderNo = payload["specOrderNo_orderRegisterPage_tab_2"];
 
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/spec_update/${orderNo}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/spec_update/${orderNo}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -299,7 +299,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
 
 
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

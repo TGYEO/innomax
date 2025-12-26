@@ -655,7 +655,7 @@ function initOrderRegister_tab_1(API_BASE) {
             },
         };
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -715,7 +715,7 @@ function initOrderRegister_tab_1(API_BASE) {
             eqtype: EquipGroup_orderRegisterPage_tab_1.value,
         };
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/${orderNo_orderRegisterPage_tab_1.value}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/${orderNo_orderRegisterPage_tab_1.value}/`, {
                 method: "PUT", // PUT 메서드 사용
                 headers: {
                     "Content-Type": "application/json",
@@ -1131,7 +1131,7 @@ function initOrderRegister_tab_2(API_BASE) {
         const payload = gatherSpecPayload_tab_2();
         const orderNo = payload["specOrderNo_orderRegisterPage_tab_2"];
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/spec_update/${orderNo}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/spec_update/${orderNo}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -1214,7 +1214,7 @@ function initOrderRegister_tab_2(API_BASE) {
         updateProgressBar(50);
         await new Promise(resolve => setTimeout(resolve, 200)); // 완료 후 지연
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

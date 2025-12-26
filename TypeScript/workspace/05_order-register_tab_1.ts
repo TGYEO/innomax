@@ -306,7 +306,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
         };
 
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -378,7 +378,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
         };
 
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/${orderNo_orderRegisterPage_tab_1.value}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/${orderNo_orderRegisterPage_tab_1.value}/`, {
                 method: "PUT", // PUT 메서드 사용
                 headers: {
                     "Content-Type": "application/json",
