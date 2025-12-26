@@ -49,17 +49,17 @@ export function initOrderRegister_tab_2(API_BASE: string) {
         const textareas = container.querySelectorAll<HTMLTextAreaElement>("textarea");
         textareas.forEach(textarea => textarea.value = "");
 
-        
+
         inputs.forEach(input => {
             input.style.backgroundColor = "#ffffff"; // 흰색
         });
 
-        
+
         selects.forEach(select => {
-           select.style.backgroundColor = "#ffffff"; // 흰색
+            select.style.backgroundColor = "#ffffff"; // 흰색
         });
 
-        
+
         textareas.forEach(textarea => {
             textarea.style.backgroundColor = "#ffffff"; // 흰색
         });
@@ -233,10 +233,10 @@ export function initOrderRegister_tab_2(API_BASE: string) {
     //#region 수주건 사양 불러와서 fill 해버림
     async function fetchAndFillSpec_orderRegister_tab_2(number: string) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/target_callspec/${number}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json",
+                    Accept: "application/json",
                 },
             });
 
@@ -381,14 +381,12 @@ export function initOrderRegister_tab_2(API_BASE: string) {
 
                     showProgressModal("수주건 불러오는 중...");
                     updateProgressBar(10);
-                    await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
-
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
                             method: "GET",
                             headers: {
-                                "Content-Type": "application/json",
+                                Accept: "application/json",
                             },
                         });
 

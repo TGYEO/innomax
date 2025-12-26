@@ -8,47 +8,28 @@ export default function innomaxProjectsRouter(pool: Pool) {
   const router = express.Router();
 
 
-  router.get("/target/:number", async (req: Request, res: Response) => {
-    const { number } = req.params;
+  router.get("/targets/:number", async (req: Request, res: Response) => {
+    const { number } = req.params; // 문자열 그대로 사용해야함 시벌 ㅈㄴ 빡친다 새벽 3시 ㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂ
+    console.log("🔍 Fetching project data for number:", number);
+    if (!number) return res.status(400).json({ error: "number가 비어있습니다." });
 
     try {
-      // 특정 code_no에 해당하는 데이터 가져오기
       const result = await pool.query(
-        `SELECT code_no, detail_json FROM innomax_projects WHERE code_no = $1`,
+        `SELECT code_no, detail_json, detail_spec_json FROM innomax_projects WHERE code_no = $1`,
         [number]
       );
-
-      if (result.rowCount === 0) {
+      if (result.rowCount === 0)
         return res.status(404).json({ error: "해당 수주건 번호를 찾을 수 없습니다." });
-      }
 
-      res.json({ 
-        success: true, 
-        rows: result.rows[0] });
-    } catch (err) {
-      console.error("❌ 특정 수주건 데이터 가져오기 실패:", err);
-      res.status(500).json({ error: "DB 데이터 가져오기 실패" });
-    }
-  });
-
-
-  router.get("/target_callspec/:number", async (req: Request, res: Response) => {
-    const { number } = req.params;
-
-    try {
-      // 특정 code_no에 해당하는 데이터 가져오기
-      const result = await pool.query(
-        `SELECT code_no, detail_spec_json FROM innomax_projects WHERE code_no = $1`,
-        [number]
-      );
-
-      if (result.rowCount === 0) {
-        return res.status(404).json({ error: "해당 수주건 번호를 찾을 수 없습니다." });
-      }
-
-      res.json({ 
-        success: true, 
-        rows: result.rows[0] });
+      const row = result.rows[0];
+      res.json({
+        success: true,
+        rows: {
+          code_no: row.code_no,
+          detail_json: row.detail_json,
+          detail_spec_json: row.detail_spec_json,
+        },
+      });
     } catch (err) {
       console.error("❌ 특정 수주건 데이터 가져오기 실패:", err);
       res.status(500).json({ error: "DB 데이터 가져오기 실패" });
@@ -62,8 +43,10 @@ export default function innomaxProjectsRouter(pool: Pool) {
         `SELECT code_no, detail_json FROM innomax_projects`
       );
 
-      res.json({ success: true, 
-        rows: result.rows });
+      res.json({
+        success: true,
+        rows: result.rows
+      });
     } catch (err) {
       console.error("❌ 데이터 가져오기 실패:", err);
       res.status(500).json({ error: "DB 데이터 가져오기 실패" });
@@ -148,8 +131,6 @@ export default function innomaxProjectsRouter(pool: Pool) {
       res.status(500).json({ error: "DB 업데이트 실패" });
     }
   });
-
-
 
   router.post("/", async (req: Request, res: Response) => {
     const { orderNo, details } = req.body;

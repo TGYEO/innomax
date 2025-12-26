@@ -203,7 +203,7 @@ export function initOrderRegister_tab_3(API_BASE: string) {
 
 
 
-    //#region 캘린더 캔버스 구현
+    //#region 캘린더 캔버스 구현 건들필요 없음!
     const tasks = [
         "수주보고서 발행", "1차 Kick up", "2차 Kick up", "Layout", "PnID", "실행예산",
         "MAIN BODY(EFEM, BUFFER BODY 포함)", "LOCAL UNIT BODY", "OP PANEL",

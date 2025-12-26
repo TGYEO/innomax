@@ -511,26 +511,40 @@ export function initOrderRegister_tab_1(API_BASE: string) {
 
                     showProgressModal("수주건 불러오는 중...");
                     updateProgressBar(10);
-                    await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
+
 
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
-                            method: "GET",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        });
+                        console.log("Fetching order number:", number);
+                        if (!number) {
+                            alert("수주 번호가 비어있습니다.");
+                            return;
+                        }
+
+                        const response = await fetch(
+                            `${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`,
+                            {
+                                method: "GET",
+                                headers: {
+                                    Accept: "application/json",
+                                },
+                            }
+                        );
 
                         if (!response.ok) {
                             throw new Error("Failed to fetch order details");
                         }
 
                         const data = await response.json();
-                        const order = data.rows;
-                        const detail = order.detail_json;
+                        const rows = data?.rows;
+                        if (!rows) {
+                            throw new Error("Invalid response shape: rows is missing");
+                        }
 
-                        //불러온 수주건 정보로 입력폼 채우기
+                        const order = rows;                 // code_no 포함
+                        const detail = rows.detail_json;    // 디테일 JSON
+
+                        // 불러온 수주건 정보로 입력폼 채우기
                         orderNo_orderRegisterPage_tab_1.value = order.code_no;
                         equipName_orderRegisterPage_tab_1.value = detail.equipName;
                         clientEquipName_orderRegisterPage_tab_1.value = detail.clientEquipName;
@@ -544,7 +558,6 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         plcSub_orderRegisterPage_tab_1.value = detail.plcSub;
                         plcCompany_orderRegisterPage_tab_1.value = detail.plcCompany;
 
-
                         pcControlMain_orderRegisterPage_tab_1.value = detail.pcControlMain;
                         pcControlSub_orderRegisterPage_tab_1.value = detail.pcControlSub;
                         pcControlCompany_orderRegisterPage_tab_1.value = detail.pcControlCompany;
@@ -552,8 +565,6 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         pcGuiMain_orderRegisterPage_tab_1.value = detail.pcGuiMain;
                         pcGuiSub_orderRegisterPage_tab_1.value = detail.pcGuiSub;
                         pcGuiCompany_orderRegisterPage_tab_1.value = detail.pcGuiCompany;
-
-
 
                         wireMain_orderRegisterPage_tab_1.value = detail.wireMain;
                         wireSub_orderRegisterPage_tab_1.value = detail.wireSub;

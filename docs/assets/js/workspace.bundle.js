@@ -814,22 +814,30 @@ function initOrderRegister_tab_1(API_BASE) {
                     });
                     showProgressModal("수주건 불러오는 중...");
                     updateProgressBar(10);
-                    await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
+                        console.log("Fetching order number:", number);
+                        if (!number) {
+                            alert("수주 번호가 비어있습니다.");
+                            return;
+                        }
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
                             method: "GET",
                             headers: {
-                                "Content-Type": "application/json",
+                                Accept: "application/json",
                             },
                         });
                         if (!response.ok) {
                             throw new Error("Failed to fetch order details");
                         }
                         const data = await response.json();
-                        const order = data.rows;
-                        const detail = order.detail_json;
-                        //불러온 수주건 정보로 입력폼 채우기
+                        const rows = data?.rows;
+                        if (!rows) {
+                            throw new Error("Invalid response shape: rows is missing");
+                        }
+                        const order = rows; // code_no 포함
+                        const detail = rows.detail_json; // 디테일 JSON
+                        // 불러온 수주건 정보로 입력폼 채우기
                         orderNo_orderRegisterPage_tab_1.value = order.code_no;
                         equipName_orderRegisterPage_tab_1.value = detail.equipName;
                         clientEquipName_orderRegisterPage_tab_1.value = detail.clientEquipName;
@@ -1153,10 +1161,10 @@ function initOrderRegister_tab_2(API_BASE) {
     //#region 수주건 사양 불러와서 fill 해버림
     async function fetchAndFillSpec_orderRegister_tab_2(number) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/target_callspec/${number}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json",
+                    Accept: "application/json",
                 },
             });
             if (!response.ok) {
@@ -1266,13 +1274,12 @@ function initOrderRegister_tab_2(API_BASE) {
                     });
                     showProgressModal("수주건 불러오는 중...");
                     updateProgressBar(10);
-                    await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
                             method: "GET",
                             headers: {
-                                "Content-Type": "application/json",
+                                Accept: "application/json",
                             },
                         });
                         if (!response.ok) {
@@ -1557,7 +1564,7 @@ function initOrderRegister_tab_3(API_BASE) {
         });
     }
     //#endregion
-    //#region 캘린더 캔버스 구현
+    //#region 캘린더 캔버스 구현 건들필요 없음!
     const tasks = [
         "수주보고서 발행", "1차 Kick up", "2차 Kick up", "Layout", "PnID", "실행예산",
         "MAIN BODY(EFEM, BUFFER BODY 포함)", "LOCAL UNIT BODY", "OP PANEL",
