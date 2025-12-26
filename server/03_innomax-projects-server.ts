@@ -27,7 +27,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
     }
   });
 
-  router.get("/targets/:number", async (req: Request, res: Response) => {
+  router.get("/:number", async (req: Request, res: Response) => {
     const { number } = req.params;
     console.log("-----------------------------------------");
     console.log("🚀 API 호출됨: /api/innomax-projects/targets/" + number);

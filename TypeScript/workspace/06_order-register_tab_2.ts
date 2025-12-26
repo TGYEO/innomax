@@ -233,7 +233,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
     //#region 수주건 사양 불러와서 fill 해버림
     async function fetchAndFillSpec_orderRegister_tab_2(number: string) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -383,7 +383,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
                     updateProgressBar(10);
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
                             method: "GET",
                             headers: {
                                 Accept: "application/json",

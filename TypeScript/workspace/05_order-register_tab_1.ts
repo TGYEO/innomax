@@ -522,7 +522,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         }
 
                         const response = await fetch(
-                            `${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`,
+                            `${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`,
                             {
                                 method: "GET",
                                 headers: {

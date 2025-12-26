@@ -821,7 +821,7 @@ function initOrderRegister_tab_1(API_BASE) {
                             alert("수주 번호가 비어있습니다.");
                             return;
                         }
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
                             method: "GET",
                             headers: {
                                 Accept: "application/json",
@@ -1161,7 +1161,7 @@ function initOrderRegister_tab_2(API_BASE) {
     //#region 수주건 사양 불러와서 fill 해버림
     async function fetchAndFillSpec_orderRegister_tab_2(number) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -1276,7 +1276,7 @@ function initOrderRegister_tab_2(API_BASE) {
                     updateProgressBar(10);
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/targets/${encodeURIComponent(number)}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
                             method: "GET",
                             headers: {
                                 Accept: "application/json",
