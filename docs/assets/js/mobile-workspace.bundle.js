@@ -322,7 +322,7 @@ const isLocal = location.hostname === "localhost" ||
     location.hostname.includes("app.github.dev");
 const API_BASE = isLocal
     ? "http://127.0.0.1:5050"
-    : "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app";
+    : "https://port-0-innomax-mjna4bki53a952de.sel3.cloudtype.app";
 console.log("📱 [Mobile_Workspace] 초기화 시작");
 // ======================================================
 // 👤 로그인 인증 및 세션 관리

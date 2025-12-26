@@ -14,7 +14,7 @@ import { ModalUtil } from "./utils/ModalUtil";
 const dummy = "1";
 const API_BASE =
   location.hostname === "tgyeo.github.io"
-    ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
+    ? "https://port-0-innomax-mjna4bki53a952de.sel3.cloudtype.app"
     : "http://127.0.0.1:5050";
 
 function initLocalTabNavigation() {

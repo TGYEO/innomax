@@ -1131,7 +1131,7 @@ function initOrderRegister_tab_2(API_BASE) {
         const payload = gatherSpecPayload_tab_2();
         const orderNo = payload["specOrderNo_orderRegisterPage_tab_2"];
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/spec_update/${orderNo}/`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/spec_update/${orderNo}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -2275,7 +2275,7 @@ __webpack_require__.r(__webpack_exports__);
 // ==============================================================
 const dummy = "1";
 const API_BASE = location.hostname === "tgyeo.github.io"
-    ? "https://port-0-innomax-mghorm7bef413a34.sel3.cloudtype.app"
+    ? "https://port-0-innomax-mjna4bki53a952de.sel3.cloudtype.app"
     : "http://127.0.0.1:5050";
 function initLocalTabNavigation() {
     const navButtons = document.querySelectorAll(".nav-btn");
