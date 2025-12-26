@@ -222,9 +222,9 @@
                 </div>
             </header>
 
-            
 
-            
+
+
 
             <script>
                 (function () {
@@ -672,7 +672,7 @@
                                             사양 저장하기
                                         </button>
 
-                                
+
                                         <input type="text" id="specOrderNo_orderRegisterPage_tab_2"
                                             class="border border-gray-300 rounded-lg p-1.5 text-sm" readonly
                                             placeholder="수주번호">
@@ -7180,10 +7180,210 @@
 
 
 
-                            <!-- Panel 3 -->
+                            <!-- Panel 3  PMS 등록-->
                             <div id="orderRegisterPage_tab_3"
-                                class="tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none">
-                                <div class="p-4">패널 3 콘텐츠</div>
+                                class="grid grid-cols-1 gap-4 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none overflow-y-auto p-4">
+
+
+                                <div class="pms-calendar">
+                                    <table class="border-collapse border border-gray-300 w-full text-center text-sm">
+                                        <thead>
+                                            <tr id="month_header_row_orderRegisterPage_tab_3">
+                                                <th class="border border-gray-300 bg-gray-200 p-2 sticky-col"
+                                                    rowspan="2">작업 종류</th>
+                                                <th class="border border-gray-300 bg-gray-200 p-2 sticky-col-sub"
+                                                    rowspan="2">구분</th>
+                                            </tr>
+                                            <tr id="date_header_row_orderRegisterPage_tab_3">
+                                            </tr>
+                                        </thead>
+                                        <tbody id="calendar_body_orderRegisterPage_tab_3">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <style>
+                                    .pms-calendar {
+                                        overflow-x: auto;
+                                        white-space: nowrap;
+                                    }
+
+                                    .pms-calendar table {
+                                        min-width: 1200px;
+                                        border-spacing: 0;
+                                    }
+
+                                    .month-divider {
+                                        border-right: 3px solid #4b5563 !important;
+                                    }
+
+                                    /* 고정 컬럼 스타일 (작업종류) */
+                                    .sticky-col {
+                                        position: sticky;
+                                        left: 0;
+                                        z-index: 21;
+                                        background-color: #f3f4f6;
+                                        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+                                    }
+
+                                    /* 고정 컬럼 스타일 (구분: 실행/Actual) */
+                                    .sticky-col-sub {
+                                        position: sticky;
+                                        left: 100px;
+                                        z-index: 20;
+                                        background-color: #ffffff;
+                                        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+                                        width: 60px;
+                                    }
+                                </style>
+
+                                <script>
+                                    const tasks = [
+                                        "수주보고서 발행", "1차 Kick up", "2차 Kick up", "Layout", "PnID", "실행예산",
+                                        "MAIN BODY(EFEM, BUFFER BODY 포함)", "LOCAL UNIT BODY", "OP PANEL", "MAIN MONITOR BRACKET",
+                                        "RINSE 및 PROCESS CHAMBER", "CHAMBER UP-DOWN", "CHAMBER EXHAUST", "CHAMBER BASE",
+                                        "RINSE 및 PROCESS CHAMBER BOX", "SHUTTER", "INNER CUP", "CHAMBER BOX SENSOR",
+                                        "RINSE 및 PROCESS DISPENSER", "SPIN CHUCK", "SPINDLE", "고압 REGULATOR", "ROBOT ASSY",
+                                        "TANK", "BUFFER", "SERIAL NAME PLATE", "소음기 BOX", "MAIN BODY 배관설계", "LOCAL 배관 설계",
+                                        "Main Body 입고", "Local unit 입고", "Chamber base Setting", "Dispenser Setting",
+                                        "Chamber up-down Setting", "Spindle Setting", "Chamber exhaust Setting", "Chamber Cup Setting",
+                                        "Spin chuck Setting", "Chamber box Setting", "Shutter Setting", "Main Piping 및 Air Line Piping",
+                                        "Local Unit Piping 및 Air Line Piping", "Programming", "Wiring", "ATM Setting", "ATM Teaching",
+                                        "IO Check", "Manual Test", "Auto Running Test", "사내 QC", "Inspection", "PACKING", "출하"
+                                    ];
+
+                                    const holidays = {
+                                        // 2026년
+                                        "2026-01-01": "신정",
+                                        "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴",
+                                        "2026-03-01": "삼일절", "2026-03-02": "대체공휴일",
+                                        "2026-05-05": "어린이날",
+                                        "2026-05-24": "부처님오신날", "2026-05-25": "대체공휴일",
+                                        "2026-06-06": "현충일",
+                                        "2026-08-15": "광복절", "2026-08-17": "대체공휴일",
+                                        "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴",
+                                        "2026-10-03": "개천절", "2026-10-05": "대체공휴일",
+                                        "2026-10-09": "한글날",
+                                        "2026-12-25": "성탄절",
+
+                                        // 2027년
+                                        "2027-01-01": "신정",
+                                        "2027-02-06": "설날 연휴", "2027-02-07": "설날", "2027-02-08": "설날 연휴", "2027-02-09": "대체공휴일",
+                                        "2027-03-01": "삼일절",
+                                        "2027-05-05": "어린이날",
+                                        "2027-05-13": "부처님오신날",
+                                        "2027-06-06": "현충일", "2027-06-07": "대체공휴일",
+                                        "2027-08-15": "광복절", "2027-08-16": "대체공휴일",
+                                        "2027-09-14": "추석 연휴", "2027-09-15": "추석", "2027-09-16": "추석 연휴",
+                                        "2027-10-03": "개천절", "2027-10-04": "대체공휴일",
+                                        "2027-10-09": "한글날", "2027-10-11": "대체공휴일",
+                                        "2027-12-25": "성탄절", "2027-12-27": "대체공휴일",
+
+                                        // 2028년
+                                        "2028-01-01": "신정", "2028-01-03": "대체공휴일",
+                                        "2028-01-26": "설날 연휴", "2028-01-27": "설날", "2028-01-28": "설날 연휴",
+                                        "2028-03-01": "삼일절",
+                                        "2028-05-02": "부처님오신날",
+                                        "2028-05-05": "어린이날",
+                                        "2028-06-06": "현충일",
+                                        "2028-08-15": "광복절",
+                                        "2028-10-02": "추석 연휴", "2028-10-03": "추석/개천절", "2028-10-04": "추석 연휴", "2028-10-05": "대체공휴일",
+                                        "2028-10-09": "한글날",
+                                        "2028-12-25": "성탄절",
+
+                                        // 2029년
+                                        "2029-01-01": "신정",
+                                        "2029-02-12": "설날 연휴", "2029-02-13": "설날", "2029-02-14": "설날 연휴",
+                                        "2029-03-01": "삼일절",
+                                        "2029-05-05": "어린이날", "2029-05-07": "대체공휴일",
+                                        "2029-05-20": "부처님오신날", "2029-05-21": "대체공휴일",
+                                        "2029-06-06": "현충일",
+                                        "2029-08-15": "광복절",
+                                        "2029-09-21": "추석 연휴", "2029-09-22": "추석", "2029-09-23": "추석 연휴", "2029-09-24": "대체공휴일",
+                                        "2029-10-03": "개천절",
+                                        "2029-10-09": "한글날",
+                                        "2029-12-25": "성탄절",
+
+                                        // 2030년
+                                        "2030-01-01": "신정",
+                                        "2030-02-02": "설날 연휴", "2030-02-03": "설날", "2030-02-04": "설날 연휴",
+                                        "2030-03-01": "삼일절",
+                                        "2030-05-05": "어린이날", "2030-05-06": "대체공휴일",
+                                        "2030-05-09": "부처님오신날",
+                                        "2030-06-06": "현충일",
+                                        "2030-08-15": "광복절",
+                                        "2030-09-11": "추석 연휴", "2030-09-12": "추석", "2030-09-13": "추석 연휴",
+                                        "2030-10-03": "개천절",
+                                        "2030-10-09": "한글날",
+                                        "2030-12-25": "성탄절"
+                                    };
+
+
+                                    const startYear = 2026;
+                                    const endYear = 2030;
+
+                                    // 1. 날짜 데이터 미리 계산 (메모리 최적화)
+                                    let dateHeadersHtml = '';
+                                    let monthHeadersHtml = '';
+                                    let cellTemplates = []; // 각 날짜별 TD 템플릿 저장
+
+                                    for (let y = startYear; y <= endYear; y++) {
+                                        for (let m = 0; m < 12; m++) {
+                                            const lastDay = new Date(y, m + 1, 0).getDate();
+                                            monthHeadersHtml += `<th class="border border-gray-300 bg-gray-200 p-2 month-divider" colspan="${lastDay}">${y}년 ${m + 1}월</th>`;
+
+                                            for (let d = 1; d <= lastDay; d++) {
+                                                const curr = new Date(y, m, d);
+                                                const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                                                const dayOfWeek = curr.getDay();
+                                                const isLastDay = (d === lastDay);
+
+                                                // 헤더 클래스 결정
+                                                let thClass = "border border-gray-300 p-1 min-w-[30px]";
+                                                if (isLastDay) thClass += " month-divider";
+                                                if (dayOfWeek === 0 || holidays[dateStr]) thClass += " bg-red-100 text-red-600";
+                                                else if (dayOfWeek === 6) thClass += " bg-blue-100 text-blue-600";
+
+                                                dateHeadersHtml += `<th class="${thClass}">${d}</th>`;
+
+                                                // 바디 셀 템플릿 생성
+                                                let tdClass = "border border-gray-300 p-0";
+                                                if (isLastDay) tdClass += " month-divider";
+                                                if (dayOfWeek === 0 || dayOfWeek === 6) tdClass += " bg-gray-50";
+                                                cellTemplates.push(`<td class="${tdClass}"></td>`);
+                                            }
+                                        }
+                                    }
+
+                                    // 2. DOM 한 번에 그리기 (innerHTML 사용)
+                                    const monthRow = document.getElementById('month_header_row_orderRegisterPage_tab_3');
+                                    const dateRow = document.getElementById('date_header_row_orderRegisterPage_tab_3');
+                                    const calendarBody = document.getElementById('calendar_body_orderRegisterPage_tab_3');
+
+                                    // 헤더 주입
+                                    monthRow.innerHTML += monthHeadersHtml;
+                                    dateRow.innerHTML = dateHeadersHtml;
+
+                                    // 바디 생성 (문자열 결합 방식)
+                                    const allCellsHtml = cellTemplates.join('');
+                                    let bodyHtml = '';
+
+                                    tasks.forEach(task => {
+                                        // 실행 행
+                                        bodyHtml += `<tr>
+            <td class="border border-gray-300 p-2 sticky-col bg-white font-medium" rowspan="2">${task}</td>
+            <td class="border border-gray-300 p-1 sticky-col-sub bg-gray-50 text-xs">실행</td>
+            ${allCellsHtml}
+        </tr>`;
+                                        // Actual 행
+                                        bodyHtml += `<tr>
+            <td class="border border-gray-300 p-1 sticky-col-sub bg-white text-xs text-blue-600">Actual</td>
+            ${allCellsHtml}
+        </tr>`;
+                                    });
+
+                                    calendarBody.innerHTML = bodyHtml;
+                                </script>
                             </div>
 
 

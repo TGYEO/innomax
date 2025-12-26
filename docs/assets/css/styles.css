@@ -1092,6 +1092,9 @@ video {
 .min-w-\[220px\] {
   min-width: 220px;
 }
+.min-w-\[30px\] {
+  min-width: 30px;
+}
 .min-w-full {
   min-width: 100%;
 }
@@ -1606,6 +1609,10 @@ video {
 .border-gray-400 {
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity, 1));
+}
+.border-gray-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity, 1));
 }
 .border-gray-600 {
   --tw-border-opacity: 1;
