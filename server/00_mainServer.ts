@@ -28,22 +28,13 @@ const allowedOrigins = [
   "https://tgyeo.github.io",
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn(`🚫 CORS 차단됨: ${origin}`);
-        callback(new Error("CORS 정책에 의해 차단된 요청입니다."));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "X-Requested-With"],
-  })
-);
+// ✅ 모든 CORS 허용 설정 (가장 단순한 방법)
+app.use(cors({
+  origin: true, // 혹은 "*" (단, credentials 사용 시 true 권장)
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "X-Requested-With"],
+}));
 
 app.use(express.json());
 
