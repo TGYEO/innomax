@@ -63,6 +63,8 @@ export default function innomaxProjectsRouter(pool: Pool) {
   });
 
   router.put("/:order_no", async (req: Request, res: Response) => {
+    console.log("🔍 PUT /:order_no called");
+    console.log("🔍 Request Params:", req.params);
     const { order_no } = req.params; // URL에서 order_no 가져오기
     const details = req.body; // 요청 본문 전체를 details로 처리
 
