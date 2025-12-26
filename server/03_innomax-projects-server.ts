@@ -24,7 +24,6 @@ export default function innomaxProjectsRouter(pool: Pool) {
 
       res.json({ 
         success: true, 
-        data: result.rows[0],
         rows: result.rows[0] });
     } catch (err) {
       console.error("❌ 특정 수주건 데이터 가져오기 실패:", err);
@@ -49,7 +48,6 @@ export default function innomaxProjectsRouter(pool: Pool) {
 
       res.json({ 
         success: true, 
-        data: result.rows[0],
         rows: result.rows[0] });
     } catch (err) {
       console.error("❌ 특정 수주건 데이터 가져오기 실패:", err);
@@ -65,7 +63,6 @@ export default function innomaxProjectsRouter(pool: Pool) {
       );
 
       res.json({ success: true, 
-        data: result.rows,
         rows: result.rows });
     } catch (err) {
       console.error("❌ 데이터 가져오기 실패:", err);
