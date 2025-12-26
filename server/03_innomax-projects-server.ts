@@ -8,7 +8,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
   const router = express.Router();
 
 
-  
+
 
   router.get("/", async (req: Request, res: Response) => {
     try {
@@ -26,32 +26,34 @@ export default function innomaxProjectsRouter(pool: Pool) {
       res.status(500).json({ error: "DB 데이터 가져오기 실패" });
     }
   });
-  
+
   router.get("/targets/:number", async (req: Request, res: Response) => {
-    const { number } = req.params; // 문자열 그대로 사용해야함 시벌 ㅈㄴ 빡친다 새벽 3시 ㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂ
-    console.log("🔍 Fetching project data for number:", number);
-    if (!number) return res.status(400).json({ error: "number가 비어있습니다." });
+    const { number } = req.params;
+    console.log("-----------------------------------------");
+    console.log("🚀 API 호출됨: /api/innomax-projects/targets/" + number);
 
     try {
-      const result = await pool.query(
-        `SELECT code_no, detail_json, detail_spec_json FROM innomax_projects WHERE code_no = $1`,
-        [number]
+      // 일단 해당 번호가 포함된 게 있는지 LIKE로 먼저 찾아보기 (디버깅용)
+      const checkAny = await pool.query(
+        "SELECT code_no FROM innomax_projects WHERE code_no LIKE $1 LIMIT 5",
+        [`%${number}%`]
       );
-      if (result.rowCount === 0)
-        return res.status(404).json({ error: "해당 수주건 번호를 찾을 수 없습니다." });
+      console.log("🔍 유사 데이터 검색 결과:", checkAny.rows);
 
-      const row = result.rows[0];
-      res.json({
-        success: true,
-        rows: {
-          code_no: row.code_no,
-          detail_json: row.detail_json,
-          detail_spec_json: row.detail_spec_json,
-        },
-      });
+      const result = await pool.query(
+        "SELECT * FROM innomax_projects WHERE TRIM(code_no) = $1",
+        [number.trim()]
+      );
+
+      if (result.rowCount === 0) {
+        console.warn("❌ 데이터를 찾지 못함: " + number);
+        return res.status(404).json({ error: "데이터 없음", debug: `Requested: ${number}` });
+      }
+
+      res.json({ success: true, rows: result.rows[0] });
     } catch (err) {
-      console.error("❌ 특정 수주건 데이터 가져오기 실패:", err);
-      res.status(500).json({ error: "DB 데이터 가져오기 실패" });
+      console.error("❌ 서버 에러:", err);
+      res.status(500).send("Internal Server Error");
     }
   });
 
