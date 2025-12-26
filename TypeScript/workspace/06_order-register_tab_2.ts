@@ -233,7 +233,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
     //#region 수주건 사양 불러와서 fill 해버림
     async function fetchAndFillSpec_orderRegister_tab_2(number: string) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -244,9 +244,19 @@ export function initOrderRegister_tab_2(API_BASE: string) {
                 throw new Error("Failed to fetch order details");
             }
 
-            const data = await response.json();
-            const order = data.rows;
-            const detail_spec = order.detail_spec_json;
+            const result = await response.json(); // { ok: true, rows: [...] } 형태
+
+            // ✅ 핵심: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
+            const targetOrder = result.rows.find((row: any) => row.code_no === number);
+
+            if (!targetOrder) {
+                alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
+                hideProgressModal();
+                return;
+            }
+
+            // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
+            const detail_spec = targetOrder.detail_spec_json;
 
 
 
@@ -383,7 +393,7 @@ export function initOrderRegister_tab_2(API_BASE: string) {
                     updateProgressBar(10);
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                             method: "GET",
                             headers: {
                                 Accept: "application/json",
@@ -393,13 +403,22 @@ export function initOrderRegister_tab_2(API_BASE: string) {
                         if (!response.ok) {
                             throw new Error("Failed to fetch order details");
                         }
+                        const result = await response.json();
 
-                        const data = await response.json();
-                        const order = data.rows;
-                        const detail = order.detail_json;
+                        // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
+                        const targetOrder = result.rows.find((row: any) => row.code_no === number);
+
+                        if (!targetOrder) {
+                            alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
+                            hideProgressModal();
+                            return;
+                        }
+
+                        // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
+                        const detail = targetOrder.detail_json;
 
                         //불러온 수주건 정보로 입력폼 채우기
-                        (domElements.specOrderNo_orderRegisterPage_tab_2 as HTMLInputElement).value = order.code_no;
+                        (domElements.specOrderNo_orderRegisterPage_tab_2 as HTMLInputElement).value = detail.code_no;
                         (domElements.specOrderName_orderRegisterPage_tab_2 as HTMLInputElement).value = detail.equipName;
                         (domElements.specOrderClient_orderRegisterPage_tab_2 as HTMLInputElement).value = detail.clientName;
 

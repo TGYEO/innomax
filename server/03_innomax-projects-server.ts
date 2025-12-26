@@ -14,7 +14,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
     try {
       // 모든 데이터 가져오기
       const result = await pool.query(
-        `SELECT code_no, detail_json FROM innomax_projects`
+        `SELECT code_no, detail_json, detail_spec_json FROM innomax_projects`
       );
 
       res.json({
@@ -27,35 +27,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
     }
   });
 
-  router.get("/:number", async (req: Request, res: Response) => {
-    const { number } = req.params;
-    console.log("-----------------------------------------");
-    console.log("🚀 API 호출됨: /api/innomax-projects/targets/" + number);
-
-    try {
-      // 일단 해당 번호가 포함된 게 있는지 LIKE로 먼저 찾아보기 (디버깅용)
-      const checkAny = await pool.query(
-        "SELECT code_no FROM innomax_projects WHERE code_no LIKE $1 LIMIT 5",
-        [`%${number}%`]
-      );
-      console.log("🔍 유사 데이터 검색 결과:", checkAny.rows);
-
-      const result = await pool.query(
-        "SELECT * FROM innomax_projects WHERE TRIM(code_no) = $1",
-        [number.trim()]
-      );
-
-      if (result.rowCount === 0) {
-        console.warn("❌ 데이터를 찾지 못함: " + number);
-        return res.status(404).json({ error: "데이터 없음", debug: `Requested: ${number}` });
-      }
-
-      res.json({ success: true, rows: result.rows[0] });
-    } catch (err) {
-      console.error("❌ 서버 에러:", err);
-      res.status(500).send("Internal Server Error");
-    }
-  });
+ 
 
   router.put("/:order_no", async (req: Request, res: Response) => {
     const { order_no } = req.params; // URL에서 order_no 가져오기

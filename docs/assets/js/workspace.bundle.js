@@ -746,7 +746,7 @@ function initOrderRegister_tab_1(API_BASE) {
         updateProgressBar(50);
         await new Promise(resolve => setTimeout(resolve, 200)); // 완료 후 지연
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -815,53 +815,54 @@ function initOrderRegister_tab_1(API_BASE) {
                     showProgressModal("수주건 불러오는 중...");
                     updateProgressBar(10);
                     //해당 수주건 정보 불러오기
+                    // ... 기존 코드 생략
+                    // 해당 수주건 정보 불러오기
                     try {
-                        console.log("Fetching order number:", number);
-                        if (!number) {
-                            alert("수주 번호가 비어있습니다.");
-                            return;
-                        }
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
+                        console.log("Fetching data and filtering for number:", number);
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                             method: "GET",
                             headers: {
-                                Accept: "application/json",
+                                "Accept": "application/json",
                             },
                         });
                         if (!response.ok) {
-                            throw new Error("Failed to fetch order details");
+                            throw new Error("Failed to fetch order list");
                         }
-                        const data = await response.json();
-                        const rows = data?.rows;
-                        if (!rows) {
-                            throw new Error("Invalid response shape: rows is missing");
+                        const result = await response.json();
+                        // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
+                        const targetOrder = result.rows.find((row) => row.code_no === number);
+                        if (!targetOrder) {
+                            alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
+                            hideProgressModal();
+                            return;
                         }
-                        const order = rows; // code_no 포함
-                        const detail = rows.detail_json; // 디테일 JSON
-                        // 불러온 수주건 정보로 입력폼 채우기
-                        orderNo_orderRegisterPage_tab_1.value = order.code_no;
-                        equipName_orderRegisterPage_tab_1.value = detail.equipName;
-                        clientEquipName_orderRegisterPage_tab_1.value = detail.clientEquipName;
-                        clientName_orderRegisterPage_tab_1.value = detail.clientName;
-                        packDate_orderRegisterPage_tab_1.value = detail.packDate;
-                        deliveryDate_orderRegisterPage_tab_1.value = detail.deliveryDate;
-                        hartMakeMain_orderRegisterPage_tab_1.value = detail.hartMakeMain;
-                        hartMakeSub_orderRegisterPage_tab_1.value = detail.hartMakeSub;
-                        hartMakeCompany_orderRegisterPage_tab_1.value = detail.hartMakeCompany;
-                        plcMain_orderRegisterPage_tab_1.value = detail.plcMain;
-                        plcSub_orderRegisterPage_tab_1.value = detail.plcSub;
-                        plcCompany_orderRegisterPage_tab_1.value = detail.plcCompany;
-                        pcControlMain_orderRegisterPage_tab_1.value = detail.pcControlMain;
-                        pcControlSub_orderRegisterPage_tab_1.value = detail.pcControlSub;
-                        pcControlCompany_orderRegisterPage_tab_1.value = detail.pcControlCompany;
-                        pcGuiMain_orderRegisterPage_tab_1.value = detail.pcGuiMain;
-                        pcGuiSub_orderRegisterPage_tab_1.value = detail.pcGuiSub;
-                        pcGuiCompany_orderRegisterPage_tab_1.value = detail.pcGuiCompany;
-                        wireMain_orderRegisterPage_tab_1.value = detail.wireMain;
-                        wireSub_orderRegisterPage_tab_1.value = detail.wireSub;
-                        wireCompany_orderRegisterPage_tab_1.value = detail.wireCompany;
-                        setupMain_orderRegisterPage_tab_1.value = detail.setupMain;
-                        setupSub_orderRegisterPage_tab_1.value = detail.setupSub;
-                        EquipGroup_orderRegisterPage_tab_1.value = detail.eqtype;
+                        // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
+                        const detail = targetOrder.detail_json;
+                        // 불러온 수주건 정보로 입력폼 채우기 (안전하게 처리하기 위해 || "" 추가)
+                        orderNo_orderRegisterPage_tab_1.value = targetOrder.code_no || "";
+                        equipName_orderRegisterPage_tab_1.value = detail.equipName || "";
+                        clientEquipName_orderRegisterPage_tab_1.value = detail.clientEquipName || "";
+                        clientName_orderRegisterPage_tab_1.value = detail.clientName || "";
+                        packDate_orderRegisterPage_tab_1.value = detail.packDate || "";
+                        deliveryDate_orderRegisterPage_tab_1.value = detail.deliveryDate || "";
+                        hartMakeMain_orderRegisterPage_tab_1.value = detail.hartMakeMain || "";
+                        hartMakeSub_orderRegisterPage_tab_1.value = detail.hartMakeSub || "";
+                        hartMakeCompany_orderRegisterPage_tab_1.value = detail.hartMakeCompany || "";
+                        plcMain_orderRegisterPage_tab_1.value = detail.plcMain || "";
+                        plcSub_orderRegisterPage_tab_1.value = detail.plcSub || "";
+                        plcCompany_orderRegisterPage_tab_1.value = detail.plcCompany || "";
+                        pcControlMain_orderRegisterPage_tab_1.value = detail.pcControlMain || "";
+                        pcControlSub_orderRegisterPage_tab_1.value = detail.pcControlSub || "";
+                        pcControlCompany_orderRegisterPage_tab_1.value = detail.pcControlCompany || "";
+                        pcGuiMain_orderRegisterPage_tab_1.value = detail.pcGuiMain || "";
+                        pcGuiSub_orderRegisterPage_tab_1.value = detail.pcGuiSub || "";
+                        pcGuiCompany_orderRegisterPage_tab_1.value = detail.pcGuiCompany || "";
+                        wireMain_orderRegisterPage_tab_1.value = detail.wireMain || "";
+                        wireSub_orderRegisterPage_tab_1.value = detail.wireSub || "";
+                        wireCompany_orderRegisterPage_tab_1.value = detail.wireCompany || "";
+                        setupMain_orderRegisterPage_tab_1.value = detail.setupMain || "";
+                        setupSub_orderRegisterPage_tab_1.value = detail.setupSub || "";
+                        EquipGroup_orderRegisterPage_tab_1.value = detail.eqtype || "";
                     }
                     catch (error) {
                         console.error("Error fetching order details:", error);
@@ -1161,7 +1162,7 @@ function initOrderRegister_tab_2(API_BASE) {
     //#region 수주건 사양 불러와서 fill 해버림
     async function fetchAndFillSpec_orderRegister_tab_2(number) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
@@ -1170,9 +1171,16 @@ function initOrderRegister_tab_2(API_BASE) {
             if (!response.ok) {
                 throw new Error("Failed to fetch order details");
             }
-            const data = await response.json();
-            const order = data.rows;
-            const detail_spec = order.detail_spec_json;
+            const result = await response.json(); // { ok: true, rows: [...] } 형태
+            // ✅ 핵심: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
+            const targetOrder = result.rows.find((row) => row.code_no === number);
+            if (!targetOrder) {
+                alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
+                hideProgressModal();
+                return;
+            }
+            // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
+            const detail_spec = targetOrder.detail_spec_json;
             // 불러온 수주건 정보로 입력폼 채우기
             for (const key in detail_spec) {
                 const element = container.querySelector(`#${key}`);
@@ -1276,7 +1284,7 @@ function initOrderRegister_tab_2(API_BASE) {
                     updateProgressBar(10);
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/${encodeURIComponent(number)}`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
                             method: "GET",
                             headers: {
                                 Accept: "application/json",
@@ -1285,11 +1293,18 @@ function initOrderRegister_tab_2(API_BASE) {
                         if (!response.ok) {
                             throw new Error("Failed to fetch order details");
                         }
-                        const data = await response.json();
-                        const order = data.rows;
-                        const detail = order.detail_json;
+                        const result = await response.json();
+                        // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
+                        const targetOrder = result.rows.find((row) => row.code_no === number);
+                        if (!targetOrder) {
+                            alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
+                            hideProgressModal();
+                            return;
+                        }
+                        // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
+                        const detail = targetOrder.detail_json;
                         //불러온 수주건 정보로 입력폼 채우기
-                        domElements.specOrderNo_orderRegisterPage_tab_2.value = order.code_no;
+                        domElements.specOrderNo_orderRegisterPage_tab_2.value = detail.code_no;
                         domElements.specOrderName_orderRegisterPage_tab_2.value = detail.equipName;
                         domElements.specOrderClient_orderRegisterPage_tab_2.value = detail.clientName;
                     }
