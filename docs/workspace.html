@@ -672,11 +672,7 @@
                                             사양 저장하기
                                         </button>
 
-                                        <button id="specEdit_orderRegisterPage_tab_2"
-                                            class="px-4 py-2 text-sm font-semibold border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 rounded-md transition-colors">
-                                            사양 수정하기
-                                        </button>
-
+                                
                                         <input type="text" id="specOrderNo_orderRegisterPage_tab_2"
                                             class="border border-gray-300 rounded-lg p-1.5 text-sm" readonly
                                             placeholder="수주번호">
@@ -688,6 +684,11 @@
                                         <input type="text" id="specOrderClient_orderRegisterPage_tab_2"
                                             class="border border-gray-300 rounded-lg p-1.5 text-sm" readonly
                                             placeholder="고객명">
+
+                                        <button id="init_orderRegisterPage_tab_2"
+                                            class="px-4 py-2 text-sm font-semibold border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                                            초기화
+                                        </button>
                                     </div>
 
                                     <!-- 💛-->
@@ -709,7 +710,7 @@
 
                                             <select id="Use_Inch1_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 Inch 를 선택하세요</option>
+                                                <option value="" selected>사용 Inch 를 선택하세요</option>
                                                 <option value="12Inch">12 Inch</option>
                                                 <option value="8Inch">8 Inch</option>
                                                 <option value="6Inch">6 Inch</option>
@@ -718,7 +719,7 @@
 
                                             <select id="Use_Inch2_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 Inch 를 선택하세요(겸용시)</option>
+                                                <option value="" selected>사용 Inch 를 선택하세요(겸용시)</option>
                                                 <option value="12Inch">12 Inch</option>
                                                 <option value="8Inch">8 Inch</option>
                                                 <option value="6Inch">6 Inch</option>
@@ -803,14 +804,14 @@
 
                                             <select id="loader2_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="loader2_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="Brooks">브룩스</option>
                                                 <option value="Symphonia">심포니아</option>
                                                 <option value="InnomaxLoader">이노맥스 로더</option>
@@ -818,7 +819,7 @@
 
                                             <select id="loader2_mappingSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="" selected>맵핑방식을 선택하세요</option>
                                                 <option value="FoupMapping">Foup 맵핑</option>
                                                 <option value="RobotMapping">Robot 맵핑</option>
                                                 <option value="InnomaxMapping">이노맥스 맵핑</option>
@@ -847,14 +848,14 @@
 
                                             <select id="loader3_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="loader3_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="Brooks">브룩스</option>
                                                 <option value="Symphonia">심포니아</option>
                                                 <option value="InnomaxLoader">이노맥스 로더</option>
@@ -862,7 +863,7 @@
 
                                             <select id="loader3_mappingSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="" selected>맵핑방식을 선택하세요</option>
                                                 <option value="FoupMapping">Foup 맵핑</option>
                                                 <option value="RobotMapping">Robot 맵핑</option>
                                                 <option value="InnomaxMapping">이노맥스 맵핑</option>
@@ -891,14 +892,14 @@
 
                                             <select id="loader4_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="loader4_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="Brooks">브룩스</option>
                                                 <option value="Symphonia">심포니아</option>
                                                 <option value="InnomaxLoader">이노맥스 로더</option>
@@ -906,7 +907,7 @@
 
                                             <select id="loader4_mappingSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>맵핑방식을 선택하세요</option>
+                                                <option value="" selected>맵핑방식을 선택하세요</option>
                                                 <option value="FoupMapping">Foup 맵핑</option>
                                                 <option value="RobotMapping">Robot 맵핑</option>
                                                 <option value="InnomaxMapping">이노맥스 맵핑</option>
@@ -945,21 +946,21 @@
 
                                             <select id="robot1_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="robot1_usage_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="" selected>용도 선택</option>
                                                 <option value="efem">EFEM</option>
                                                 <option value="transfer">Transfer</option>
                                             </select>
 
                                             <select id="robot1_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="rnd">RND</option>
                                                 <option value="koro">KORO</option>
                                                 <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
@@ -992,21 +993,21 @@
 
                                             <select id="robot2_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="robot2_usage_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="" selected>용도 선택</option>
                                                 <option value="efem">EFEM</option>
                                                 <option value="transfer">Transfer</option>
                                             </select>
 
                                             <select id="robot2_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="rnd">RND</option>
                                                 <option value="koro">KORO</option>
                                                 <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
@@ -1039,21 +1040,21 @@
 
                                             <select id="robot3_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="robot3_usage_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="" selected>용도 선택</option>
                                                 <option value="efem">EFEM</option>
                                                 <option value="transfer">Transfer</option>
                                             </select>
 
                                             <select id="robot3_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="rnd">RND</option>
                                                 <option value="koro">KORO</option>
                                                 <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
@@ -1086,21 +1087,21 @@
 
                                             <select id="robot4_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="robot4_usage_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>용도 선택</option>
+                                                <option value="" selected>용도 선택</option>
                                                 <option value="efem">EFEM</option>
                                                 <option value="transfer">Transfer</option>
                                             </select>
 
                                             <select id="robot4_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="rnd">RND</option>
                                                 <option value="koro">KORO</option>
                                                 <option value="innomax_redwin">이노맥스 로봇(Redwin)</option>
@@ -1145,14 +1146,14 @@
 
                                             <select id="buffer1_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="buffer1_centeringUseSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>Centering 사용 여부</option>
+                                                <option value="" selected>Centering 사용 여부</option>
                                                 <option value="centering_use">사용</option>
                                                 <option value="centering_not_use">미사용</option>
                                             </select>
@@ -1186,7 +1187,7 @@
 
                                             <select id="buffer2_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
@@ -1247,7 +1248,7 @@
 
                                             <select id="immersionBath_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
@@ -1271,14 +1272,14 @@
 
                                             <select id="aliger_useSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>사용 여부를 선택하세요</option>
+                                                <option value="" selected>사용 여부를 선택하세요</option>
                                                 <option value="use">사용</option>
                                                 <option value="not_use">미사용</option>
                                             </select>
 
                                             <select id="aliger_brandSelection_orderRegisterPage_tab_2"
                                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm mt-2">
-                                                <option value="" disabled selected>브랜드를 선택하세요</option>
+                                                <option value="" selected>브랜드를 선택하세요</option>
                                                 <option value="bluecode">블루코드</option>
                                             </select>
 

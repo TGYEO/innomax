@@ -489,7 +489,6 @@ export function initOrderRegister_tab_1(API_BASE: string) {
 
 
     //#region 현재 수주건 테이블에서 버튼 클릭 이벤트쪽
-
     function bindRowEvents() {
         orderListBody_orderRegisterPage_tab_1.querySelectorAll("button").forEach((btn) => {
             btn.addEventListener("click", async (e) => {
@@ -528,7 +527,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         }
 
                         const data = await response.json();
-                        const order = data.data;
+                        const order = data.rows;
                         const detail = order.detail_json;
 
                         //불러온 수주건 정보로 입력폼 채우기
