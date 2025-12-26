@@ -15,6 +15,7 @@ import innomaxProgressRouter from "./05_innomax-progress-server";
 dotenv.config();
 
 const app = express();
+app.set('strict routing', false); // 이 줄을 추가하세요.
 const PORT = Number(process.env.PORT) || 5050;
 
 // ✅ CORS 설정

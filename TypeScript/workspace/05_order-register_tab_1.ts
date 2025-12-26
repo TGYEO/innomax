@@ -378,11 +378,12 @@ export function initOrderRegister_tab_1(API_BASE: string) {
         };
 
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/${orderNo_orderRegisterPage_tab_1.value}`, {
-                method: "PUT", // PUT 메서드 사용
-                headers: {
-                    "Content-Type": "application/json",
-                },
+            const orderNo = orderNo_orderRegisterPage_tab_1.value.trim(); // 공백 제거
+            const url = `${API_BASE}/api/innomax-projects/${encodeURIComponent(orderNo)}`; // 슬래시 중복 확인 필수
+
+            const response = await fetch(url, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });
 
@@ -533,7 +534,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         }
 
                         const result = await response.json();
-                        
+
                         // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
                         const targetOrder = result.rows.find((row: any) => row.code_no === number);
 

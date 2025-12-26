@@ -715,11 +715,11 @@ function initOrderRegister_tab_1(API_BASE) {
             eqtype: EquipGroup_orderRegisterPage_tab_1.value,
         };
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/${orderNo_orderRegisterPage_tab_1.value}`, {
-                method: "PUT", // PUT 메서드 사용
-                headers: {
-                    "Content-Type": "application/json",
-                },
+            const orderNo = orderNo_orderRegisterPage_tab_1.value.trim(); // 공백 제거
+            const url = `${API_BASE}/api/innomax-projects/${encodeURIComponent(orderNo)}`; // 슬래시 중복 확인 필수
+            const response = await fetch(url, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });
             if (!response.ok) {
