@@ -8,6 +8,25 @@ export default function innomaxProjectsRouter(pool: Pool) {
   const router = express.Router();
 
 
+  
+
+  router.get("/", async (req: Request, res: Response) => {
+    try {
+      // 모든 데이터 가져오기
+      const result = await pool.query(
+        `SELECT code_no, detail_json FROM innomax_projects`
+      );
+
+      res.json({
+        success: true,
+        rows: result.rows
+      });
+    } catch (err) {
+      console.error("❌ 데이터 가져오기 실패:", err);
+      res.status(500).json({ error: "DB 데이터 가져오기 실패" });
+    }
+  });
+  
   router.get("/targets/:number", async (req: Request, res: Response) => {
     const { number } = req.params; // 문자열 그대로 사용해야함 시벌 ㅈㄴ 빡친다 새벽 3시 ㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂㅅㅂ
     console.log("🔍 Fetching project data for number:", number);
@@ -35,24 +54,6 @@ export default function innomaxProjectsRouter(pool: Pool) {
       res.status(500).json({ error: "DB 데이터 가져오기 실패" });
     }
   });
-
-  router.get("/", async (req: Request, res: Response) => {
-    try {
-      // 모든 데이터 가져오기
-      const result = await pool.query(
-        `SELECT code_no, detail_json FROM innomax_projects`
-      );
-
-      res.json({
-        success: true,
-        rows: result.rows
-      });
-    } catch (err) {
-      console.error("❌ 데이터 가져오기 실패:", err);
-      res.status(500).json({ error: "DB 데이터 가져오기 실패" });
-    }
-  });
-
 
   router.put("/:order_no", async (req: Request, res: Response) => {
     const { order_no } = req.params; // URL에서 order_no 가져오기
