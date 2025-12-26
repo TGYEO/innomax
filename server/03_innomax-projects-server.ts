@@ -8,14 +8,14 @@ export default function innomaxProjectsRouter(pool: Pool) {
   const router = express.Router();
 
 
-  router.get("/target/:code_no", async (req: Request, res: Response) => {
-    const { code_no } = req.params;
+  router.get("/target/:number", async (req: Request, res: Response) => {
+    const { number } = req.params;
 
     try {
       // 특정 code_no에 해당하는 데이터 가져오기
       const result = await pool.query(
         `SELECT code_no, detail_json FROM innomax_projects WHERE code_no = $1`,
-        [code_no]
+        [number]
       );
 
       if (result.rowCount === 0) {
@@ -33,14 +33,14 @@ export default function innomaxProjectsRouter(pool: Pool) {
   });
 
 
-  router.get("/target_callspec/:code_no", async (req: Request, res: Response) => {
-    const { code_no } = req.params;
+  router.get("/target_callspec/:number", async (req: Request, res: Response) => {
+    const { number } = req.params;
 
     try {
       // 특정 code_no에 해당하는 데이터 가져오기
       const result = await pool.query(
         `SELECT code_no, detail_spec_json FROM innomax_projects WHERE code_no = $1`,
-        [code_no]
+        [number]
       );
 
       if (result.rowCount === 0) {

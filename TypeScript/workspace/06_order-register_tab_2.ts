@@ -231,9 +231,9 @@ export function initOrderRegister_tab_2(API_BASE: string) {
 
 
     //#region 수주건 사양 불러와서 fill 해버림
-    async function fetchAndFillSpec_orderRegister_tab_2(orderNo: string) {
+    async function fetchAndFillSpec_orderRegister_tab_2(number: string) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/target_callspec/${orderNo}`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/target_callspec/${number}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

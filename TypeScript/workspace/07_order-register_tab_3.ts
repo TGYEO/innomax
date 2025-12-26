@@ -125,81 +125,81 @@ export function initOrderRegister_tab_3(API_BASE: string) {
 
     }
     //#endregion
- 
+
     //#region 현재 수주건 테이블에서 버튼 클릭 이벤트쪽  
-        function bindRowEvents() {
-            domElements.orderListBody_orderList_Modal_orderRegisterPage_tab_3.querySelectorAll("button").forEach((btn) => {
-                btn.addEventListener("click", async (e) => {
-                    const target = e.currentTarget as HTMLElement;
-                    const action = target.dataset.action;
-                    const number = target.dataset.number;
-    
-                    if (!action || !number) return;
-    
-                    if (action === "code_no_button") {
-    
-    
-                        console.log(`[order_registerPage_tab_1] 수주번호 클릭: ${number}`);
-    
-                        await ModalUtil.confirm({
-                            title: "수주건 정보 불러오기",
-                            message: `수주번호 ${number} 의 정보를 불러오시겠습니까?`,
-                            type: "info"
+    function bindRowEvents() {
+        domElements.orderListBody_orderList_Modal_orderRegisterPage_tab_3.querySelectorAll("button").forEach((btn) => {
+            btn.addEventListener("click", async (e) => {
+                const target = e.currentTarget as HTMLElement;
+                const action = target.dataset.action;
+                const number = target.dataset.number;
+
+                if (!action || !number) return;
+
+                if (action === "code_no_button") {
+
+
+                    console.log(`[order_registerPage_tab_1] 수주번호 클릭: ${number}`);
+
+                    await ModalUtil.confirm({
+                        title: "수주건 정보 불러오기",
+                        message: `수주번호 ${number} 의 정보를 불러오시겠습니까?`,
+                        type: "info"
+                    });
+
+                    showProgressModal("수주건 불러오는 중...");
+                    updateProgressBar(10);
+                    await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
+
+                    //해당 수주건 정보 불러오기
+                    try {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
                         });
-    
-                        showProgressModal("수주건 불러오는 중...");
-                        updateProgressBar(10);
-                        await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
-    
-                        //해당 수주건 정보 불러오기
-                        try {
-                            const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
-                                method: "GET",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                            });
-    
-                            if (!response.ok) {
-                                throw new Error("Failed to fetch order details");
-                            }
-    
-                            const data = await response.json();
-                            const order = data.rows;
-                            const detail = order.detail_json;
-    
-                            //불러온 수주건 정보로 입력폼 채우기
-                            (domElements.specOrderNo_orderRegisterPage_tab_3 as HTMLInputElement).value = order.code_no;
-                            (domElements.specOrderName_orderRegisterPage_tab_3 as HTMLInputElement).value = detail.equipName;
-                            (domElements.specOrderClient_orderRegisterPage_tab_3 as HTMLInputElement).value = detail.clientName;
-    
-    
-    
-                        } catch (error) {
-                            console.error("Error fetching order details:", error);
-                            alert("Error fetching order details. Please try again. 개발자 문의!");
+
+                        if (!response.ok) {
+                            throw new Error("Failed to fetch order details");
                         }
-    
-                        updateProgressBar(50);
-                        await new Promise(resolve => setTimeout(resolve, 200)); // 완료 후 지연
-                        updateProgressBar(100);
-                        await new Promise(resolve => setTimeout(resolve, 100)); // 완료 후 지연
-    
-                        hideProgressModal();
-    
-                        //visible_option("call");
-    
-                        
+
+                        const data = await response.json();
+                        const order = data.rows;
+                        const detail = order.detail_json;
+
+                        //불러온 수주건 정보로 입력폼 채우기
+                        (domElements.specOrderNo_orderRegisterPage_tab_3 as HTMLInputElement).value = order.code_no;
+                        (domElements.specOrderName_orderRegisterPage_tab_3 as HTMLInputElement).value = detail.equipName;
+                        (domElements.specOrderClient_orderRegisterPage_tab_3 as HTMLInputElement).value = detail.clientName;
+
+
+
+                    } catch (error) {
+                        console.error("Error fetching order details:", error);
+                        alert("Error fetching order details. Please try again. 개발자 문의!");
                     }
-    
-    
-                });
+
+                    updateProgressBar(50);
+                    await new Promise(resolve => setTimeout(resolve, 200)); // 완료 후 지연
+                    updateProgressBar(100);
+                    await new Promise(resolve => setTimeout(resolve, 100)); // 완료 후 지연
+
+                    hideProgressModal();
+
+                    //visible_option("call");
+
+
+                }
+
+
             });
-        }
-    
-    
-        //#endregion
-    
+        });
+    }
+
+
+    //#endregion
+
 
 
 
@@ -276,7 +276,7 @@ export function initOrderRegister_tab_3(API_BASE: string) {
         canvas.width = totalWidth;
         canvas.height = totalHeight + HEADER_HEIGHT;
 
-        
+
 
         // 좌측 패널 생성 및 이벤트 바인딩
         tasks.forEach((task, idx) => {
@@ -365,22 +365,22 @@ export function initOrderRegister_tab_3(API_BASE: string) {
                     const range = taskRanges[j];
 
                     let cellColor = '#ffffff';
-if (j === currentSelectedRow) cellColor = '#fff3cd'; // 더 진한 노랑
-if (isWeekend) cellColor = '#e9ecef'; // 더 진한 회색
+                    if (j === currentSelectedRow) cellColor = '#fff3cd'; // 더 진한 노랑
+                    if (isWeekend) cellColor = '#e9ecef'; // 더 진한 회색
 
-if (range.start && range.end) {
-    if (dateStr >= range.start && dateStr <= range.end) {
-        cellColor = '#2563eb'; // 더 진한 파랑
-    }
-}
+                    if (range.start && range.end) {
+                        if (dateStr >= range.start && dateStr <= range.end) {
+                            cellColor = '#2563eb'; // 더 진한 파랑
+                        }
+                    }
 
                     ctx.fillStyle = cellColor;
                     ctx.fillRect(x, y, CELL_WIDTH, ROW_HEIGHT);
 
                     // 날짜 셀 구분선
                     ctx.strokeStyle = '#cbd5e1'; // 더 진한 회색
-ctx.lineWidth = 1;
-ctx.strokeRect(x, y, CELL_WIDTH, ROW_HEIGHT);
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, CELL_WIDTH, ROW_HEIGHT);
 
                     // 월 구분선
                     const nextDate = new Date(date);
