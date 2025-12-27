@@ -95,5 +95,5 @@ app.get("/", (req: Request, res: Response) => {
 
 // ✅ 서버 실행
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 즐즐즐ㄴServer running on http://localhost:${PORT}`);
 });
