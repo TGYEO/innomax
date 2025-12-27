@@ -716,9 +716,9 @@ function initOrderRegister_tab_1(API_BASE) {
         };
         try {
             const orderNo = orderNo_orderRegisterPage_tab_1.value.trim(); // 공백 제거
-            const url = `${API_BASE}/api/innomax-projects/${encodeURIComponent(orderNo)}`; // 슬래시 중복 확인 필수
+            const url = `${API_BASE}/api/innomax-projects/${encodeURIComponent(orderNo)}`;
             const response = await fetch(url, {
-                method: "PUT",
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });

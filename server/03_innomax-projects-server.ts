@@ -11,6 +11,7 @@ export default function innomaxProjectsRouter(pool: Pool) {
 
 
   router.get("/", async (req: Request, res: Response) => {
+    console.log("일단은 들어오는 시밤 겟");
     try {
       // 모든 데이터 가져오기
       const result = await pool.query(
@@ -27,7 +28,9 @@ export default function innomaxProjectsRouter(pool: Pool) {
     }
   });
 
-  router.put("/spec_update/:order_no", async (req: Request, res: Response) => {
+  router.post("/spec_update/:order_no", async (req: Request, res: Response) => {
+
+    console.log("일단은 들어오는 시밤1");
     const { order_no } = req.params; // URL에서 order_no 가져오기
     const details_spec = req.body; // 요청 본문 전체를 details로 처리
 
@@ -62,9 +65,9 @@ export default function innomaxProjectsRouter(pool: Pool) {
     }
   });
 
-  router.put("/:order_no", async (req: Request, res: Response) => {
-    console.log("🔍 PUT /:order_no called");
-    console.log("🔍 Request Params:", req.params);
+  router.post("/:order_no", async (req: Request, res: Response) => {
+    console.log("일단은 들어오는 시밤2");
+    
     const { order_no } = req.params; // URL에서 order_no 가져오기
     const details = req.body; // 요청 본문 전체를 details로 처리
 
