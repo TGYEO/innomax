@@ -377,9 +377,11 @@ export function initOrderRegister_tab_1(API_BASE: string) {
             eqtype: EquipGroup_orderRegisterPage_tab_1.value,
         };
 
+
+        
         try {
             const orderNo = orderNo_orderRegisterPage_tab_1.value.trim(); // 공백 제거
-            const url = `${API_BASE}/api/innomax-projects/${encodeURIComponent(orderNo)}`;
+            const url = `${API_BASE}/api/innomax-projects/note/${encodeURIComponent(orderNo)}`;
 
             const response = await fetch(url, {
                 method: "POST",

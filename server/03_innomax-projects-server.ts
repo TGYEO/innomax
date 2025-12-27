@@ -28,44 +28,80 @@ export default function innomaxProjectsRouter(pool: Pool) {
     }
   });
 
-  router.post("/spec_update/:order_no", async (req: Request, res: Response) => {
+  
 
-    console.log("일단은 들어오는 시밤1");
-    const { order_no } = req.params; // URL에서 order_no 가져오기
-    const details_spec = req.body; // 요청 본문 전체를 details로 처리
 
-    if (!details_spec || Object.keys(details_spec).length === 0) {
-      console.error("❌ 요청 본문에 'details_spec'이 없습니다.");
-      return res.status(400).json({ error: "details are required" });
+
+  router.post("/", async (req: Request, res: Response) => {
+    const { orderNo, details } = req.body;
+
+    if (!orderNo) {
+      return res.status(400).json({ error: "code_no is required" });
     }
 
     try {
-      // 해당 order_no가 존재하는지 확인
-      console.log("🔍 Checking if order_no exists in the database...");
+      // 중복 확인
       const existingOrder = await pool.query(
         `SELECT code_no FROM innomax_projects WHERE code_no = $1`,
-        [order_no]
+        [orderNo]
       );
 
-      if (existingOrder.rowCount === 0) {
-        console.error(`❌ order_no '${order_no}'를 찾을 수 없습니다.`);
-        return res.status(404).json({ error: "해당 order_no를 찾을 수 없습니다." });
+      if ((existingOrder.rowCount ?? 0) > 0) {
+        return res.status(409).json({ error: "중복된 code_no가 존재합니다." });
       }
 
+      // 새로운 데이터 삽입
       await pool.query(
-        `UPDATE innomax_projects SET detail_spec_json = $1 WHERE code_no = $2`,
-        [details_spec, order_no]
+        `INSERT INTO innomax_projects (code_no, detail_json)
+             VALUES ($1, $2)`,
+        [orderNo, details]
       );
 
-      console.log("✅ Spec 데이터가 성공적으로 업데이트되었습니다.");
-      res.json({ success: true, message: "Spec 데이터가 성공적으로 업데이트되었습니다." });
+      res.json({ success: true, orderNo });
     } catch (err) {
-      console.error("❌ Spec 데이터 업데이트 실패:", err);
-      res.status(500).json({ error: "DB 업데이트 실패" });
+      console.error("❌ 프로젝트 저장 실패:", err);
+      res.status(500).json({ error: "DB 저장 실패" });
     }
   });
 
-  router.post("/:order_no", async (req: Request, res: Response) => {
+  // router.post("/spec_update/:order_no", async (req: Request, res: Response) => {
+
+  //   console.log("일단은 들어오는 시밤1");
+  //   const { order_no } = req.params; // URL에서 order_no 가져오기
+  //   const details_spec = req.body; // 요청 본문 전체를 details로 처리
+
+  //   if (!details_spec || Object.keys(details_spec).length === 0) {
+  //     console.error("❌ 요청 본문에 'details_spec'이 없습니다.");
+  //     return res.status(400).json({ error: "details are required" });
+  //   }
+
+  //   try {
+  //     // 해당 order_no가 존재하는지 확인
+  //     console.log("🔍 Checking if order_no exists in the database...");
+  //     const existingOrder = await pool.query(
+  //       `SELECT code_no FROM innomax_projects WHERE code_no = $1`,
+  //       [order_no]
+  //     );
+
+  //     if (existingOrder.rowCount === 0) {
+  //       console.error(`❌ order_no '${order_no}'를 찾을 수 없습니다.`);
+  //       return res.status(404).json({ error: "해당 order_no를 찾을 수 없습니다." });
+  //     }
+
+  //     await pool.query(
+  //       `UPDATE innomax_projects SET detail_spec_json = $1 WHERE code_no = $2`,
+  //       [details_spec, order_no]
+  //     );
+
+  //     console.log("✅ Spec 데이터가 성공적으로 업데이트되었습니다.");
+  //     res.json({ success: true, message: "Spec 데이터가 성공적으로 업데이트되었습니다." });
+  //   } catch (err) {
+  //     console.error("❌ Spec 데이터 업데이트 실패:", err);
+  //     res.status(500).json({ error: "DB 업데이트 실패" });
+  //   }
+  // });
+
+  router.post("/note/:order_no", async (req, res) => {
     console.log("일단은 들어오는 시밤2");
     
     const { order_no } = req.params; // URL에서 order_no 가져오기
@@ -107,40 +143,6 @@ export default function innomaxProjectsRouter(pool: Pool) {
     } catch (err) {
       console.error("❌ 데이터 업데이트 실패:", err);
       res.status(500).json({ error: "DB 업데이트 실패" });
-    }
-  });
-
-
-
-  router.post("/", async (req: Request, res: Response) => {
-    const { orderNo, details } = req.body;
-
-    if (!orderNo) {
-      return res.status(400).json({ error: "code_no is required" });
-    }
-
-    try {
-      // 중복 확인
-      const existingOrder = await pool.query(
-        `SELECT code_no FROM innomax_projects WHERE code_no = $1`,
-        [orderNo]
-      );
-
-      if ((existingOrder.rowCount ?? 0) > 0) {
-        return res.status(409).json({ error: "중복된 code_no가 존재합니다." });
-      }
-
-      // 새로운 데이터 삽입
-      await pool.query(
-        `INSERT INTO innomax_projects (code_no, detail_json)
-             VALUES ($1, $2)`,
-        [orderNo, details]
-      );
-
-      res.json({ success: true, orderNo });
-    } catch (err) {
-      console.error("❌ 프로젝트 저장 실패:", err);
-      res.status(500).json({ error: "DB 저장 실패" });
     }
   });
 
