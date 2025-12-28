@@ -13,7 +13,7 @@
     "build:frontend": "webpack --mode production",
     "build:server": "tsc -p tsconfig.server.json",
     "build": "npm run build:server && npm run build:frontend && npm run build:css",
-    "start": "node dist/mainServer.js"
+    "start": "ts-node-dev --respawn --transpile-only --project tsconfig.server.json server/00_mainServer.ts"
   },
   "dependencies": {
     "@types/nodemailer": "^7.0.3",
