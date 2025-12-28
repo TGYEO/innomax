@@ -756,7 +756,7 @@ function initOrderRegister_tab_1(API_BASE) {
                 throw new Error("Failed to fetch orders");
             }
             const data = await response.json();
-            let orders = data.rows;
+            let orders = data.data;
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a, b) => {
                 const aNumber = parseInt(a.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
@@ -830,7 +830,7 @@ function initOrderRegister_tab_1(API_BASE) {
                         }
                         const result = await response.json();
                         // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
-                        const targetOrder = result.rows.find((row) => row.code_no === number);
+                        const targetOrder = result.data.find((row) => row.code_no === number);
                         if (!targetOrder) {
                             alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
                             hideProgressModal();
@@ -1160,27 +1160,20 @@ function initOrderRegister_tab_2(API_BASE) {
     }
     //
     //#region 수주건 사양 불러와서 fill 해버림
-    async function fetchAndFillSpec_orderRegister_tab_2(number) {
+    async function fetchAndFillSpec_orderRegister_tab_2(orderNo) {
         try {
-            const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
+            const response = await fetch(`${API_BASE}/api/innomax-projects/target_callspec/${orderNo}`, {
                 method: "GET",
                 headers: {
-                    Accept: "application/json",
+                    "Content-Type": "application/json",
                 },
             });
             if (!response.ok) {
                 throw new Error("Failed to fetch order details");
             }
-            const result = await response.json(); // { ok: true, rows: [...] } 형태
-            // ✅ 핵심: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
-            const targetOrder = result.rows.find((row) => row.code_no === number);
-            if (!targetOrder) {
-                alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
-                hideProgressModal();
-                return;
-            }
-            // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
-            const detail_spec = targetOrder.detail_spec_json;
+            const data = await response.json();
+            const order = data.data;
+            const detail_spec = order.detail_spec_json;
             // 불러온 수주건 정보로 입력폼 채우기
             for (const key in detail_spec) {
                 const element = container.querySelector(`#${key}`);
@@ -1224,7 +1217,7 @@ function initOrderRegister_tab_2(API_BASE) {
                 throw new Error("Failed to fetch orders");
             }
             const data = await response.json();
-            let orders = data.rows;
+            let orders = data.data;
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a, b) => {
                 const aNumber = parseInt(a.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
@@ -1273,38 +1266,36 @@ function initOrderRegister_tab_2(API_BASE) {
                 const number = target.dataset.number;
                 if (!action || !number)
                     return;
+                //#region 각종 이벤트 모음
                 if (action === "code_no_button") {
                     console.log(`[order_registerPage_tab_1] 수주번호 클릭: ${number}`);
-                    await _workspace_utils_ModalUtil__WEBPACK_IMPORTED_MODULE_0__.ModalUtil.confirm({
+                    const modal_result = await _workspace_utils_ModalUtil__WEBPACK_IMPORTED_MODULE_0__.ModalUtil.confirm({
                         title: "수주건 정보 불러오기",
                         message: `수주번호 ${number} 의 정보를 불러오시겠습니까?`,
                         type: "info"
                     });
+                    if (!modal_result) {
+                        return; // 작업 중단
+                    }
                     showProgressModal("수주건 불러오는 중...");
                     updateProgressBar(10);
+                    await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
                     //해당 수주건 정보 불러오기
                     try {
-                        const response = await fetch(`${API_BASE}/api/innomax-projects/`, {
+                        const response = await fetch(`${API_BASE}/api/innomax-projects/target/${number}`, {
                             method: "GET",
                             headers: {
-                                Accept: "application/json",
+                                "Content-Type": "application/json",
                             },
                         });
                         if (!response.ok) {
                             throw new Error("Failed to fetch order details");
                         }
-                        const result = await response.json();
-                        // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
-                        const targetOrder = result.rows.find((row) => row.code_no === number);
-                        if (!targetOrder) {
-                            alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
-                            hideProgressModal();
-                            return;
-                        }
-                        // ✅ 데이터 파싱: targetOrder 내부의 detail_json을 가져옴
-                        const detail = targetOrder.detail_json;
+                        const data = await response.json();
+                        const order = data.data;
+                        const detail = order.detail_json;
                         //불러온 수주건 정보로 입력폼 채우기
-                        domElements.specOrderNo_orderRegisterPage_tab_2.value = detail.code_no;
+                        domElements.specOrderNo_orderRegisterPage_tab_2.value = order.code_no;
                         domElements.specOrderName_orderRegisterPage_tab_2.value = detail.equipName;
                         domElements.specOrderClient_orderRegisterPage_tab_2.value = detail.clientName;
                     }

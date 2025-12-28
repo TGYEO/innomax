@@ -438,7 +438,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
             }
 
             const data = await response.json();
-            let orders = data.rows;
+            let orders = data.data;
 
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a: any, b: any) => {
@@ -538,7 +538,7 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         const result = await response.json();
 
                         // ✅ 존나중요: 전체 데이터(rows) 중에서 내가 클릭한 number와 일치하는 것만 찾기
-                        const targetOrder = result.rows.find((row: any) => row.code_no === number);
+                        const targetOrder = result.data.find((row: any) => row.code_no === number);
 
                         if (!targetOrder) {
                             alert("해당 수주 번호의 데이터를 찾을 수 없습니다.");
