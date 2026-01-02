@@ -902,6 +902,9 @@ video {
 .h-\[600px\] {
   height: 600px;
 }
+.h-\[700px\] {
+  height: 700px;
+}
 .h-\[730px\] {
   height: 730px;
 }
@@ -1325,6 +1328,9 @@ video {
 .gap-4 {
   gap: 1rem;
 }
+.gap-5 {
+  gap: 1.25rem;
+}
 .gap-6 {
   gap: 1.5rem;
 }
@@ -1509,6 +1515,9 @@ video {
 }
 .border-b {
   border-bottom-width: 1px;
+}
+.border-l-4 {
+  border-left-width: 4px;
 }
 .border-r {
   border-right-width: 1px;

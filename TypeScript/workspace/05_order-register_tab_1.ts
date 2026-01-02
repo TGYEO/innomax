@@ -24,6 +24,9 @@ export function initOrderRegister_tab_1(API_BASE: string) {
     const plcSub_orderRegisterPage_tab_1 = document.getElementById("plcSub_orderRegisterPage_tab_1") as HTMLInputElement;
     const plcCompany_orderRegisterPage_tab_1 = document.getElementById("plcCompany_orderRegisterPage_tab_1") as HTMLInputElement;
 
+    const pmsStartDate_orderRegisterPage_tab_1 = document.getElementById("pmsStartDate_orderRegisterPage_tab_1") as HTMLInputElement;
+    const pmsEndDate_orderRegisterPage_tab_1 = document.getElementById("pmsEndDate_orderRegisterPage_tab_1") as HTMLInputElement;
+
     const pcGuiMain_orderRegisterPage_tab_1 = document.getElementById("pcGuiMain_orderRegisterPage_tab_1") as HTMLInputElement;
     const pcGuiSub_orderRegisterPage_tab_1 = document.getElementById("pcGuiSub_orderRegisterPage_tab_1") as HTMLInputElement;
     const pcGuiCompany_orderRegisterPage_tab_1 = document.getElementById("pcGuiCompany_orderRegisterPage_tab_1") as HTMLInputElement;
@@ -59,6 +62,8 @@ export function initOrderRegister_tab_1(API_BASE: string) {
         packDate_orderRegisterPage_tab_1,
         deliveryDate_orderRegisterPage_tab_1,
         EquipGroup_orderRegisterPage_tab_1,
+        pmsStartDate_orderRegisterPage_tab_1,
+        pmsEndDate_orderRegisterPage_tab_1,
     ];
 
 
@@ -108,6 +113,9 @@ export function initOrderRegister_tab_1(API_BASE: string) {
         setupMain_orderRegisterPage_tab_1.value = "";
         setupSub_orderRegisterPage_tab_1.value = "";
         EquipGroup_orderRegisterPage_tab_1.value = "";
+
+        pmsStartDate_orderRegisterPage_tab_1.value = "";
+        pmsEndDate_orderRegisterPage_tab_1.value = "";
     }
 
 
@@ -302,6 +310,9 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                 setupMain: setupMain_orderRegisterPage_tab_1.value,
                 setupSub: setupSub_orderRegisterPage_tab_1.value,
                 eqtype: EquipGroup_orderRegisterPage_tab_1.value,
+
+                pmsStartDate: pmsStartDate_orderRegisterPage_tab_1.value,
+                pmsEndDate: pmsEndDate_orderRegisterPage_tab_1.value,
             },
         };
 
@@ -375,10 +386,13 @@ export function initOrderRegister_tab_1(API_BASE: string) {
             setupMain: setupMain_orderRegisterPage_tab_1.value,
             setupSub: setupSub_orderRegisterPage_tab_1.value,
             eqtype: EquipGroup_orderRegisterPage_tab_1.value,
+
+            pmsStartDate: pmsStartDate_orderRegisterPage_tab_1.value,
+            pmsEndDate: pmsEndDate_orderRegisterPage_tab_1.value,
         };
 
 
-        
+
         try {
             const orderNo = orderNo_orderRegisterPage_tab_1.value.trim(); // 공백 제거
             const url = `${API_BASE}/api/innomax-projects/note/${encodeURIComponent(orderNo)}`;
@@ -562,6 +576,9 @@ export function initOrderRegister_tab_1(API_BASE: string) {
                         plcMain_orderRegisterPage_tab_1.value = detail.plcMain || "";
                         plcSub_orderRegisterPage_tab_1.value = detail.plcSub || "";
                         plcCompany_orderRegisterPage_tab_1.value = detail.plcCompany || "";
+
+                        pmsStartDate_orderRegisterPage_tab_1.value = detail.pmsStartDate || "";
+                        pmsEndDate_orderRegisterPage_tab_1.value = detail.pmsEndDate || "";
 
                         pcControlMain_orderRegisterPage_tab_1.value = detail.pcControlMain || "";
                         pcControlSub_orderRegisterPage_tab_1.value = detail.pcControlSub || "";

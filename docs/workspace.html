@@ -53,7 +53,7 @@
                             수주건등록
                         </button>
 
-                        
+
 
                         <!-- 사용자관리 (공통메뉴) -->
                         <button
@@ -280,11 +280,11 @@
             <!-- 실제 컨텐츠 패널 -->
             <section class="overflow-hidden flex-1 space-y-0">
 
-                <!-- 📌📌📌📌📌📌📌 장비 현황 대시보드 -->
-                <div id="panel-dashboard" class="hidden p-1">
+                <!-- 📌📌📌📌📌📌📌 장비 제작 공정 대시보드 -->
+                <section id="panel-dashboard" class="p-4" style="background-color: #f8f9fa; min-height: 100vh;">
 
 
-                </div>
+                </section>
 
 
                 <!-- 📌📌📌📌📌📌📌 수주건등록 패널 -->
@@ -369,6 +369,23 @@
                                             </select>
                                         </div>
 
+                                    </div>
+
+                                    <!-- 2) PMS 시작 / PMS 종료 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PMS 시작 <span
+                                                    class="text-red-500">*</span></label>
+                                            <input type="date" id="pmsStartDate_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-1">PMS 종료 <span
+                                                    class="text-red-500">*</span></label>
+                                            <input type="date" id="pmsEndDate_orderRegisterPage_tab_1"
+                                                class="w-full border border-[#2770b4] rounded-lg p-1.5">
+                                        </div>
                                     </div>
 
                                     <!-- 2) 포장예정일 / 납품예정일 -->
@@ -7184,38 +7201,106 @@
 
                             <!-- Panel 3  PMS 등록-->
                             <div id="orderRegisterPage_tab_3"
-                                class="grid grid-cols-1 gap-4 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none overflow-y-auto p-4">
+                                class="grid grid-cols-1 gap-4 tab-panel absolute inset-0 opacity-0 translate-x-10 transition-all duration-300 pointer-events-none p-2">
 
-                                <div class="flex flex-wrap gap-2 pb-4 border-b border-gray-100">
+                                <!-- 상단 요약 섹션 -->
+                                <div class="flex flex-row gap-4 items-center">
                                     <button id="readOrder_orderRegisterPage_tab_3"
-                                        class="flex-shrink-0 px-4 py-2 text-sm font-semibold border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors max-w-[150px]">
+                                        class="px-4 text-sm font-semibold border border-gray-300 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors max-w-[150px]">
                                         수주건 불러오기
                                     </button>
 
                                     <button id="pmsSave_orderRegisterPage_tab_3"
-                                        class="flex-shrink-0 px-4 py-2 text-sm font-semibold border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 rounded-md transition-colors">
+                                        class="px-4 text-sm font-semibold border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 rounded-md transition-colors">
                                         PMS 저장하기
                                     </button>
 
                                     <input type="text" id="specOrderNo_orderRegisterPage_tab_3"
-                                        class="flex-grow border border-gray-300 rounded-lg p-1.5 text-sm" readonly
+                                        class="px-4 border border-gray-300 rounded-lg text-sm" readonly
                                         placeholder="수주번호">
 
                                     <input type="text" id="specOrderName_orderRegisterPage_tab_3"
-                                        class="flex-grow border border-gray-300 rounded-lg p-1.5 text-sm w-[400px]"
-                                        readonly placeholder="장비명">
+                                        class="px-4 border border-gray-300 rounded-lg text-sm w-[400px]" readonly
+                                        placeholder="장비명">
 
                                     <input type="text" id="specOrderClient_orderRegisterPage_tab_3"
-                                        class="flex-grow border border-gray-300 rounded-lg p-1.5 text-sm" readonly
+                                        class="px-4 border border-gray-300 rounded-lg text-sm" readonly
                                         placeholder="고객명">
 
                                     <button id="init_orderRegisterPage_tab_3"
-                                        class="flex-shrink-0 px-4 py-2 text-sm font-semibold border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                                        class="px-4 text-sm font-semibold border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 rounded-md transition-colors">
                                         초기화
                                     </button>
                                 </div>
 
-                                <div id="calendar_container_orderRegisterPage_tab_3" class="flex-grow"></div>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="px-4 bg-white rounded-lg shadow-xl border-l-4 border-blue-500">
+                                        <div class="text-gray-500 text-sm mb-1">전체 공정 수</div>
+                                        <div id="totalProcessCount_orderRegisterPage_tab_3"
+                                            class="text-xl font-bold text-gray-800 text-center">-</div>
+                                    </div>
+                                    <div class="px-4 bg-white rounded-lg shadow-xl border-l-4 border-green-500">
+                                        <div class="text-gray-500 text-sm mb-1">현재 진행률</div>
+                                        <div id="currentProgress_orderRegisterPage_tab_3"
+                                            class="text-xl font-bold text-gray-800 text-center">-</div>
+                                    </div>
+                                    <div class="px-4 bg-white rounded-lg shadow-xl border-l-4 border-red-500">
+                                        <div class="text-gray-500 text-sm mb-1">예정 출하일</div>
+                                        <div id="scheduledShippingDate_orderRegisterPage_tab_3"
+                                            class="text-xl font-bold text-gray-800 text-center">-</div>
+                                    </div>
+                                </div>
+
+                                <!--  간트차트 -->
+                                <div class="bg-white p-2 rounded-lg shadow-lg">
+                                    <div id="chart_wrapper_orderRegisterPage_tab_3"
+                                        class="w-full h-[700px] border border-red-300 rounded-lg p-4">
+                                        <div id="gantt_here" style="width:100%; height:670px;"></div>
+                                    </div>
+                                </div>
+                                <style>
+                                    /* 좌측 그리드 줄무늬 */
+                                    .gantt_grid .gantt_row.gantt_row_odd {
+                                        background-color: #ffffff;
+                                    }
+
+                                    .gantt_grid .gantt_row.gantt_row_even {
+                                        background-color: #e8f4ff;
+                                    }
+
+                                    /* 우측 타임라인 셀 줄무늬 */
+                                    .gantt_task .gantt_task_cell.gantt_cell_odd {
+                                        background-color: #ffffff;
+                                    }
+
+                                    .gantt_task .gantt_task_cell.gantt_cell_even {
+                                        background-color: #e8f4ff;
+                                    }
+
+                                    /* 1일 단위 테두리 */
+                                    .gantt_task .gantt_task_cell.gantt_cell_bordered {
+                                        border-right: 1px solid #c0c0c0;
+                                        /* 세로선 */
+                                        border-left: 1px solid #c0c0c0;
+                                    }
+
+                                    /* 스케일(헤더) 높이/폭 줄이기 */
+                                    .gantt_scale_cell {
+                                        padding: 2px 4px;
+                                        font-size: 11px;
+                                    }
+
+                                    /* 타임라인 행 높이 살짝 줄이기 */
+                                    .gantt_task_row,
+                                    .gantt_row {
+                                        height: 24px;
+                                    }
+
+                                    .gantt_task_line {
+                                        height: 18px;
+                                        line-height: 18px;
+                                    }
+                                </style>
 
 
 
@@ -8469,6 +8554,12 @@
             });
         })();
     </script>
+
+    <!-- 1. dhtmlx-gantt CSS -->
+    <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css">
+
+    <!-- 2. dhtmlx-gantt JS (gantt 전역 객체 생성) -->
+    <script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
 
     <script src="assets/js/workspace.bundle.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>

@@ -436,6 +436,8 @@ function initOrderRegister_tab_1(API_BASE) {
     const plcMain_orderRegisterPage_tab_1 = document.getElementById("plcMain_orderRegisterPage_tab_1");
     const plcSub_orderRegisterPage_tab_1 = document.getElementById("plcSub_orderRegisterPage_tab_1");
     const plcCompany_orderRegisterPage_tab_1 = document.getElementById("plcCompany_orderRegisterPage_tab_1");
+    const pmsStartDate_orderRegisterPage_tab_1 = document.getElementById("pmsStartDate_orderRegisterPage_tab_1");
+    const pmsEndDate_orderRegisterPage_tab_1 = document.getElementById("pmsEndDate_orderRegisterPage_tab_1");
     const pcGuiMain_orderRegisterPage_tab_1 = document.getElementById("pcGuiMain_orderRegisterPage_tab_1");
     const pcGuiSub_orderRegisterPage_tab_1 = document.getElementById("pcGuiSub_orderRegisterPage_tab_1");
     const pcGuiCompany_orderRegisterPage_tab_1 = document.getElementById("pcGuiCompany_orderRegisterPage_tab_1");
@@ -465,6 +467,8 @@ function initOrderRegister_tab_1(API_BASE) {
         packDate_orderRegisterPage_tab_1,
         deliveryDate_orderRegisterPage_tab_1,
         EquipGroup_orderRegisterPage_tab_1,
+        pmsStartDate_orderRegisterPage_tab_1,
+        pmsEndDate_orderRegisterPage_tab_1,
     ];
     if (initOrderRegister_tab_1_init) {
         filterYear_orderRegisterPage_tab_1.value = "전체";
@@ -502,6 +506,8 @@ function initOrderRegister_tab_1(API_BASE) {
         setupMain_orderRegisterPage_tab_1.value = "";
         setupSub_orderRegisterPage_tab_1.value = "";
         EquipGroup_orderRegisterPage_tab_1.value = "";
+        pmsStartDate_orderRegisterPage_tab_1.value = "";
+        pmsEndDate_orderRegisterPage_tab_1.value = "";
     }
     function visible_option(option) {
         if (option === "call") { //불러오기
@@ -652,6 +658,8 @@ function initOrderRegister_tab_1(API_BASE) {
                 setupMain: setupMain_orderRegisterPage_tab_1.value,
                 setupSub: setupSub_orderRegisterPage_tab_1.value,
                 eqtype: EquipGroup_orderRegisterPage_tab_1.value,
+                pmsStartDate: pmsStartDate_orderRegisterPage_tab_1.value,
+                pmsEndDate: pmsEndDate_orderRegisterPage_tab_1.value,
             },
         };
         try {
@@ -713,6 +721,8 @@ function initOrderRegister_tab_1(API_BASE) {
             setupMain: setupMain_orderRegisterPage_tab_1.value,
             setupSub: setupSub_orderRegisterPage_tab_1.value,
             eqtype: EquipGroup_orderRegisterPage_tab_1.value,
+            pmsStartDate: pmsStartDate_orderRegisterPage_tab_1.value,
+            pmsEndDate: pmsEndDate_orderRegisterPage_tab_1.value,
         };
         try {
             const orderNo = orderNo_orderRegisterPage_tab_1.value.trim(); // 공백 제거
@@ -851,6 +861,8 @@ function initOrderRegister_tab_1(API_BASE) {
                         plcMain_orderRegisterPage_tab_1.value = detail.plcMain || "";
                         plcSub_orderRegisterPage_tab_1.value = detail.plcSub || "";
                         plcCompany_orderRegisterPage_tab_1.value = detail.plcCompany || "";
+                        pmsStartDate_orderRegisterPage_tab_1.value = detail.pmsStartDate || "";
+                        pmsEndDate_orderRegisterPage_tab_1.value = detail.pmsEndDate || "";
                         pcControlMain_orderRegisterPage_tab_1.value = detail.pcControlMain || "";
                         pcControlSub_orderRegisterPage_tab_1.value = detail.pcControlSub || "";
                         pcControlCompany_orderRegisterPage_tab_1.value = detail.pcControlCompany || "";
@@ -1433,10 +1445,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workspace_utils_ModalUtil__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../workspace/utils/ModalUtil */ "./TypeScript/workspace/utils/ModalUtil.ts");
 
 let initOrderRegister_tab_3_init = false;
-// 가로/세로 상수 정의
-const CELL_WIDTH = 30; // 하루 너비
-const ROW_HEIGHT = 50; // 한 태스크 높이
-const HEADER_HEIGHT = 80; // 헤더 높이
 function initOrderRegister_tab_3(API_BASE) {
     const container = document.getElementById("orderRegisterPage_tab_3");
     if (!container) {
@@ -1459,11 +1467,26 @@ function initOrderRegister_tab_3(API_BASE) {
         return;
     }
     initOrderRegister_tab_3_init = true;
+    //#region 각종 함수 모음집
+    function AllClear() {
+        const leftBody = document.getElementById('left_body');
+        // 상단 기본 정보 초기화
+        domElements.specOrderNo_orderRegisterPage_tab_3.value = "";
+        domElements.specOrderName_orderRegisterPage_tab_3.value = "";
+        domElements.specOrderClient_orderRegisterPage_tab_3.value = "";
+        domElements.specOrderNo_orderRegisterPage_tab_3.classList.remove("bg-gray-300");
+        domElements.specOrderName_orderRegisterPage_tab_3.classList.remove("bg-gray-300");
+        domElements.specOrderClient_orderRegisterPage_tab_3.classList.remove("bg-gray-300");
+        const canvas = document.getElementById('calendar_canvas');
+        const ctx = canvas.getContext('2d');
+        console.log("모든 필드와 캔버스 데이터가 초기화되었습니다.");
+    }
+    //#endregion
     //#region 현재 등록 되어있는 수주건 불러오기
     async function fetchAndRenderOrderList() {
         showProgressModal("화면 로딩중 ...");
         updateProgressBar(10);
-        await new Promise(resolve => setTimeout(resolve, 500)); // 완료 후 지연
+        await new Promise(resolve => setTimeout(resolve, 300)); // 완료 후 지연
         updateProgressBar(50);
         await new Promise(resolve => setTimeout(resolve, 200)); // 완료 후 지연
         try {
@@ -1477,7 +1500,7 @@ function initOrderRegister_tab_3(API_BASE) {
                 throw new Error("Failed to fetch orders");
             }
             const data = await response.json();
-            let orders = data.rows;
+            let orders = data.data;
             // 코드번호 기준 정렬 (- 이후의 3글자를 기준으로)
             orders = orders.sort((a, b) => {
                 const aNumber = parseInt(a.code_no.split("-")[1]?.substring(0, 3) || "0", 10);
@@ -1548,12 +1571,15 @@ function initOrderRegister_tab_3(API_BASE) {
                             throw new Error("Failed to fetch order details");
                         }
                         const data = await response.json();
-                        const order = data.rows;
+                        const order = data.data;
                         const detail = order.detail_json;
                         //불러온 수주건 정보로 입력폼 채우기
                         domElements.specOrderNo_orderRegisterPage_tab_3.value = order.code_no;
                         domElements.specOrderName_orderRegisterPage_tab_3.value = detail.equipName;
                         domElements.specOrderClient_orderRegisterPage_tab_3.value = detail.clientName;
+                        domElements.specOrderNo_orderRegisterPage_tab_3.classList.add("bg-gray-300");
+                        domElements.specOrderName_orderRegisterPage_tab_3.classList.add("bg-gray-300");
+                        domElements.specOrderClient_orderRegisterPage_tab_3.classList.add("bg-gray-300");
                     }
                     catch (error) {
                         console.error("Error fetching order details:", error);
@@ -1564,229 +1590,175 @@ function initOrderRegister_tab_3(API_BASE) {
                     updateProgressBar(100);
                     await new Promise(resolve => setTimeout(resolve, 100)); // 완료 후 지연
                     hideProgressModal();
-                    //visible_option("call");
+                    drawDhtmlxGantt("SINGLE", new Date("2026-01-01"), new Date("2026-03-20"));
                 }
             });
         });
     }
     //#endregion
-    //#region 캘린더 캔버스 구현 건들필요 없음!
-    const tasks = [
-        "수주보고서 발행", "1차 Kick up", "2차 Kick up", "Layout", "PnID", "실행예산",
-        "MAIN BODY(EFEM, BUFFER BODY 포함)", "LOCAL UNIT BODY", "OP PANEL",
-        "MAIN MONITOR BRACKET", "RINSE 및 PROCESS CHAMBER", "CHAMBER UP-DOWN",
-        "CHAMBER EXHAUST", "CHAMBER BASE", "RINSE 및 PROCESS CHAMBER BOX", "SHUTTER",
-        "INNER CUP", "CHAMBER BOX SENSOR", "RINSE 및 PROCESS DISPENSER", "SPIN CHUCK",
-        "SPINDLE", "고압 REGULATOR", "ROBOT ASSY", "TANK", "BUFFER", "SERIAL NAME PLATE",
-        "소음기 BOX", "MAIN BODY 배관설계", "LOCAL 배관 설계", "Main Body 입고",
-        "Local unit 입고", "Chamber base Setting", "Dispenser Setting",
-        "Chamber up-down Setting", "Spindle Setting", "Chamber exhaust Setting",
-        "Chamber Cup Setting", "Spin chuck Setting", "Chamber box Setting",
-        "Shutter Setting", "Main Piping 및 Air Line Piping",
-        "Local Unit Piping 및 Air Line Piping", "Programming", "Wiring", "ATM Setting",
-        "ATM Teaching", "IO Check", "Manual Test", "Auto Running Test", "사내 QC",
-        "Inspection", "PACKING", "출하"
-    ];
-    // 각 태스크의 기간 상태 저장
-    const taskRanges = tasks.map(() => ({ start: '', end: '' }));
-    let currentSelectedRow = -1;
-    let highlightedCol = null;
-    function generateDateList(startYear, endYear) {
-        const dates = [];
-        for (let y = startYear; y <= endYear; y++) {
-            for (let m = 0; m < 12; m++) {
-                const lastDay = new Date(y, m + 1, 0).getDate();
-                for (let d = 1; d <= lastDay; d++) {
-                    dates.push(new Date(y, m, d));
-                }
-            }
+    //#region 일단 간트차트부터 그려버려 싱글, 웻 2개다 
+    function drawDhtmlxGantt(eqType, projectStart, projectEnd) {
+        let taskData = [];
+        if (eqType === "SINGLE") {
+            taskData = [
+                { name: "수주보고서 발행", group: "설계/준비" },
+                { name: "1차 Kick up", group: "설계/준비" },
+                { name: "2차 Kick up", group: "설계/준비" },
+                { name: "Layout", group: "설계/준비" },
+                { name: "PnID", group: "설계/준비" },
+                { name: "실행예산", group: "설계/준비" },
+                { name: "MAIN BODY(EFEM, BUFFER BODY 포함)", group: "설계/준비" },
+                { name: "LOCAL UNIT BODY", group: "부품입고" },
+                { name: "OP PANEL", group: "부품입고" },
+                { name: "MAIN MONITOR BRACKET", group: "부품입고" },
+                { name: "RINSE 및 PROCESS CHAMBER", group: "부품입고" },
+                { name: "CHAMBER UP-DOWN", group: "부품입고" },
+                { name: "CHAMBER EXHAUST", group: "부품입고" },
+                { name: "CHAMBER BASE", group: "부품입고" },
+                { name: "RINSE 및 PROCESS CHAMBER BOX", group: "부품입고" },
+                { name: "SHUTTER", group: "부품입고" },
+                { name: "INNER CUP", group: "부품입고" },
+                { name: "CHAMBER BOX SENSOR", group: "부품입고" },
+                { name: "RINSE 및 PROCESS DISPENSER", group: "부품입고" },
+                { name: "SPIN CHUCK", group: "부품입고" },
+                { name: "SPINDLE", group: "부품입고" },
+                { name: "고압 REGULATOR", group: "부품입고" },
+                { name: "ROBOT ASSY", group: "부품입고" },
+                { name: "TANK", group: "부품입고" },
+                { name: "BUFFER", group: "부품입고" },
+                { name: "SERIAL NAME PLATE", group: "부품입고" },
+                { name: "소음기 BOX", group: "부품입고" },
+                { name: "MAIN BODY 배관설계", group: "설계/준비" },
+                { name: "LOCAL 배관 설계", group: "설계/준비" },
+                { name: "Main Body 입고", group: "부품입고" },
+                { name: "Local unit 입고", group: "부품입고" },
+                { name: "Chamber base Setting", group: "조립/셋팅" },
+                { name: "Dispenser Setting", group: "조립/셋팅" },
+                { name: "Chamber up-down Setting", group: "조립/셋팅" },
+                { name: "Spindle Setting", group: "조립/셋팅" },
+                { name: "Chamber exhaust Setting", group: "조립/셋팅" },
+                { name: "Chamber Cup Setting", group: "조립/셋팅" },
+                { name: "Spin chuck Setting", group: "조립/셋팅" },
+                { name: "Chamber box Setting", group: "조립/셋팅" },
+                { name: "Shutter Setting", group: "조립/셋팅" },
+                { name: "Main Piping 및 Air Line Piping", group: "배관/배선" },
+                { name: "Local Unit Piping 및 Air Line Piping", group: "배관/배선" },
+                { name: "Programming", group: "테스트/출하" },
+                { name: "Wiring", group: "배관/배선" },
+                { name: "ATM Setting", group: "조립/셋팅" },
+                { name: "ATM Teaching", group: "테스트/출하" },
+                { name: "IO Check", group: "테스트/출하" },
+                { name: "Manual Test", group: "테스트/출하" },
+                { name: "Auto Running Test", group: "테스트/출하" },
+                { name: "사내 QC", group: "테스트/출하" },
+                { name: "Inspection", group: "테스트/출하" },
+                { name: "PACKING", group: "테스트/출하" },
+                { name: "출하", group: "테스트/출하" }
+            ];
         }
-        return dates;
-    }
-    function renderCanvasCalendar(config) {
-        const { startYear, endYear } = config;
-        const dateList = generateDateList(startYear, endYear);
-        const container = document.getElementById('calendar_container_orderRegisterPage_tab_3');
-        if (!container)
+        if (taskData.length === 0)
             return;
-        container.innerHTML = `
-        <div id="calendar_outer_wrapper" style="display: flex; height: 750px; overflow: auto; border: 1px solid #ccc; position: relative;">
-            <div id="left_panel" style="position: sticky; left: 0; z-index: 50; background: white; border-right: 2px solid #999;">
-                <table style="border-collapse: collapse; width: 540px; table-layout: fixed;">
-                    <thead>
-                        <tr style="height: ${HEADER_HEIGHT}px; background: #f3f4f6;">
-                            <th style="border: 1px solid #ccc; width: 300px; font-size: 13px;">작업종류</th>
-                            <th style="border: 1px solid #ccc; width: 120px; font-size: 13px;">시작일</th>
-                            <th style="border: 1px solid #ccc; width: 120px; font-size: 13px;">종료일</th>
-                        </tr>
-                    </thead>
-                    <tbody id="left_body"></tbody>
-                </table>
-            </div>
-            <div id="canvas_wrapper" style="position: relative; background-color: #fff;">
-                <canvas id="calendar_canvas"></canvas>
-            </div>
-        </div>
-        `;
-        const outerWrapper = document.getElementById('calendar_outer_wrapper');
-        const leftBody = document.getElementById('left_body');
-        const canvas = document.getElementById('calendar_canvas');
-        const ctx = canvas.getContext('2d');
-        const totalWidth = dateList.length * CELL_WIDTH;
-        const totalHeight = tasks.length * ROW_HEIGHT;
-        canvas.width = totalWidth;
-        canvas.height = totalHeight + HEADER_HEIGHT;
-        // 좌측 패널 생성 및 이벤트 바인딩
-        tasks.forEach((task, idx) => {
-            const tr = document.createElement('tr');
-            tr.style.height = `${ROW_HEIGHT}px`;
-            tr.style.cursor = 'pointer';
-            tr.innerHTML = `
-            <td style="border: 1px solid #ccc; padding: 4px; font-size: 12px; font-weight: 500;">${task}</td>
-            <td style="border: 1px solid #ccc; padding: 2px;">
-                <input type="date" class="start-date" data-idx="${idx}" style="width:100%; border:1px solid #ddd; font-size:11px;">
-            </td>
-            <td style="border: 1px solid #ccc; padding: 2px;">
-                <input type="date" class="end-date" data-idx="${idx}" style="width:100%; border:1px solid #ddd; font-size:11px;">
-            </td>
-            `;
-            // 날짜 입력 이벤트
-            tr.querySelectorAll('input').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    const target = e.target;
-                    const type = target.classList.contains('start-date') ? 'start' : 'end';
-                    taskRanges[idx][type] = target.value;
-                    drawGrid(); // 입력 즉시 캔버스 업데이트
+        // 1) DHTMLX Gantt 데이터/링크 구성
+        let currentDate = new Date(projectStart);
+        const tasks = [];
+        const links = [];
+        taskData.forEach((item, index) => {
+            const id = index + 1;
+            const start = new Date(currentDate);
+            const duration = 0; // 0일
+            const startStr = start.toISOString().substring(0, 10); // YYYY-MM-DD
+            tasks.push({
+                id,
+                text: item.name,
+                start_date: startStr,
+                duration,
+                progress: 0,
+                group: item.group
+            });
+            if (index > 0) {
+                links.push({
+                    id: index,
+                    source: index,
+                    target: id,
+                    type: "0"
                 });
-            });
-            // 단일 클릭: 행 선택
-            tr.addEventListener('click', (e) => {
-                if (e.target.tagName === 'INPUT')
-                    return;
-                leftBody.querySelectorAll('tr').forEach(r => r.style.backgroundColor = '');
-                tr.style.backgroundColor = '#0cd316ff';
-                currentSelectedRow = idx;
-                drawGrid();
-            });
-            // ✅ 더블 클릭: 시작일 위치로 스크롤 이동
-            tr.addEventListener('dblclick', () => {
-                const startInput = tr.querySelector('input.start-date');
-                if (!startInput || !startInput.value) {
-                    alert('시작일이 없습니다.');
-                    return;
-                }
-                const startDateStr = startInput.value; // yyyy-MM-dd
-                const targetIndex = dateList.findIndex(d => d.toISOString().split('T')[0] === startDateStr);
-                if (targetIndex === -1) {
-                    alert('해당 시작일이 캘린더 범위에 없습니다.');
-                    return;
-                }
-                const targetX = targetIndex * CELL_WIDTH;
-                // 좌측 패널 폭만큼 오른쪽에 canvas가 있으므로 그걸 고려해서 스크롤
-                const canvasWrapper = document.getElementById('canvas_wrapper');
-                const offsetLeft = canvasWrapper.offsetLeft;
-                // 타깃 날짜가 가운데쯤 오도록
-                const scrollX = targetX - offsetLeft - outerWrapper.clientWidth / 5;
-                outerWrapper.scrollLeft = Math.max(0, scrollX);
-                // 행/컬럼 하이라이트 상태 갱신
-                leftBody.querySelectorAll('tr').forEach(r => r.style.backgroundColor = '');
-                tr.style.backgroundColor = '#fef9c3';
-                currentSelectedRow = idx;
-                highlightedCol = targetIndex;
-                drawGrid();
-            });
-            leftBody.appendChild(tr);
-        });
-        function drawGrid() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // 1. 배경 그리드 및 데이터 영역 그리기
-            dateList.forEach((date, i) => {
-                const x = i * CELL_WIDTH;
-                const dow = date.getDay();
-                const isWeekend = (dow === 0 || dow === 6);
-                const dateStr = date.toISOString().split('T')[0];
-                for (let j = 0; j < tasks.length; j++) {
-                    const y = HEADER_HEIGHT + (j * ROW_HEIGHT);
-                    const range = taskRanges[j];
-                    let cellColor = '#ffffff';
-                    if (j === currentSelectedRow)
-                        cellColor = '#fff3cd'; // 더 진한 노랑
-                    if (isWeekend)
-                        cellColor = '#e9ecef'; // 더 진한 회색
-                    if (range.start && range.end) {
-                        if (dateStr >= range.start && dateStr <= range.end) {
-                            cellColor = '#2563eb'; // 더 진한 파랑
-                        }
-                    }
-                    ctx.fillStyle = cellColor;
-                    ctx.fillRect(x, y, CELL_WIDTH, ROW_HEIGHT);
-                    // 날짜 셀 구분선
-                    ctx.strokeStyle = '#cbd5e1'; // 더 진한 회색
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(x, y, CELL_WIDTH, ROW_HEIGHT);
-                    // 월 구분선
-                    const nextDate = new Date(date);
-                    nextDate.setDate(date.getDate() + 1);
-                    if (nextDate.getMonth() !== date.getMonth()) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = '#9ca3af';
-                        ctx.lineWidth = 1.5;
-                        ctx.moveTo(x + CELL_WIDTH, y);
-                        ctx.lineTo(x + CELL_WIDTH, y + ROW_HEIGHT);
-                        ctx.stroke();
-                    }
-                }
-                // 헤더 날짜 영역
-                ctx.fillStyle = '#f3f4f6';
-                ctx.fillRect(x, HEADER_HEIGHT / 2, CELL_WIDTH, HEADER_HEIGHT / 2);
-                ctx.strokeStyle = '#d1d5db';
-                ctx.strokeRect(x, HEADER_HEIGHT / 2, CELL_WIDTH, HEADER_HEIGHT / 2);
-                ctx.fillStyle = dow === 0 ? '#ef4444' : (dow === 6 ? '#2563eb' : '#374151');
-                ctx.font = '11px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText(date.getDate().toString(), x + CELL_WIDTH / 2, HEADER_HEIGHT * 0.75 + 4);
-            });
-            // 2. 상단 월/년 헤더
-            let currentX = 0;
-            let currentMonthStart = 0;
-            dateList.forEach((date, i) => {
-                const isLastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() === date.getDate();
-                if (isLastDay || i === dateList.length - 1) {
-                    const monthWidth = (i - currentMonthStart + 1) * CELL_WIDTH;
-                    ctx.fillStyle = '#e5e7eb';
-                    ctx.fillRect(currentX, 0, monthWidth, HEADER_HEIGHT / 2);
-                    ctx.strokeStyle = '#9ca3af';
-                    ctx.strokeRect(currentX, 0, monthWidth, HEADER_HEIGHT / 2);
-                    ctx.fillStyle = '#111827';
-                    ctx.font = 'bold 12px sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(`${date.getFullYear()}년 ${date.getMonth() + 1}월`, currentX + monthWidth / 2, HEADER_HEIGHT / 4 + 5);
-                    currentX += monthWidth;
-                    currentMonthStart = i + 1;
-                }
-            });
-            // 3. 선택된 컬럼(시작일) 강조
-            if (highlightedCol !== null && highlightedCol >= 0 && highlightedCol < dateList.length) {
-                const x = highlightedCol * CELL_WIDTH;
-                ctx.fillStyle = 'rgba(192, 212, 134, 0.15)'; // 노랑 반투명
-                ctx.fillRect(x, HEADER_HEIGHT, CELL_WIDTH, totalHeight);
-                ctx.strokeStyle = '#f59e0b';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(x, HEADER_HEIGHT);
-                ctx.lineTo(x, HEADER_HEIGHT + totalHeight);
-                ctx.stroke();
-                ctx.lineWidth = 1;
             }
+            currentDate.setDate(currentDate.getDate() + 2);
+        });
+        const data = { data: tasks, links };
+        const ganttDiv = document.getElementById('gantt_here');
+        if (!ganttDiv) {
+            console.error('#gantt_here 요소를 찾을 수 없습니다.');
+            return;
         }
-        drawGrid();
+        // 기간 제한
+        gantt.config.start_date = new Date(projectStart);
+        gantt.config.end_date = new Date(projectEnd);
+        // 포맷
+        gantt.config.date_format = "%Y-%m-%d";
+        gantt.templates.date_grid = function (date) {
+            const y = date.getFullYear();
+            const m = date.getMonth() + 1;
+            const d = date.getDate();
+            return `${y}년 ${m}월 ${d}일`;
+        };
+        // 컬럼 (가로 폭 약간 줄임)
+        gantt.config.columns = [
+            { name: "text", label: "작업", width: 300, tree: true },
+            { name: "group", label: "그룹", align: "center", width: 110 },
+            {
+                name: "start_date",
+                label: "시작일",
+                align: "center",
+                width: 130,
+                template: function (task) {
+                    const d = task.start_date instanceof Date
+                        ? task.start_date
+                        : gantt.date.parseDate(task.start_date, gantt.config.date_format);
+                    const y = d.getFullYear();
+                    const m = d.getMonth() + 1;
+                    const day = d.getDate();
+                    return `${y}년 ${m}월 ${day}일`;
+                }
+            },
+            { name: "duration", label: "기간(일)", align: "center", width: 70 }
+        ];
+        // 스케일 (day 폭 줄이기 위해 min_column_width 조정)
+        gantt.config.scales = [
+            {
+                unit: "month",
+                step: 1,
+                format: function (date) {
+                    const y = date.getFullYear();
+                    const m = date.getMonth() + 1;
+                    return `${y}년 ${m}월`;
+                }
+            },
+            {
+                unit: "day",
+                step: 1,
+                format: function (date) {
+                    const d = date.getDate();
+                    return `${d}`; // 일만 표시해서 더 컴팩트하게
+                }
+            }
+        ];
+        // 하루 셀 가로폭 최소값 (기본보다 작게)
+        gantt.config.min_column_width = 40; // 필요하면 30 ~ 50 사이로 조절
+        // 줄무늬
+        gantt.templates.grid_row_class = function (_start, _end, row) {
+            return row.id % 2 === 0 ? "gantt_row_even" : "gantt_row_odd";
+        };
+        gantt.templates.timeline_cell_class = function (_task, date) {
+            const day = date.getDate();
+            // 홀짝 배경 + border 클래스를 같이 줌
+            return (day % 2 === 0 ? "gantt_cell_even" : "gantt_cell_odd") + " gantt_cell_bordered";
+        };
+        gantt.init("gantt_here");
+        gantt.clearAll();
+        gantt.parse(data);
     }
-    renderCanvasCalendar({
-        tasks,
-        startYear: 2026,
-        endYear: 2027
-    });
-    //#endregion 캘린더 캔버스 구현
+    //#endregion
     //#region 이벤트 관련 모음집
     domElements.readOrder_orderRegisterPage_tab_3.addEventListener("click", async () => {
         console.log("Read Order button clicked in Tab 3");
@@ -1798,6 +1770,12 @@ function initOrderRegister_tab_3(API_BASE) {
     });
     domElements.closeModalBtn2_orderList_Modal_orderRegisterPage_tab_3.addEventListener("click", () => {
         domElements.modalOverlay_orderRegisterPage_tab_3.classList.add("hidden");
+    });
+    domElements.pmsSave_orderRegisterPage_tab_3.addEventListener("click", async () => {
+        const specOrderNo_orderRegisterPage_tab_3 = domElements.specOrderNo_orderRegisterPage_tab_3.value;
+    });
+    domElements.init_orderRegisterPage_tab_3.addEventListener("click", () => {
+        AllClear();
     });
     //#endregion 이벤트 관련 모음집
     //#region 프로그레스바 관련 건드필요없음
@@ -1815,6 +1793,10 @@ function initOrderRegister_tab_3(API_BASE) {
         const progressModal = document.getElementById("progressModal_orderRegisterPage");
         if (progressModal) {
             progressModal.classList.add("hidden");
+        }
+        const modalOverlay_orderRegisterPage_tab_3 = document.getElementById("modalOverlay_orderRegisterPage_tab_3");
+        if (modalOverlay_orderRegisterPage_tab_3) {
+            modalOverlay_orderRegisterPage_tab_3.classList.add("hidden");
         }
     }
     function updateProgressBar(percentage) {

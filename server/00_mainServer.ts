@@ -11,6 +11,8 @@ import innomaxProjectsRouter from "./03_innomax-projects-server";
 import innomaxWorksRouter from "./04_innomax-works-server";
 import innomaxProgressRouter from "./05_innomax-progress-server";
 
+import innomaxProjectsPMSRouter from "./06_innomax-projects-pms-server";
+
 // ✅ .env 로딩
 dotenv.config();
 
@@ -80,6 +82,8 @@ app.use("/api/users", userRegisterRouter(pool));
 app.use("/api/innomax-projects", innomaxProjectsRouter(pool));
 app.use("/api/innomax-works", innomaxWorksRouter(pool));
 app.use("/api/innomax-progress", innomaxProgressRouter(pool));
+
+app.use("/api/innomax-projects-pms", innomaxProjectsPMSRouter(pool));
 
 // ---------------------------------------------------------
 // ✅ 정적 파일 및 루트 경로는 API 라우터 다음에 배치
